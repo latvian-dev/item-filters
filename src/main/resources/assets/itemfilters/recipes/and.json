@@ -1,0 +1,12 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"group": "itemfilters:filter",
+	"result": {"item": "and", "count": 2},
+	"pattern": [
+		"F",
+		"F"
+	],
+	"key": {
+		"F": {"item": "basic"}
+	}
+}

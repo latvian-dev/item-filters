@@ -1,0 +1,14 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"group": "itemfilters:filter",
+	"result": {"item": "basic", "count": 8},
+	"pattern": [
+		"PPP",
+		"PWP",
+		"PPP"
+	],
+	"key": {
+		"P": {"type": "forge:ore_dict", "ore": "paper"},
+		"W": {"item": "minecraft:wool", "data": 0}
+	}
+}

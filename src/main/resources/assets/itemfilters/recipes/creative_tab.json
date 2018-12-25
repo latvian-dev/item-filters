@@ -1,0 +1,9 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"group": "itemfilters:filter",
+	"result": {"item": "creative_tab"},
+	"ingredients": [
+		{"item": "basic"},
+		{"type": "forge:ore_dict", "ore": "paper"}
+	]
+}
