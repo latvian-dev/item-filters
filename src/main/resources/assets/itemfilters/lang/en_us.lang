@@ -1,6 +1,10 @@
 itemGroup.itemfilters=Item Filters
 
 tile.itemfilters.advanced_hopper.name=Advanced Hopper
+tile.itemfilters.advanced_hopper.mode=Mode: %s
+tile.itemfilters.advanced_hopper.mode.none=None
+tile.itemfilters.advanced_hopper.mode.in=Input
+tile.itemfilters.advanced_hopper.mode.out=Output
 
 itemfilters.filter=Filter
 

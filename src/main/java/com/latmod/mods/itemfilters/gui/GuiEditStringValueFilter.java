@@ -61,7 +61,7 @@ public class GuiEditStringValueFilter extends GuiScreen
 		else if (keyCode == Keyboard.KEY_RETURN)
 		{
 			String text = nameField.getText();
-			if (variants.isEmpty() || text.isEmpty() || variants.contains(text))
+			if (variants.isEmpty() || text.isEmpty() || variants.contains(new StringValueFilterVariant(text)))
 			{
 				filter.setValue(text);
 				new MessageUpdateItem(hand, filter).send();

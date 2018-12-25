@@ -3,7 +3,9 @@
 	"group": "itemfilters:hopper",
 	"result": {"item": "advanced_hopper"},
 	"ingredients": [
-		{"item": "hopper"},
-		{"item": "dropper"}
+		{"item": "minecraft:hopper"},
+		{"type": "forge:ore_dict", "ore": "dustGlowstone"},
+		{"type": "forge:ore_dict", "ore": "dustRedstone"},
+		{"type": "forge:ore_dict", "ore": "gemQuartz"}
 	]
 }

@@ -26,15 +26,32 @@ public class ItemFiltersAPI
 		return stack.hasCapability(CAPABILITY, null);
 	}
 
-	public static boolean filterItems(ItemStack filter, ItemStack stack)
+	public static boolean areItemStacksEqual(ItemStack stackA, ItemStack stackB)
 	{
-		return filter.getItem() == stack.getItem() && filter.getMetadata() == stack.getMetadata() && ItemStack.areItemStackShareTagsEqual(filter, stack);
+		if (stackA.getItem() != stackB.getItem())
+		{
+			return false;
+		}
+
+		if (stackA.getHasSubtypes())
+		{
+			if (stackA.getMetadata() != stackB.getMetadata())
+			{
+				return false;
+			}
+		}
+		else if (stackA.getItemDamage() != stackB.getItemDamage())
+		{
+			return false;
+		}
+
+		return ItemStack.areItemStackShareTagsEqual(stackA, stackB);
 	}
 
 	public static boolean filter(ItemStack filter, ItemStack stack)
 	{
 		IItemFilter f = getFilter(filter);
-		return f == null ? filterItems(filter, stack) : f.filter(stack);
+		return f == null ? areItemStacksEqual(filter, stack) : f.filter(stack);
 	}
 
 	public static void getValidItems(ItemStack filter, List<ItemStack> list)
