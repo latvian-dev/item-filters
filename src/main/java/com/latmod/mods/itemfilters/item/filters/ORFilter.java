@@ -18,9 +18,14 @@ public class ORFilter extends LogicFilter implements INBTSerializable<NBTTagList
 	@Override
 	public boolean filter(ItemStack stack)
 	{
+		if (items.size() == 1)
+		{
+			return ItemFiltersAPI.filter(items.get(0), stack);
+		}
+
 		for (ItemStack stack1 : items)
 		{
-			if (!stack1.isEmpty() && ItemFiltersAPI.filter(stack1, stack))
+			if (ItemFiltersAPI.filter(stack1, stack))
 			{
 				return true;
 			}

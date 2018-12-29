@@ -1,0 +1,6 @@
+{
+	"parent": "itemfilters:block/pipe_base",
+	"textures": {
+		"material": "minecraft:blocks/cobblestone"
+	}
+}

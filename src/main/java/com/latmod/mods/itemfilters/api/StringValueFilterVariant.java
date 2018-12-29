@@ -31,9 +31,14 @@ public class StringValueFilterVariant implements Comparable<StringValueFilterVar
 		return id.hashCode();
 	}
 
+	public String getTitle()
+	{
+		return title.isEmpty() ? id : title;
+	}
+
 	@Override
 	public int compareTo(StringValueFilterVariant o)
 	{
-		return title.compareToIgnoreCase(o.title);
+		return getTitle().compareToIgnoreCase(o.getTitle());
 	}
 }

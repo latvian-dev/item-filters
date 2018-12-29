@@ -12,4 +12,5 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 public class ItemFiltersBlocks
 {
 	public static final Block ADVANCED_HOPPER = Blocks.AIR;
+	public static final Block COBBLESTONE_PIPE = Blocks.AIR;
 }

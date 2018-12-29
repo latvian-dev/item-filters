@@ -12,13 +12,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 public class ItemFiltersItems
 {
 	public static final Item ADVANCED_HOPPER = Items.AIR;
+	public static final Item COBBLESTONE_PIPE = Items.AIR;
 
-	public static final Item BASIC = Items.AIR;
-	public static final Item NOT = Items.AIR;
-	public static final Item OR = Items.AIR;
-	public static final Item AND = Items.AIR;
-	public static final Item XOR = Items.AIR;
-	public static final Item ORE = Items.AIR;
-	public static final Item CREATIVE_TAB = Items.AIR;
-	public static final Item MOD = Items.AIR;
+	public static final Item FILTER = Items.AIR;
 }

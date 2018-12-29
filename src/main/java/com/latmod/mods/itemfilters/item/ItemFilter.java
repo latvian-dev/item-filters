@@ -2,6 +2,7 @@ package com.latmod.mods.itemfilters.item;
 
 import com.latmod.mods.itemfilters.api.IItemFilter;
 import com.latmod.mods.itemfilters.api.ItemFiltersAPI;
+import com.latmod.mods.itemfilters.item.filters.BasicItemFilter;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,6 +12,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fml.relauncher.Side;
@@ -18,24 +20,20 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.function.Supplier;
 
 /**
  * @author LatvianModder
  */
 public class ItemFilter extends Item
 {
-	private final Supplier<BaseItemFilter> function;
-
-	public ItemFilter(Supplier<BaseItemFilter> f)
+	public ItemFilter()
 	{
-		function = f;
 	}
 
 	@Override
 	public BaseItemFilter initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt)
 	{
-		return function.get();
+		return new BasicItemFilter();
 	}
 
 	@Override
@@ -112,7 +110,13 @@ public class ItemFilter extends Item
 	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag)
 	{
 		super.addInformation(stack, world, tooltip, flag);
-		tooltip.add(I18n.format("itemfilters.filter") + ": " + I18n.format(stack.getTranslationKey() + ".filter"));
+
+		String key = stack.getTranslationKey() + ".filter";
+
+		if (I18n.hasKey(key))
+		{
+			tooltip.add(TextFormatting.ITALIC + I18n.format(key));
+		}
 
 		IItemFilter filter = ItemFiltersAPI.getFilter(stack);
 

@@ -1,9 +1,0 @@
-{
-	"type": "minecraft:crafting_shapeless",
-	"group": "itemfilters:filter",
-	"result": {"item": "mod"},
-	"ingredients": [
-		{"item": "basic"},
-		{"type": "forge:ore_dict", "ore": "nuggetGold"}
-	]
-}

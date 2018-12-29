@@ -5,22 +5,24 @@ tile.itemfilters.advanced_hopper.mode=Mode: %s
 tile.itemfilters.advanced_hopper.mode.none=None
 tile.itemfilters.advanced_hopper.mode.in=Input
 tile.itemfilters.advanced_hopper.mode.out=Output
+tile.itemfilters.cobblestone_pipe.name=Cobblestone Pipe
 
-itemfilters.filter=Filter
+item.itemfilters.filter.name=Item Filter
 
-item.itemfilters.basic.name=Basic Item Filter
-item.itemfilters.basic.filter=Always True
-item.itemfilters.or.name=OR Filter
-item.itemfilters.or.filter=One must match
-item.itemfilters.and.name=AND Filter
-item.itemfilters.and.filter=All must match
-item.itemfilters.not.name=NOT Filter
-item.itemfilters.not.filter=Invert filter
-item.itemfilters.xor.name=XOR Filter
-item.itemfilters.xor.filter=One of two, but not both
+filter.itemfilters.or.name=OR Filter
+filter.itemfilters.or.filter=One must match
+
+filter.itemfilters.and.name=AND Filter
+filter.itemfilters.and.filter=All must match
+
+filter.itemfilters.not.name=NOT Filter
+filter.itemfilters.not.filter=Invert filter
+
+filter.itemfilters.xor.name=XOR Filter
+filter.itemfilters.xor.filter=One of two, but not both
 
 item.itemfilters.ore.name=Ore Dictionary Filter
-item.itemfilters.ore.filter=Use Ore Dictionary names, such as 'ingotCopper' or 'cobblestone'
+item.itemfilters.ore.filter=Ore Dictionary names, such as 'ingotCopper' or 'cobblestone'
 item.itemfilters.ore.text=Ore name: %s
 
 item.itemfilters.creative_tab.name=Creative Tab Filter

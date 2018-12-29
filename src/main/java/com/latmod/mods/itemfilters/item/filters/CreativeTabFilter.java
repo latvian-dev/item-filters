@@ -56,6 +56,11 @@ public class CreativeTabFilter extends com.latmod.mods.itemfilters.item.StringVa
 
 		for (CreativeTabs t : CreativeTabs.CREATIVE_TAB_ARRAY)
 		{
+			if (t == CreativeTabs.SEARCH || t == CreativeTabs.INVENTORY)
+			{
+				continue;
+			}
+
 			StringValueFilterVariant variant = new StringValueFilterVariant(getTabID(t));
 			variant.title = I18n.format(t.getTranslationKey());
 			variant.icon = t.getIcon();

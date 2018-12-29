@@ -1,6 +1,7 @@
 package com.latmod.mods.itemfilters;
 
 import com.latmod.mods.itemfilters.api.IItemFilter;
+import com.latmod.mods.itemfilters.block.PipeNetwork;
 import com.latmod.mods.itemfilters.gui.ItemFiltersGuiHandler;
 import com.latmod.mods.itemfilters.item.ItemFiltersItems;
 import com.latmod.mods.itemfilters.item.filters.BasicItemFilter;
@@ -37,7 +38,7 @@ public class ItemFilters
 		@Override
 		public ItemStack createIcon()
 		{
-			return new ItemStack(ItemFiltersItems.BASIC);
+			return new ItemStack(ItemFiltersItems.FILTER);
 		}
 	};
 
@@ -62,6 +63,21 @@ public class ItemFilters
 				}
 			}
 		}, BasicItemFilter::new);
+
+		CapabilityManager.INSTANCE.register(PipeNetwork.class, new Capability.IStorage<PipeNetwork>()
+		{
+			@Nullable
+			@Override
+			public NBTBase writeNBT(Capability<PipeNetwork> capability, PipeNetwork instance, EnumFacing side)
+			{
+				return null;
+			}
+
+			@Override
+			public void readNBT(Capability<PipeNetwork> capability, PipeNetwork instance, EnumFacing side, NBTBase nbt)
+			{
+			}
+		}, () -> null);
 
 		ItemFiltersNetHandler.init();
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, ItemFiltersGuiHandler.INSTANCE);

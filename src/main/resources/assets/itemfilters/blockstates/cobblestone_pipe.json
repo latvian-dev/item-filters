@@ -1,0 +1,7 @@
+{
+	"variants": {
+		"axis=y": {"model": "itemfilters:cobblestone_pipe"},
+		"axis=z": {"model": "itemfilters:cobblestone_pipe", "x": 90},
+		"axis=x": {"model": "itemfilters:cobblestone_pipe", "x": 90, "y": 90}
+	}
+}

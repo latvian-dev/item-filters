@@ -14,6 +14,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -25,10 +26,18 @@ public class ModFilter extends com.latmod.mods.itemfilters.item.StringValueFilte
 	@SideOnly(Side.CLIENT)
 	public Collection<StringValueFilterVariant> getValueVariants()
 	{
+		HashSet<String> modIDs = new HashSet<>();
+
+		for (Item item : Item.REGISTRY)
+		{
+			modIDs.add(item.getRegistryName().getNamespace());
+		}
+
 		Collection<StringValueFilterVariant> variants = new ArrayList<>();
 
-		for (ModContainer container : Loader.instance().getIndexedModList().values())
+		for (String id : modIDs)
 		{
+			ModContainer container = Loader.instance().getIndexedModList().get(id);
 			StringValueFilterVariant variant = new StringValueFilterVariant(container.getModId());
 			variant.title = container.getName();
 			variants.add(variant);

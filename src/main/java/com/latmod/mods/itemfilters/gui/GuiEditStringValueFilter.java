@@ -7,12 +7,15 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.toasts.SystemToast;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextComponentString;
 import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author LatvianModder
@@ -22,13 +25,23 @@ public class GuiEditStringValueFilter extends GuiScreen
 	public final IStringValueFilter filter;
 	public final EnumHand hand;
 	private GuiTextField nameField;
-	private final HashSet<StringValueFilterVariant> variants;
+	private final Map<String, StringValueFilterVariant> variants;
+	private final ArrayList<StringValueFilterVariant> visibleVariants;
+	private int selectedVariant = -1;
 
 	public GuiEditStringValueFilter(IStringValueFilter f, EnumHand h)
 	{
 		filter = f;
 		hand = h;
-		variants = new HashSet<>(filter.getValueVariants());
+		variants = new HashMap<>();
+
+		for (StringValueFilterVariant variant : filter.getValueVariants())
+		{
+			variants.put(variant.id, variant);
+		}
+
+		visibleVariants = new ArrayList<>(variants.values());
+		visibleVariants.sort(null);
 	}
 
 	@Override
@@ -52,16 +65,42 @@ public class GuiEditStringValueFilter extends GuiScreen
 		Keyboard.enableRepeatEvents(false);
 	}
 
+	private void updateVariants()
+	{
+		if (!variants.isEmpty())
+		{
+			visibleVariants.clear();
+
+			String txt = nameField.getText().toLowerCase();
+
+			if (txt.isEmpty())
+			{
+				visibleVariants.addAll(variants.values());
+			}
+			else
+			{
+				for (StringValueFilterVariant variant : variants.values())
+				{
+					if (variant.id.toLowerCase().contains(txt) || variant.title.toLowerCase().contains(txt))
+					{
+						visibleVariants.add(variant);
+					}
+				}
+			}
+
+			visibleVariants.sort(null);
+			selectedVariant = -1;
+		}
+	}
+
 	@Override
 	protected void keyTyped(char typedChar, int keyCode) throws IOException
 	{
-		if (nameField.textboxKeyTyped(typedChar, keyCode))
+		if (keyCode == Keyboard.KEY_RETURN)
 		{
-		}
-		else if (keyCode == Keyboard.KEY_RETURN)
-		{
-			String text = nameField.getText();
-			if (variants.isEmpty() || text.isEmpty() || variants.contains(new StringValueFilterVariant(text)))
+			String text = visibleVariants.size() == 1 ? visibleVariants.get(0).id : selectedVariant == -1 ? nameField.getText() : visibleVariants.get(selectedVariant).id;
+
+			if (variants.isEmpty() || text.isEmpty() || variants.containsKey(text))
 			{
 				filter.setValue(text);
 				new MessageUpdateItem(hand, filter).send();
@@ -73,12 +112,26 @@ public class GuiEditStringValueFilter extends GuiScreen
 					mc.setIngameFocus();
 				}
 
-				mc.getToastGui().add(new SystemToast(SystemToast.Type.TUTORIAL_HINT, new TextComponentString("Value changed!"), text.isEmpty() ? null : new TextComponentString(text)));
+				StringValueFilterVariant variant = variants.get(text);
+				mc.getToastGui().add(new SystemToast(SystemToast.Type.TUTORIAL_HINT, new TextComponentString("Value changed!"), text.isEmpty() ? null : new TextComponentString(variant == null ? text : variant.getTitle())));
 			}
 			else
 			{
 				mc.getToastGui().add(new SystemToast(SystemToast.Type.TUTORIAL_HINT, new TextComponentString("Invalid string!"), null));
 			}
+		}
+		else if (keyCode == Keyboard.KEY_TAB)
+		{
+			selectedVariant++;
+
+			if (selectedVariant == visibleVariants.size() || 14 + selectedVariant * 10 >= height)
+			{
+				selectedVariant = 0;
+			}
+		}
+		else if (nameField.textboxKeyTyped(typedChar, keyCode))
+		{
+			updateVariants();
 		}
 		else
 		{
@@ -94,6 +147,7 @@ public class GuiEditStringValueFilter extends GuiScreen
 		if (mouseButton == 1)
 		{
 			nameField.setText("");
+			updateVariants();
 		}
 		else
 		{
@@ -113,6 +167,39 @@ public class GuiEditStringValueFilter extends GuiScreen
 		super.drawScreen(mouseX, mouseY, partialTicks);
 		GlStateManager.disableLighting();
 		GlStateManager.disableBlend();
+
+		if (!variants.isEmpty())
+		{
+			drawString(fontRenderer, "Variants [" + visibleVariants.size() + "]:", 4, 4, -1);
+
+			for (int i = 0; i < visibleVariants.size(); i++)
+			{
+				StringValueFilterVariant variant = visibleVariants.get(i);
+				drawString(fontRenderer, variant.getTitle(), variant.icon.isEmpty() ? 4 : 14, 14 + i * 10, i == selectedVariant ? 0xFFFFFF00 : -1);
+
+				if (!variant.icon.isEmpty())
+				{
+					GlStateManager.pushMatrix();
+					GlStateManager.translate(4, 14 + i * 10, 0);
+					GlStateManager.scale(0.5F, 0.5F, 1F);
+					zLevel = 100F;
+					itemRender.zLevel = 100F;
+					GlStateManager.enableDepth();
+					RenderHelper.enableGUIStandardItemLighting();
+					itemRender.renderItemAndEffectIntoGUI(mc.player, variant.icon, 0, 0);
+					itemRender.renderItemOverlayIntoGUI(fontRenderer, variant.icon, 0, 0, "");
+					itemRender.zLevel = 0F;
+					zLevel = 0F;
+					GlStateManager.popMatrix();
+				}
+
+				if (14 + i * 10 >= height)
+				{
+					break;
+				}
+			}
+		}
+
 		nameField.drawTextBox();
 	}
 }

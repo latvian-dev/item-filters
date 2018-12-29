@@ -1,6 +1,0 @@
-{
-	"parent": "itemfilters:item/base",
-	"textures": {
-		"layer1": "itemfilters:items/and"
-	}
-}

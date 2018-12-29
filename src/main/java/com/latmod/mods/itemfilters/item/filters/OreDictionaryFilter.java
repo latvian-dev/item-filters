@@ -39,7 +39,13 @@ public class OreDictionaryFilter extends com.latmod.mods.itemfilters.item.String
 			if (!list.isEmpty())
 			{
 				StringValueFilterVariant variant = new StringValueFilterVariant(s);
-				variant.icon = list.get(0);
+				variant.icon = list.get(0).copy();
+
+				if (variant.icon.getItemDamage() == OreDictionary.WILDCARD_VALUE)
+				{
+					variant.icon.setItemDamage(0);
+				}
+
 				variants.add(variant);
 			}
 		}

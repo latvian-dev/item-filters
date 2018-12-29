@@ -1,8 +1,0 @@
-{
-	"type": "minecraft:crafting_shapeless",
-	"group": "itemfilters:filter",
-	"result": {"item": "not"},
-	"ingredients": [
-		{"item": "basic"}
-	]
-}

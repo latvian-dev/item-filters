@@ -10,13 +10,19 @@ import java.util.List;
 /**
  * @author LatvianModder
  */
-@FunctionalInterface
 public interface IItemFilter
 {
 	/**
 	 * @param stack ItemStack
 	 */
 	boolean filter(ItemStack stack);
+
+	/**
+	 * Open GUI on client side
+	 */
+	default void openEditingGUI(Runnable save)
+	{
+	}
 
 	/**
 	 * You should only override this if there is a faster way to check valid items

@@ -1,9 +1,0 @@
-{
-	"type": "minecraft:crafting_shapeless",
-	"group": "itemfilters:filter",
-	"result": {"item": "ore"},
-	"ingredients": [
-		{"item": "basic"},
-		{"item": "minecraft:sign"}
-	]
-}
