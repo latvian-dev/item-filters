@@ -1,19 +1,25 @@
 package com.latmod.mods.itemfilters.item;
 
 import com.latmod.mods.itemfilters.api.IItemFilter;
+import com.latmod.mods.itemfilters.api.IRegisteredItemFilter;
 import com.latmod.mods.itemfilters.api.ItemFiltersAPI;
-import com.latmod.mods.itemfilters.item.filters.BasicItemFilter;
+import com.latmod.mods.itemfilters.filters.AlwaysTrueItemFilter;
+import com.latmod.mods.itemfilters.net.MessageUpdateItem;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -26,14 +32,81 @@ import java.util.List;
  */
 public class ItemFilter extends Item
 {
+	public static class ItemFilterData implements IItemFilter, ICapabilitySerializable<NBTTagCompound>
+	{
+		public IRegisteredItemFilter filter = AlwaysTrueItemFilter.INSTANCE;
+
+		@Override
+		public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing)
+		{
+			return capability == ItemFiltersAPI.CAPABILITY;
+		}
+
+		@Nullable
+		@Override
+		public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing)
+		{
+			return capability == ItemFiltersAPI.CAPABILITY ? (T) this : null;
+		}
+
+		@Override
+		public NBTTagCompound serializeNBT()
+		{
+			NBTTagCompound nbt = new NBTTagCompound();
+			nbt.setString("id", filter.getID());
+			NBTBase nbt1 = filter instanceof INBTSerializable ? ((INBTSerializable) filter).serializeNBT() : null;
+
+			if (nbt1 != null && !nbt1.isEmpty())
+			{
+				nbt.setTag("data", nbt1);
+			}
+
+			return nbt;
+		}
+
+		@Override
+		public void deserializeNBT(NBTTagCompound nbt)
+		{
+			filter = ItemFiltersAPI.createFromID(nbt.getString("id"));
+
+			if (filter == null)
+			{
+				filter = AlwaysTrueItemFilter.INSTANCE;
+			}
+
+			if (filter instanceof INBTSerializable && nbt.hasKey("data"))
+			{
+				((INBTSerializable) filter).deserializeNBT(nbt.getTag("data"));
+			}
+		}
+
+		@Override
+		public boolean filter(ItemStack stack)
+		{
+			return filter.filter(stack);
+		}
+
+		@Override
+		public void openEditingGUI(Runnable save)
+		{
+			filter.openEditingGUI(save);
+		}
+
+		@Override
+		public void getValidItems(List<ItemStack> list)
+		{
+			filter.getValidItems(list);
+		}
+	}
+
 	public ItemFilter()
 	{
 	}
 
 	@Override
-	public BaseItemFilter initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt)
+	public ItemFilterData initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt)
 	{
-		return new BasicItemFilter();
+		return new ItemFilterData();
 	}
 
 	@Override
@@ -92,17 +165,18 @@ public class ItemFilter extends Item
 		ItemStack stack = player.getHeldItem(hand);
 		IItemFilter filter = ItemFiltersAPI.getFilter(stack);
 
-		if (filter instanceof BaseItemFilter && openGUI((BaseItemFilter) filter, player, hand, stack))
+		if (filter != null)
 		{
+			openGUI(filter, hand);
 			return new ActionResult<>(EnumActionResult.SUCCESS, stack);
 		}
 
 		return new ActionResult<>(EnumActionResult.PASS, stack);
 	}
 
-	private boolean openGUI(BaseItemFilter filter, EntityPlayer player, EnumHand hand, ItemStack heldItem)
+	private void openGUI(IItemFilter filter, EnumHand hand)
 	{
-		return filter.openGUI(player, hand, heldItem);
+		filter.openEditingGUI(() -> new MessageUpdateItem(hand, filter).send());
 	}
 
 	@Override
@@ -116,13 +190,6 @@ public class ItemFilter extends Item
 		if (I18n.hasKey(key))
 		{
 			tooltip.add(TextFormatting.ITALIC + I18n.format(key));
-		}
-
-		IItemFilter filter = ItemFiltersAPI.getFilter(stack);
-
-		if (filter instanceof BaseItemFilter)
-		{
-			((BaseItemFilter) filter).addInformation(tooltip);
 		}
 	}
 }

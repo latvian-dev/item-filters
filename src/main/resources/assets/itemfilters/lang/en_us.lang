@@ -1,12 +1,3 @@
-itemGroup.itemfilters=Item Filters
-
-tile.itemfilters.advanced_hopper.name=Advanced Hopper
-tile.itemfilters.advanced_hopper.mode=Mode: %s
-tile.itemfilters.advanced_hopper.mode.none=None
-tile.itemfilters.advanced_hopper.mode.in=Input
-tile.itemfilters.advanced_hopper.mode.out=Output
-tile.itemfilters.cobblestone_pipe.name=Cobblestone Pipe
-
 item.itemfilters.filter.name=Item Filter
 
 filter.itemfilters.or.name=OR Filter
@@ -23,12 +14,9 @@ filter.itemfilters.xor.filter=One of two, but not both
 
 item.itemfilters.ore.name=Ore Dictionary Filter
 item.itemfilters.ore.filter=Ore Dictionary names, such as 'ingotCopper' or 'cobblestone'
-item.itemfilters.ore.text=Ore name: %s
 
 item.itemfilters.creative_tab.name=Creative Tab Filter
 item.itemfilters.creative_tab.filter=Use Creative Tab ID
-item.itemfilters.creative_tab.text=Creative Tab: %s
 
 item.itemfilters.mod.name=Mod Filter
 item.itemfilters.mod.filter=Use Mod ID
-item.itemfilters.mod.text=Mod: %s

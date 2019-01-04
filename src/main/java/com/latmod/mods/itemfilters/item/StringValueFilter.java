@@ -1,18 +1,16 @@
 package com.latmod.mods.itemfilters.item;
 
+import com.latmod.mods.itemfilters.api.IRegisteredItemFilter;
 import com.latmod.mods.itemfilters.api.IStringValueFilter;
 import com.latmod.mods.itemfilters.gui.GuiEditStringValueFilter;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagString;
-import net.minecraft.util.EnumHand;
 import net.minecraftforge.common.util.INBTSerializable;
 
 /**
  * @author LatvianModder
  */
-public abstract class StringValueFilter extends BaseItemFilter implements IStringValueFilter, INBTSerializable<NBTTagString>
+public abstract class StringValueFilter implements IStringValueFilter, IRegisteredItemFilter, INBTSerializable<NBTTagString>
 {
 	private String value = "";
 
@@ -41,9 +39,8 @@ public abstract class StringValueFilter extends BaseItemFilter implements IStrin
 	}
 
 	@Override
-	public boolean openGUI(EntityPlayer player, EnumHand hand, ItemStack heldItem)
+	public void openEditingGUI(Runnable save)
 	{
-		Minecraft.getMinecraft().displayGuiScreen(new GuiEditStringValueFilter(this, hand));
-		return true;
+		Minecraft.getMinecraft().displayGuiScreen(new GuiEditStringValueFilter(this, save));
 	}
 }

@@ -1,12 +1,12 @@
-package com.latmod.mods.itemfilters.item.filters;
+package com.latmod.mods.itemfilters.filters;
 
 import com.latmod.mods.itemfilters.api.StringValueFilterVariant;
+import com.latmod.mods.itemfilters.item.StringValueFilter;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * @author LatvianModder
  */
-public class CreativeTabFilter extends com.latmod.mods.itemfilters.item.StringValueFilter
+public class CreativeTabFilter extends StringValueFilter
 {
 	private static Field labelField;
 
@@ -40,6 +40,12 @@ public class CreativeTabFilter extends com.latmod.mods.itemfilters.item.StringVa
 	}
 
 	private CreativeTabs tab = null;
+
+	@Override
+	public String getID()
+	{
+		return "creative_tab";
+	}
 
 	@Override
 	public void setValue(String v)
@@ -122,15 +128,5 @@ public class CreativeTabFilter extends com.latmod.mods.itemfilters.item.StringVa
 		}
 
 		list.addAll(allItems);
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void addInformation(List<String> tooltip)
-	{
-		if (!getValue().isEmpty())
-		{
-			tooltip.add(I18n.format("item.itemfilters.creative_tab.text", TextFormatting.YELLOW + I18n.format(getTab().getTranslationKey())));
-		}
 	}
 }

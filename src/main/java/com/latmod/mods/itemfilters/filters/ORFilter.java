@@ -1,4 +1,4 @@
-package com.latmod.mods.itemfilters.item.filters;
+package com.latmod.mods.itemfilters.filters;
 
 import com.latmod.mods.itemfilters.api.ItemFiltersAPI;
 import net.minecraft.item.ItemStack;
@@ -14,6 +14,12 @@ import java.util.List;
 public class ORFilter extends LogicFilter implements INBTSerializable<NBTTagList>
 {
 	public final List<ItemStack> items = new ArrayList<>();
+
+	@Override
+	public String getID()
+	{
+		return "or";
+	}
 
 	@Override
 	public boolean filter(ItemStack stack)

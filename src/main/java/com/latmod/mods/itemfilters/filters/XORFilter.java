@@ -1,4 +1,4 @@
-package com.latmod.mods.itemfilters.item.filters;
+package com.latmod.mods.itemfilters.filters;
 
 import com.latmod.mods.itemfilters.api.ItemFiltersAPI;
 import net.minecraft.item.ItemStack;
@@ -12,6 +12,12 @@ public class XORFilter extends LogicFilter implements INBTSerializable<NBTTagCom
 {
 	public ItemStack left = ItemStack.EMPTY;
 	public ItemStack right = ItemStack.EMPTY;
+
+	@Override
+	public String getID()
+	{
+		return "xor";
+	}
 
 	@Override
 	public boolean filter(ItemStack stack)

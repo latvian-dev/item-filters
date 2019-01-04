@@ -2,13 +2,11 @@ package com.latmod.mods.itemfilters.gui;
 
 import com.latmod.mods.itemfilters.api.IStringValueFilter;
 import com.latmod.mods.itemfilters.api.StringValueFilterVariant;
-import com.latmod.mods.itemfilters.net.MessageUpdateItem;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.toasts.SystemToast;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextComponentString;
 import org.lwjgl.input.Keyboard;
 
@@ -23,16 +21,16 @@ import java.util.Map;
 public class GuiEditStringValueFilter extends GuiScreen
 {
 	public final IStringValueFilter filter;
-	public final EnumHand hand;
+	public final Runnable save;
 	private GuiTextField nameField;
 	private final Map<String, StringValueFilterVariant> variants;
 	private final ArrayList<StringValueFilterVariant> visibleVariants;
 	private int selectedVariant = -1;
 
-	public GuiEditStringValueFilter(IStringValueFilter f, EnumHand h)
+	public GuiEditStringValueFilter(IStringValueFilter f, Runnable s)
 	{
 		filter = f;
-		hand = h;
+		save = s;
 		variants = new HashMap<>();
 
 		for (StringValueFilterVariant variant : filter.getValueVariants())
@@ -103,7 +101,7 @@ public class GuiEditStringValueFilter extends GuiScreen
 			if (variants.isEmpty() || text.isEmpty() || variants.containsKey(text))
 			{
 				filter.setValue(text);
-				new MessageUpdateItem(hand, filter).send();
+				save.run();
 
 				mc.displayGuiScreen(null);
 

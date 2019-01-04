@@ -1,4 +1,4 @@
-package com.latmod.mods.itemfilters.item.filters;
+package com.latmod.mods.itemfilters.filters;
 
 import com.latmod.mods.itemfilters.api.ItemFiltersAPI;
 import net.minecraft.item.ItemStack;
@@ -11,6 +11,12 @@ import net.minecraftforge.common.util.INBTSerializable;
 public class NOTFilter extends LogicFilter implements INBTSerializable<NBTTagCompound>
 {
 	public ItemStack filter = ItemStack.EMPTY;
+
+	@Override
+	public String getID()
+	{
+		return "not";
+	}
 
 	@Override
 	public boolean filter(ItemStack stack)

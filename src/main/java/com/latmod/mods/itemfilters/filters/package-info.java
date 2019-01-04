@@ -1,3 +1,3 @@
 @javax.annotation.ParametersAreNonnullByDefault
 @mcp.MethodsReturnNonnullByDefault
-package com.latmod.mods.itemfilters.block;
+package com.latmod.mods.itemfilters.filters;

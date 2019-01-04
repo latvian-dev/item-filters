@@ -1,13 +1,16 @@
 package com.latmod.mods.itemfilters;
 
 import com.latmod.mods.itemfilters.api.IItemFilter;
-import com.latmod.mods.itemfilters.block.PipeNetwork;
-import com.latmod.mods.itemfilters.gui.ItemFiltersGuiHandler;
-import com.latmod.mods.itemfilters.item.ItemFiltersItems;
-import com.latmod.mods.itemfilters.item.filters.BasicItemFilter;
+import com.latmod.mods.itemfilters.api.ItemFiltersAPI;
+import com.latmod.mods.itemfilters.filters.ANDFilter;
+import com.latmod.mods.itemfilters.filters.AlwaysTrueItemFilter;
+import com.latmod.mods.itemfilters.filters.CreativeTabFilter;
+import com.latmod.mods.itemfilters.filters.ModFilter;
+import com.latmod.mods.itemfilters.filters.NOTFilter;
+import com.latmod.mods.itemfilters.filters.ORFilter;
+import com.latmod.mods.itemfilters.filters.OreDictionaryFilter;
+import com.latmod.mods.itemfilters.filters.XORFilter;
 import com.latmod.mods.itemfilters.net.ItemFiltersNetHandler;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
@@ -15,7 +18,6 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 import javax.annotation.Nullable;
 
@@ -32,15 +34,6 @@ public class ItemFilters
 
 	@Mod.Instance(MOD_ID)
 	public static ItemFilters INSTANCE;
-
-	public static final CreativeTabs TAB = new CreativeTabs(ItemFilters.MOD_ID)
-	{
-		@Override
-		public ItemStack createIcon()
-		{
-			return new ItemStack(ItemFiltersItems.FILTER);
-		}
-	};
 
 	@Mod.EventHandler
 	public void onPreInit(FMLPreInitializationEvent event)
@@ -62,24 +55,17 @@ public class ItemFilters
 					((INBTSerializable) instance).deserializeNBT(nbt);
 				}
 			}
-		}, BasicItemFilter::new);
-
-		CapabilityManager.INSTANCE.register(PipeNetwork.class, new Capability.IStorage<PipeNetwork>()
-		{
-			@Nullable
-			@Override
-			public NBTBase writeNBT(Capability<PipeNetwork> capability, PipeNetwork instance, EnumFacing side)
-			{
-				return null;
-			}
-
-			@Override
-			public void readNBT(Capability<PipeNetwork> capability, PipeNetwork instance, EnumFacing side, NBTBase nbt)
-			{
-			}
-		}, () -> null);
+		}, () -> AlwaysTrueItemFilter.INSTANCE);
 
 		ItemFiltersNetHandler.init();
-		NetworkRegistry.INSTANCE.registerGuiHandler(this, ItemFiltersGuiHandler.INSTANCE);
+
+		ItemFiltersAPI.register("always_true", () -> AlwaysTrueItemFilter.INSTANCE);
+		ItemFiltersAPI.register("or", ORFilter::new);
+		ItemFiltersAPI.register("and", ANDFilter::new);
+		ItemFiltersAPI.register("not", NOTFilter::new);
+		ItemFiltersAPI.register("xor", XORFilter::new);
+		ItemFiltersAPI.register("ore", OreDictionaryFilter::new);
+		ItemFiltersAPI.register("mod", ModFilter::new);
+		ItemFiltersAPI.register("creative_tab", CreativeTabFilter::new);
 	}
 }

@@ -5,7 +5,11 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Supplier;
 
 /**
  * @author LatvianModder
@@ -14,6 +18,9 @@ public class ItemFiltersAPI
 {
 	@CapabilityInject(IItemFilter.class)
 	public static Capability<IItemFilter> CAPABILITY;
+
+	private static final Map<String, Supplier<IRegisteredItemFilter>> REGISTRY0 = new HashMap<>();
+	public static final Map<String, Supplier<IRegisteredItemFilter>> REGISTRY = Collections.unmodifiableMap(REGISTRY0);
 
 	@Nullable
 	public static IItemFilter getFilter(ItemStack stack)
@@ -50,6 +57,11 @@ public class ItemFiltersAPI
 
 	public static boolean filter(ItemStack filter, ItemStack stack)
 	{
+		if (filter.isEmpty())
+		{
+			return true;
+		}
+
 		IItemFilter f = getFilter(filter);
 		return f == null ? areItemStacksEqual(filter, stack) : f.filter(stack);
 	}
@@ -71,5 +83,17 @@ public class ItemFiltersAPI
 		{
 			f.getValidItems(list);
 		}
+	}
+
+	public static void register(String id, Supplier<IRegisteredItemFilter> supplier)
+	{
+		REGISTRY0.put(id, supplier);
+	}
+
+	@Nullable
+	public static IRegisteredItemFilter createFromID(String id)
+	{
+		Supplier<IRegisteredItemFilter> supplier = REGISTRY0.get(id);
+		return supplier == null ? null : supplier.get();
 	}
 }
