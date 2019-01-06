@@ -58,6 +58,11 @@ public class ItemFiltersAPI
 	 */
 	public static boolean areItemStacksEqual(ItemStack stackA, ItemStack stackB)
 	{
+		if (stackA == stackB)
+		{
+			return true;
+		}
+
 		if (stackA.getItem() != stackB.getItem())
 		{
 			return false;
@@ -84,7 +89,7 @@ public class ItemFiltersAPI
 	 */
 	public static boolean filter(ItemStack filter, ItemStack stack)
 	{
-		if (filter.isEmpty())
+		if (filter == stack || filter.isEmpty())
 		{
 			return true;
 		}
