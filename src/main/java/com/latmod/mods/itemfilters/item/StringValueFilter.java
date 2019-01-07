@@ -6,6 +6,8 @@ import com.latmod.mods.itemfilters.gui.GuiEditStringValueFilter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraftforge.common.util.INBTSerializable;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author LatvianModder
@@ -39,6 +41,7 @@ public abstract class StringValueFilter implements IStringValueFilter, IRegister
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void openEditingGUI(Runnable save)
 	{
 		Minecraft.getMinecraft().displayGuiScreen(new GuiEditStringValueFilter(this, save));

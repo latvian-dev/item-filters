@@ -87,6 +87,7 @@ public class ItemFilter extends Item
 		}
 
 		@Override
+		@SideOnly(Side.CLIENT)
 		public void openEditingGUI(Runnable save)
 		{
 			filter.openEditingGUI(save);
@@ -167,7 +168,11 @@ public class ItemFilter extends Item
 
 		if (filter != null)
 		{
-			openGUI(filter, hand);
+			if (world.isRemote)
+			{
+				openGUI(filter, hand);
+			}
+
 			return new ActionResult<>(EnumActionResult.SUCCESS, stack);
 		}
 
