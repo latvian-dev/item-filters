@@ -70,8 +70,6 @@ if (ENV.CURSEFORGE_KEY) {
 			id = "${curseforge_id}"
 			releaseType = "release"
 			addGameVersion "${mc_version}"
-			relations {
-			}
 			changelog = getGitChangelog
 			changelogType = 'markdown'
 			addArtifact(sourceJar)
