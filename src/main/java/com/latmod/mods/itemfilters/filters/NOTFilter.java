@@ -1,14 +1,16 @@
 package com.latmod.mods.itemfilters.filters;
 
+import com.latmod.mods.itemfilters.api.IItemFilter;
 import com.latmod.mods.itemfilters.api.ItemFiltersAPI;
+import com.latmod.mods.itemfilters.item.ItemMissing;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTBase;
 import net.minecraftforge.common.util.INBTSerializable;
 
 /**
  * @author LatvianModder
  */
-public class NOTFilter extends LogicFilter implements INBTSerializable<NBTTagCompound>
+public class NOTFilter extends LogicFilter implements INBTSerializable<NBTBase>
 {
 	public ItemStack filter = ItemStack.EMPTY;
 
@@ -25,19 +27,27 @@ public class NOTFilter extends LogicFilter implements INBTSerializable<NBTTagCom
 	}
 
 	@Override
-	public NBTTagCompound serializeNBT()
+	public NBTBase serializeNBT()
 	{
-		return filter.isEmpty() ? new NBTTagCompound() : filter.serializeNBT();
+		return ItemMissing.write(filter, false);
 	}
 
 	@Override
-	public void deserializeNBT(NBTTagCompound nbt)
+	public void deserializeNBT(NBTBase nbt)
 	{
-		filter = new ItemStack(nbt);
+		filter = ItemMissing.read(nbt);
+	}
 
-		if (filter.isEmpty())
+	@Override
+	public void clearCache()
+	{
+		super.clearCache();
+
+		IItemFilter f = ItemFiltersAPI.getFilter(filter);
+
+		if (f != null)
 		{
-			filter = ItemStack.EMPTY;
+			f.clearCache();
 		}
 	}
 }

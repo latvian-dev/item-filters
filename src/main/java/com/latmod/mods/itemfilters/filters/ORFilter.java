@@ -1,6 +1,8 @@
 package com.latmod.mods.itemfilters.filters;
 
+import com.latmod.mods.itemfilters.api.IItemFilter;
 import com.latmod.mods.itemfilters.api.ItemFiltersAPI;
+import com.latmod.mods.itemfilters.item.ItemMissing;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -49,7 +51,7 @@ public class ORFilter extends LogicFilter implements INBTSerializable<NBTTagList
 		{
 			if (!stack.isEmpty())
 			{
-				list.appendTag(stack.serializeNBT());
+				list.appendTag(ItemMissing.write(stack, true));
 			}
 		}
 
@@ -63,7 +65,7 @@ public class ORFilter extends LogicFilter implements INBTSerializable<NBTTagList
 
 		for (int i = 0; i < nbt.tagCount(); i++)
 		{
-			ItemStack stack = new ItemStack(nbt.getCompoundTagAt(i));
+			ItemStack stack = ItemMissing.read(nbt.get(i));
 
 			if (!stack.isEmpty())
 			{
@@ -85,5 +87,21 @@ public class ORFilter extends LogicFilter implements INBTSerializable<NBTTagList
 		}
 
 		list.addAll(items);
+	}
+
+	@Override
+	public void clearCache()
+	{
+		super.clearCache();
+
+		for (ItemStack item : items)
+		{
+			IItemFilter f = ItemFiltersAPI.getFilter(item);
+
+			if (f != null)
+			{
+				f.clearCache();
+			}
+		}
 	}
 }

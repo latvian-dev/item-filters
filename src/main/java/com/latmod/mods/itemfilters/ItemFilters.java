@@ -1,15 +1,8 @@
 package com.latmod.mods.itemfilters;
 
 import com.latmod.mods.itemfilters.api.IItemFilter;
-import com.latmod.mods.itemfilters.api.ItemFiltersAPI;
-import com.latmod.mods.itemfilters.filters.ANDFilter;
 import com.latmod.mods.itemfilters.filters.AlwaysTrueItemFilter;
-import com.latmod.mods.itemfilters.filters.CreativeTabFilter;
-import com.latmod.mods.itemfilters.filters.ModFilter;
-import com.latmod.mods.itemfilters.filters.NOTFilter;
-import com.latmod.mods.itemfilters.filters.ORFilter;
-import com.latmod.mods.itemfilters.filters.OreDictionaryFilter;
-import com.latmod.mods.itemfilters.filters.XORFilter;
+import com.latmod.mods.itemfilters.filters.FilterBase;
 import com.latmod.mods.itemfilters.net.ItemFiltersNetHandler;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.util.EnumFacing;
@@ -58,14 +51,6 @@ public class ItemFilters
 		}, () -> AlwaysTrueItemFilter.INSTANCE);
 
 		ItemFiltersNetHandler.init();
-
-		ItemFiltersAPI.register("always_true", () -> AlwaysTrueItemFilter.INSTANCE);
-		ItemFiltersAPI.register("or", ORFilter::new);
-		ItemFiltersAPI.register("and", ANDFilter::new);
-		ItemFiltersAPI.register("not", NOTFilter::new);
-		ItemFiltersAPI.register("xor", XORFilter::new);
-		ItemFiltersAPI.register("ore", OreDictionaryFilter::new);
-		ItemFiltersAPI.register("mod", ModFilter::new);
-		ItemFiltersAPI.register("creative_tab", CreativeTabFilter::new);
+		FilterBase.register();
 	}
 }

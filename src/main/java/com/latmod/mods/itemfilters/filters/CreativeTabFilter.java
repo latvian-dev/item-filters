@@ -1,7 +1,6 @@
 package com.latmod.mods.itemfilters.filters;
 
 import com.latmod.mods.itemfilters.api.StringValueFilterVariant;
-import com.latmod.mods.itemfilters.item.StringValueFilter;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -120,13 +119,21 @@ public class CreativeTabFilter extends StringValueFilter
 	@Override
 	public void getValidItems(List<ItemStack> list)
 	{
-		NonNullList<ItemStack> allItems = NonNullList.create();
-
-		for (Item item : Item.REGISTRY)
+		if (cachedItems == null)
 		{
-			item.getSubItems(getTab(), allItems);
+			NonNullList<ItemStack> allItems = NonNullList.create();
+
+			for (Item item : Item.REGISTRY)
+			{
+				item.getSubItems(getTab(), allItems);
+			}
+
+			cachedItems = compress(allItems);
 		}
 
-		list.addAll(allItems);
+		if (!cachedItems.isEmpty())
+		{
+			list.addAll(cachedItems);
+		}
 	}
 }

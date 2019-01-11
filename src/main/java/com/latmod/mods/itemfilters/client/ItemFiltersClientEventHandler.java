@@ -25,5 +25,6 @@ public class ItemFiltersClientEventHandler
 	public static void registerModels(ModelRegistryEvent event)
 	{
 		addModel(ItemFiltersItems.FILTER, "inventory");
+		addModel(ItemFiltersItems.MISSING, "inventory");
 	}
 }

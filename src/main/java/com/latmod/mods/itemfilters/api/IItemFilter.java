@@ -49,4 +49,8 @@ public interface IItemFilter
 			}
 		}
 	}
+
+	default void clearCache()
+	{
+	}
 }

@@ -1,6 +1,8 @@
 package com.latmod.mods.itemfilters.filters;
 
+import com.latmod.mods.itemfilters.api.IItemFilter;
 import com.latmod.mods.itemfilters.api.ItemFiltersAPI;
+import com.latmod.mods.itemfilters.item.ItemMissing;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -32,12 +34,12 @@ public class XORFilter extends LogicFilter implements INBTSerializable<NBTTagCom
 
 		if (!left.isEmpty())
 		{
-			nbt.setTag("l", left.serializeNBT());
+			nbt.setTag("l", ItemMissing.write(left, false));
 		}
 
 		if (!right.isEmpty())
 		{
-			nbt.setTag("r", right.serializeNBT());
+			nbt.setTag("r", ItemMissing.write(right, false));
 		}
 
 		return nbt;
@@ -46,17 +48,27 @@ public class XORFilter extends LogicFilter implements INBTSerializable<NBTTagCom
 	@Override
 	public void deserializeNBT(NBTTagCompound nbt)
 	{
-		left = new ItemStack(nbt.getCompoundTag("l"));
-		right = new ItemStack(nbt.getCompoundTag("r"));
+		left = ItemMissing.read(nbt.getTag("l"));
+		right = ItemMissing.read(nbt.getTag("r"));
+	}
 
-		if (left.isEmpty())
+	@Override
+	public void clearCache()
+	{
+		super.clearCache();
+
+		IItemFilter leftf = ItemFiltersAPI.getFilter(left);
+
+		if (leftf != null)
 		{
-			left = ItemStack.EMPTY;
+			leftf.clearCache();
 		}
 
-		if (right.isEmpty())
+		IItemFilter rightf = ItemFiltersAPI.getFilter(right);
+
+		if (rightf != null)
 		{
-			right = ItemStack.EMPTY;
+			rightf.clearCache();
 		}
 	}
 }

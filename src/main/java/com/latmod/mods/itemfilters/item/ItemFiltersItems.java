@@ -12,4 +12,5 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 public class ItemFiltersItems
 {
 	public static final Item FILTER = Items.AIR;
+	public static final Item MISSING = Items.AIR;
 }

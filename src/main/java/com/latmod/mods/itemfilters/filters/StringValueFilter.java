@@ -1,6 +1,5 @@
-package com.latmod.mods.itemfilters.item;
+package com.latmod.mods.itemfilters.filters;
 
-import com.latmod.mods.itemfilters.api.IRegisteredItemFilter;
 import com.latmod.mods.itemfilters.api.IStringValueFilter;
 import com.latmod.mods.itemfilters.gui.GuiEditStringValueFilter;
 import net.minecraft.client.Minecraft;
@@ -12,7 +11,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 /**
  * @author LatvianModder
  */
-public abstract class StringValueFilter implements IStringValueFilter, IRegisteredItemFilter, INBTSerializable<NBTTagString>
+public abstract class StringValueFilter extends FilterBase implements IStringValueFilter, INBTSerializable<NBTTagString>
 {
 	private String value = "";
 

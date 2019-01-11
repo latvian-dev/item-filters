@@ -1,7 +1,6 @@
 package com.latmod.mods.itemfilters.filters;
 
 import com.latmod.mods.itemfilters.api.StringValueFilterVariant;
-import com.latmod.mods.itemfilters.item.StringValueFilter;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -9,6 +8,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -90,9 +90,14 @@ public class OreDictionaryFilter extends StringValueFilter
 	@Override
 	public void getValidItems(List<ItemStack> list)
 	{
-		if (!getValue().isEmpty())
+		if (cachedItems == null)
 		{
-			list.addAll(OreDictionary.getOres(getValue()));
+			cachedItems = getValue().isEmpty() ? Collections.emptyList() : compress(OreDictionary.getOres(getValue()));
+		}
+
+		if (!cachedItems.isEmpty())
+		{
+			list.addAll(cachedItems);
 		}
 	}
 }
