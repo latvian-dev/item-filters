@@ -1,3 +1,3 @@
 @javax.annotation.ParametersAreNonnullByDefault
 @mcp.MethodsReturnNonnullByDefault
-package com.latmod.mods.itemfilters.filters.integration;
+package com.latmod.mods.itemfilters.integration.jei;

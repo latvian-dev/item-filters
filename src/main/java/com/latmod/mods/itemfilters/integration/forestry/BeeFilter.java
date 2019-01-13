@@ -1,4 +1,4 @@
-package com.latmod.mods.itemfilters.filters.integration;
+package com.latmod.mods.itemfilters.integration.forestry;
 
 import com.latmod.mods.itemfilters.filters.FilterBase;
 import forestry.api.apiculture.BeeManager;

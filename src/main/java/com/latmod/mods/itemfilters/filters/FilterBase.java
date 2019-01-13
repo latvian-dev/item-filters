@@ -2,7 +2,7 @@ package com.latmod.mods.itemfilters.filters;
 
 import com.latmod.mods.itemfilters.api.IRegisteredItemFilter;
 import com.latmod.mods.itemfilters.api.ItemFiltersAPI;
-import com.latmod.mods.itemfilters.filters.integration.BeeFilter;
+import com.latmod.mods.itemfilters.integration.forestry.BeeFilter;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
