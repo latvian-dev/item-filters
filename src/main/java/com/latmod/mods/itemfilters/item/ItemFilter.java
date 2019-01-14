@@ -1,13 +1,11 @@
 package com.latmod.mods.itemfilters.item;
 
+import com.latmod.mods.itemfilters.ItemFilters;
 import com.latmod.mods.itemfilters.api.IItemFilter;
 import com.latmod.mods.itemfilters.api.IRegisteredItemFilter;
 import com.latmod.mods.itemfilters.api.ItemFiltersAPI;
 import com.latmod.mods.itemfilters.filters.AlwaysTrueItemFilter;
 import com.latmod.mods.itemfilters.filters.LogicFilter;
-import com.latmod.mods.itemfilters.gui.GuiSelectFilter;
-import com.latmod.mods.itemfilters.net.MessageUpdateItem;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -194,11 +192,11 @@ public class ItemFilter extends Item
 			{
 				if (player.isSneaking())
 				{
-					openSelectionGUI((ItemFilterData) filter, hand);
+					ItemFilters.PROXY.openSelectionGUI((ItemFilterData) filter, hand);
 				}
 				else
 				{
-					openGUI(filter, hand);
+					ItemFilters.PROXY.openGUI(filter, hand);
 				}
 			}
 
@@ -206,16 +204,6 @@ public class ItemFilter extends Item
 		}
 
 		return new ActionResult<>(EnumActionResult.PASS, stack);
-	}
-
-	private void openSelectionGUI(ItemFilterData data, EnumHand hand)
-	{
-		Minecraft.getMinecraft().displayGuiScreen(new GuiSelectFilter(data, () -> new MessageUpdateItem(hand, data).send()));
-	}
-
-	private void openGUI(IItemFilter filter, EnumHand hand)
-	{
-		filter.openEditingGUI(() -> new MessageUpdateItem(hand, filter).send());
 	}
 
 	@Override

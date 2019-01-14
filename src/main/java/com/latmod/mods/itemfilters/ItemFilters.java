@@ -10,6 +10,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import javax.annotation.Nullable;
@@ -27,6 +28,9 @@ public class ItemFilters
 
 	@Mod.Instance(MOD_ID)
 	public static ItemFilters INSTANCE;
+
+	@SidedProxy(serverSide = "com.latmod.mods.itemfilters.ItemFiltersCommon", clientSide = "com.latmod.mods.itemfilters.client.ItemFiltersClient")
+	public static ItemFiltersCommon PROXY;
 
 	@Mod.EventHandler
 	public void onPreInit(FMLPreInitializationEvent event)
