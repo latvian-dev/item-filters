@@ -8,7 +8,7 @@ import net.minecraftforge.common.capabilities.CapabilityInject;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -24,7 +24,7 @@ public class ItemFiltersAPI
 	@CapabilityInject(IItemFilter.class)
 	public static Capability<IItemFilter> CAPABILITY;
 
-	private static final Map<String, Supplier<IRegisteredItemFilter>> REGISTRY0 = new HashMap<>();
+	private static final Map<String, Supplier<IRegisteredItemFilter>> REGISTRY0 = new LinkedHashMap<>();
 
 	/**
 	 * Immutable map of registered filters.

@@ -1,14 +1,15 @@
 package com.latmod.mods.itemfilters.filters;
 
 import com.latmod.mods.itemfilters.api.StringValueFilterVariant;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -92,7 +93,26 @@ public class OreDictionaryFilter extends StringValueFilter
 	{
 		if (cachedItems == null)
 		{
-			cachedItems = getValue().isEmpty() ? Collections.emptyList() : compress(OreDictionary.getOres(getValue()));
+			cachedItems = new ArrayList<>();
+
+			if (!getValue().isEmpty())
+			{
+				for (ItemStack stack : compress(OreDictionary.getOres(getValue())))
+				{
+					if (stack.getMetadata() == OreDictionary.WILDCARD_VALUE)
+					{
+						NonNullList<ItemStack> list1 = NonNullList.create();
+						stack.getItem().getSubItems(CreativeTabs.SEARCH, list1);
+						cachedItems.addAll(list1);
+					}
+					else
+					{
+						cachedItems.add(stack);
+					}
+				}
+			}
+
+			cachedItems = compress(cachedItems);
 		}
 
 		if (!cachedItems.isEmpty())

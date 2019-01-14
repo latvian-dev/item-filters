@@ -1,6 +1,9 @@
 item.itemfilters.filter.name=Item Filter
 item.itemfilters.missing.name=Missing Item
 
+filter.itemfilters.always_true.name=Always True
+filter.itemfilters.always_true.filter=Matches all items
+
 filter.itemfilters.or.name=OR Filter
 filter.itemfilters.or.filter=One must match
 
@@ -13,11 +16,11 @@ filter.itemfilters.not.filter=Invert filter
 filter.itemfilters.xor.name=XOR Filter
 filter.itemfilters.xor.filter=One of two, but not both
 
-item.itemfilters.ore.name=Ore Dictionary Filter
-item.itemfilters.ore.filter=Ore Dictionary names, such as 'ingotCopper' or 'cobblestone'
+filter.itemfilters.ore.name=Ore Dictionary Filter
+filter.itemfilters.ore.filter=Ore Dictionary names, such as 'ingotCopper' or 'cobblestone'
 
-item.itemfilters.creative_tab.name=Creative Tab Filter
-item.itemfilters.creative_tab.filter=Use Creative Tab ID
+filter.itemfilters.creative_tab.name=Creative Tab Filter
+filter.itemfilters.creative_tab.filter=Use Creative Tab ID
 
-item.itemfilters.mod.name=Mod Filter
-item.itemfilters.mod.filter=Use Mod ID
+filter.itemfilters.mod.name=Mod Filter
+filter.itemfilters.mod.filter=Use Mod ID

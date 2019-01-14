@@ -18,7 +18,6 @@ public class ItemFiltersEventHandler
 {
 	private static Item withName(Item item, String name)
 	{
-		item.setCreativeTab(CreativeTabs.TRANSPORTATION);
 		item.setRegistryName(name);
 		item.setTranslationKey(ItemFilters.MOD_ID + "." + name);
 		return item;
@@ -27,8 +26,8 @@ public class ItemFiltersEventHandler
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> event)
 	{
-		event.getRegistry().register(withName(new ItemFilter(), "filter"));
-		event.getRegistry().register(withName(new ItemMissing(), "missing"));
+		event.getRegistry().register(withName(new ItemFilter(), "filter").setCreativeTab(CreativeTabs.TRANSPORTATION));
+		event.getRegistry().register(withName(new ItemMissing(), "missing").setCreativeTab(CreativeTabs.MISC));
 	}
 
 	@SubscribeEvent
