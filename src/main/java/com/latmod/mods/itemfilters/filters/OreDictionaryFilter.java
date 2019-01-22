@@ -97,7 +97,7 @@ public class OreDictionaryFilter extends StringValueFilter
 
 			if (!getValue().isEmpty())
 			{
-				for (ItemStack stack : compress(OreDictionary.getOres(getValue())))
+				for (ItemStack stack : OreDictionary.getOres(getValue()))
 				{
 					if (stack.getMetadata() == OreDictionary.WILDCARD_VALUE)
 					{
