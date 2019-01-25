@@ -18,7 +18,8 @@ import javax.annotation.Nullable;
 @Mod(
 		modid = ItemFilters.MOD_ID,
 		name = ItemFilters.MOD_NAME,
-		version = ItemFilters.VERSION
+		version = ItemFilters.VERSION,
+		dependencies = "after:forestry"
 )
 public class ItemFilters
 {

@@ -2,7 +2,7 @@ package com.latmod.mods.itemfilters.filters;
 
 import com.latmod.mods.itemfilters.api.IRegisteredItemFilter;
 import com.latmod.mods.itemfilters.api.ItemFiltersAPI;
-import com.latmod.mods.itemfilters.integration.forestry.BeeFilter;
+import com.latmod.mods.itemfilters.integration.forestry.ForestryIntegration;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -77,12 +77,7 @@ public abstract class FilterBase implements IRegisteredItemFilter
 
 		if (Loader.isModLoaded("forestry"))
 		{
-			registerForestry();
+			ForestryIntegration.init();
 		}
-	}
-
-	private static void registerForestry()
-	{
-		ItemFiltersAPI.register("bee", BeeFilter::new);
 	}
 }
