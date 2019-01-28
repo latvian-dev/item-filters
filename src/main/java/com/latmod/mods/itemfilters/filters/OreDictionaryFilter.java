@@ -72,7 +72,7 @@ public class OreDictionaryFilter extends StringValueFilter
 	@Override
 	public boolean filter(ItemStack stack)
 	{
-		if (getValue().isEmpty())
+		if (getValue().isEmpty() || stack.isEmpty())
 		{
 			return false;
 		}
