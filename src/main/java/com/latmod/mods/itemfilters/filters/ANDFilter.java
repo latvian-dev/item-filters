@@ -89,4 +89,10 @@ public class ANDFilter extends LogicFilter implements INBTSerializable<NBTTagLis
 			}
 		}
 	}
+
+	@Override
+	public void resetData()
+	{
+		items.clear();
+	}
 }

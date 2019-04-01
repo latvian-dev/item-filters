@@ -50,4 +50,10 @@ public class NOTFilter extends LogicFilter implements INBTSerializable<NBTBase>
 			f.clearCache();
 		}
 	}
+
+	@Override
+	public void resetData()
+	{
+		filter = ItemStack.EMPTY;
+	}
 }

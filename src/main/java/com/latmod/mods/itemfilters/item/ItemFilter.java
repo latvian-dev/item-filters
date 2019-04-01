@@ -140,23 +140,18 @@ public class ItemFilter extends Item
 	@Override
 	public void readNBTShareTag(ItemStack stack, @Nullable NBTTagCompound nbt)
 	{
-		stack.setTagCompound(null);
+		stack.setTagCompound(nbt == null ? null : (NBTTagCompound) nbt.getTag("nbt"));
 
-		if (nbt != null)
+		IItemFilter filter = ItemFiltersAPI.getFilter(stack);
+		filter.resetData();
+
+		if (nbt != null && filter instanceof INBTSerializable)
 		{
-			if (nbt.hasKey("nbt"))
-			{
-				stack.setTagCompound(nbt.getCompoundTag("nbt"));
-			}
+			NBTBase nbt1 = nbt.getTag("filter");
 
-			if (nbt.hasKey("filter"))
+			if (nbt1 != null)
 			{
-				IItemFilter filter = ItemFiltersAPI.getFilter(stack);
-
-				if (filter instanceof INBTSerializable)
-				{
-					((INBTSerializable) filter).deserializeNBT(nbt.getTag("filter"));
-				}
+				((INBTSerializable) filter).deserializeNBT(nbt1);
 			}
 		}
 	}

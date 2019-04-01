@@ -55,6 +55,7 @@ public class GuiEditStringValueFilter extends GuiScreen
 		nameField.setEnableBackgroundDrawing(false);
 		nameField.setText(filter.getValue());
 		nameField.setFocused(true);
+		updateVariants();
 	}
 
 	@Override

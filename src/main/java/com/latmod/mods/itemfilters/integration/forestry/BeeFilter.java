@@ -101,4 +101,11 @@ public class BeeFilter extends FilterBase implements INBTSerializable<NBTTagComp
 	{
 		stacks.add(beeStack);
 	}
+
+	@Override
+	public void resetData()
+	{
+		beeStack = ItemStack.EMPTY;
+		checkSecondary = false;
+	}
 }

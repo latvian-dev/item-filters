@@ -45,4 +45,10 @@ public abstract class StringValueFilter extends FilterBase implements IStringVal
 	{
 		Minecraft.getMinecraft().displayGuiScreen(new GuiEditStringValueFilter(this, save));
 	}
+
+	@Override
+	public void resetData()
+	{
+		value = "";
+	}
 }

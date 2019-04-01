@@ -53,4 +53,8 @@ public interface IItemFilter
 	default void clearCache()
 	{
 	}
+
+	default void resetData()
+	{
+	}
 }

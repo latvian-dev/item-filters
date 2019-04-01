@@ -71,4 +71,11 @@ public class XORFilter extends LogicFilter implements INBTSerializable<NBTTagCom
 			rightf.clearCache();
 		}
 	}
+
+	@Override
+	public void resetData()
+	{
+		left = ItemStack.EMPTY;
+		right = ItemStack.EMPTY;
+	}
 }

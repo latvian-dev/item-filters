@@ -104,4 +104,10 @@ public class ORFilter extends LogicFilter implements INBTSerializable<NBTTagList
 			}
 		}
 	}
+
+	@Override
+	public void resetData()
+	{
+		items.clear();
+	}
 }
