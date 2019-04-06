@@ -1,9 +1,12 @@
 package com.latmod.mods.itemfilters;
 
 import com.latmod.mods.itemfilters.api.IItemFilter;
+import com.latmod.mods.itemfilters.api.IPaintable;
 import com.latmod.mods.itemfilters.filters.AlwaysTrueItemFilter;
 import com.latmod.mods.itemfilters.filters.FilterBase;
 import com.latmod.mods.itemfilters.net.ItemFiltersNetHandler;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
@@ -54,6 +57,37 @@ public class ItemFilters
 				}
 			}
 		}, () -> AlwaysTrueItemFilter.INSTANCE);
+
+		CapabilityManager.INSTANCE.register(IPaintable.class, new Capability.IStorage<IPaintable>()
+		{
+			@Nullable
+			@Override
+			public NBTBase writeNBT(Capability<IPaintable> capability, IPaintable instance, EnumFacing side)
+			{
+				return instance instanceof INBTSerializable ? ((INBTSerializable) instance).serializeNBT() : null;
+			}
+
+			@Override
+			public void readNBT(Capability<IPaintable> capability, IPaintable instance, EnumFacing side, NBTBase nbt)
+			{
+				if (nbt != null && instance instanceof INBTSerializable)
+				{
+					((INBTSerializable) instance).deserializeNBT(nbt);
+				}
+			}
+		}, () -> new IPaintable()
+		{
+			@Override
+			public void paint(IBlockState paint, EnumFacing facing, boolean all)
+			{
+			}
+
+			@Override
+			public IBlockState getPaint()
+			{
+				return Blocks.AIR.getDefaultState();
+			}
+		});
 
 		ItemFiltersNetHandler.init();
 		FilterBase.register();
