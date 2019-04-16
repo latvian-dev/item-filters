@@ -6,7 +6,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -21,11 +21,13 @@ public class CreativeTabFilter extends StringValueFilter
 {
 	private static Field labelField;
 
+	@SuppressWarnings("deprecation")
 	public static String getTabID(CreativeTabs tab)
 	{
 		if (labelField == null)
 		{
-			labelField = ObfuscationReflectionHelper.findField(CreativeTabs.class, "field_78034_o");
+			labelField = ReflectionHelper.findField(CreativeTabs.class, "field_78034_o");
+			labelField.setAccessible(true);
 		}
 
 		try
