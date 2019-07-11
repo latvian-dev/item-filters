@@ -1,1 +1,1 @@
-# Item Filters [![](http://cf.way2muchnoise.eu/item-filters.svg)](https://minecraft.curseforge.com/projects/item-filters) [![](http://cf.way2muchnoise.eu/versions/item-filters.svg)](https://minecraft.curseforge.com/projects/item-filters)
+# Item Filters [![](http://cf.way2muchnoise.eu/item-filters.svg) ![](https://cf.way2muchnoise.eu/packs/item-filters.svg) ![](http://cf.way2muchnoise.eu/versions/item-filters.svg)](https://www.curseforge.com/minecraft/mc-mods/item-filters)
