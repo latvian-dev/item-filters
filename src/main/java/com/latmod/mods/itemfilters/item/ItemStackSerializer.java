@@ -1,16 +1,17 @@
 package com.latmod.mods.itemfilters.item;
 
-import net.minecraft.init.Items;
+import com.latmod.mods.itemfilters.util.NBTUtil;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.JsonToNBT;
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagString;
+import net.minecraft.nbt.StringNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 
@@ -25,18 +26,18 @@ public class ItemStackSerializer
 		}
 		else if (input.startsWith("{"))
 		{
-			NBTTagCompound nbt = JsonToNBT.getTagFromJson(input);
+			CompoundNBT nbt = JsonToNBT.getTagFromJson(input);
 
 			if (nbt.getByte("Count") <= 0)
 			{
-				nbt.setByte("Count", (byte) 1);
+				nbt.putByte("Count", (byte) 1);
 			}
 
-			return new ItemStack(nbt);
+			return ItemStack.read(nbt);
 		}
 
-		String[] s1 = input.split(" ", 4);
-		Item item = Item.REGISTRY.getObject(new ResourceLocation(s1[0]));
+		String[] s1 = input.split(" ", 3);
+		Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(s1[0]));
 
 		if (item == null)
 		{
@@ -47,23 +48,18 @@ public class ItemStackSerializer
 			return ItemStack.EMPTY;
 		}
 
-		int stackSize = 1, meta = 0;
+		int stackSize = 1;
 
 		if (s1.length >= 2)
 		{
 			stackSize = MathHelper.getInt(s1[1], 1);
 		}
 
+		ItemStack itemstack = new ItemStack(item, stackSize);
+
 		if (s1.length >= 3)
 		{
-			meta = (s1[2].charAt(0) == '*') ? OreDictionary.WILDCARD_VALUE : MathHelper.getInt(s1[2], 0);
-		}
-
-		ItemStack itemstack = new ItemStack(item, stackSize, meta);
-
-		if (s1.length >= 4)
-		{
-			itemstack.setTagCompound(JsonToNBT.getTagFromJson(s1[3]));
+			itemstack.setTag(JsonToNBT.getTagFromJson(s1[3]));
 		}
 
 		return itemstack.isEmpty() ? ItemStack.EMPTY : itemstack;
@@ -88,29 +84,22 @@ public class ItemStackSerializer
 			return "minecraft:air";
 		}
 
-		NBTTagCompound nbt = stack.serializeNBT();
+		CompoundNBT nbt = stack.serializeNBT();
 
-		if (nbt.hasKey("ForgeCaps"))
+		if (nbt.contains("ForgeCaps"))
 		{
 			return nbt.toString();
 		}
 
-		StringBuilder builder = new StringBuilder(String.valueOf(Item.REGISTRY.getNameForObject(stack.getItem())));
+		StringBuilder builder = new StringBuilder(String.valueOf(ForgeRegistries.ITEMS.getKey(stack.getItem())));
 
 		int count = stack.getCount();
-		int meta = stack.getMetadata();
-		NBTTagCompound tag = stack.getTagCompound();
+		CompoundNBT tag = stack.getTag();
 
-		if (count > 1 || meta != 0 || tag != null)
+		if (count > 1 || tag != null)
 		{
 			builder.append(' ');
 			builder.append(count);
-		}
-
-		if (meta != 0 || tag != null)
-		{
-			builder.append(' ');
-			builder.append(meta);
 		}
 
 		if (tag != null)
@@ -122,68 +111,68 @@ public class ItemStackSerializer
 		return builder.toString();
 	}
 
-	public static NBTBase write(ItemStack stack, boolean forceCompound)
+	public static INBT write(ItemStack stack, boolean forceCompound)
 	{
 		if (stack.isEmpty())
 		{
-			return forceCompound ? new NBTTagCompound() : new NBTTagString("");
+			return forceCompound ? new CompoundNBT() : new StringNBT("");
 		}
 
-		NBTTagCompound nbt = stack.serializeNBT();
+		CompoundNBT nbt = stack.serializeNBT();
 
-		if (!nbt.hasKey("ForgeCaps") && !nbt.hasKey("tag"))
+		if (!nbt.contains("ForgeCaps") && !nbt.contains("tag"))
 		{
 			if (!forceCompound)
 			{
-				return new NBTTagString(toString(stack));
+				return new StringNBT(toString(stack));
 			}
 
-			NBTTagCompound nbt1 = new NBTTagCompound();
-			nbt1.setString("item", toString(stack));
+			CompoundNBT nbt1 = new CompoundNBT();
+			nbt1.putString("item", toString(stack));
 			return nbt1;
 		}
 
 		if (nbt.getByte("Count") == 1)
 		{
-			nbt.removeTag("Count");
+			nbt.remove("Count");
 		}
 
 		if (nbt.getShort("Damage") == 0)
 		{
-			nbt.removeTag("Damage");
+			nbt.remove("Damage");
 		}
 
 		return nbt;
 	}
 
-	public static ItemStack read(@Nullable NBTBase nbtBase)
+	public static ItemStack read(@Nullable INBT inbt)
 	{
-		if (nbtBase == null || nbtBase.isEmpty())
+		if (NBTUtil.isNullOrEmpty(inbt))
 		{
 			return ItemStack.EMPTY;
 		}
-		else if (nbtBase instanceof NBTTagString)
+		else if (inbt instanceof StringNBT)
 		{
-			return parseItem(((NBTTagString) nbtBase).getString());
+			return parseItem(((StringNBT) inbt).getString());
 		}
-		else if (!(nbtBase instanceof NBTTagCompound))
+		else if (!(inbt instanceof CompoundNBT))
 		{
 			return ItemStack.EMPTY;
 		}
 
-		NBTTagCompound nbt = (NBTTagCompound) nbtBase;
+		CompoundNBT nbt = (CompoundNBT) inbt;
 
-		if (nbt.hasKey("item", Constants.NBT.TAG_STRING))
+		if (nbt.contains("item", Constants.NBT.TAG_STRING))
 		{
 			return parseItem(nbt.getString("item"));
 		}
 
-		if (!nbt.hasKey("Count"))
+		if (!nbt.contains("Count"))
 		{
-			nbt.setByte("Count", (byte) 1);
+			nbt.putByte("Count", (byte) 1);
 		}
 
-		ItemStack stack = new ItemStack(nbt);
+		ItemStack stack = ItemStack.read(nbt);
 		return stack.isEmpty() ? ItemStack.EMPTY : stack;
 	}
 }

@@ -1,0 +1,8 @@
+modLoader="javafml"
+loaderVersion="[24,)"
+authors="LatvianModder, Coded"
+[[mods]] #mandatory
+modId="itemfilters"
+version="${file.jarVersion}"
+displayName="ItemFilters"
+description='''i dunno'''

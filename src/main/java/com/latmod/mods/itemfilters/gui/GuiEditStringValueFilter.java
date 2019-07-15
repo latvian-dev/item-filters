@@ -2,15 +2,14 @@ package com.latmod.mods.itemfilters.gui;
 
 import com.latmod.mods.itemfilters.api.IStringValueFilter;
 import com.latmod.mods.itemfilters.api.StringValueFilterVariant;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.GuiTextField;
+import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.toasts.SystemToast;
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.util.text.TextComponentString;
-import org.lwjgl.input.Keyboard;
+import net.minecraft.util.text.StringTextComponent;
+import org.lwjgl.glfw.GLFW;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,17 +17,18 @@ import java.util.Map;
 /**
  * @author LatvianModder
  */
-public class GuiEditStringValueFilter extends GuiScreen
+public class GuiEditStringValueFilter extends Screen
 {
 	public final IStringValueFilter filter;
 	public final Runnable save;
-	private GuiTextField nameField;
 	private final Map<String, StringValueFilterVariant> variants;
 	private final ArrayList<StringValueFilterVariant> visibleVariants;
+	private TextFieldWidget nameField;
 	private int selectedVariant = -1;
 
 	public GuiEditStringValueFilter(IStringValueFilter f, Runnable s)
 	{
+		super(new StringTextComponent(""));
 		filter = f;
 		save = s;
 		variants = new HashMap<>();
@@ -43,26 +43,21 @@ public class GuiEditStringValueFilter extends GuiScreen
 	}
 
 	@Override
-	public void initGui()
+	public void init()
 	{
-		super.initGui();
-		Keyboard.enableRepeatEvents(true);
+		super.init();
+		//		Keyboard.enableRepeatEvents(true);
 		int i = width / 2;
 		int j = height / 2;
-		nameField = new GuiTextField(0, fontRenderer, i - 52, j - 6, 104, 12);
+		nameField = new TextFieldWidget(font, i - 52, j - 6, 104, 12, "");
 		nameField.setTextColor(-1);
 		nameField.setDisabledTextColour(-1);
 		nameField.setEnableBackgroundDrawing(false);
 		nameField.setText(filter.getValue());
-		nameField.setFocused(true);
+		nameField.setFocused2(true);
 		updateVariants();
 	}
 
-	@Override
-	public void onGuiClosed()
-	{
-		Keyboard.enableRepeatEvents(false);
-	}
 
 	private void updateVariants()
 	{
@@ -93,9 +88,9 @@ public class GuiEditStringValueFilter extends GuiScreen
 	}
 
 	@Override
-	protected void keyTyped(char typedChar, int keyCode) throws IOException
+	public boolean charTyped(char typedChar, int keyCode)
 	{
-		if (keyCode == Keyboard.KEY_RETURN)
+		if (keyCode == GLFW.GLFW_KEY_ENTER)
 		{
 			String text = visibleVariants.size() == 1 ? visibleVariants.get(0).id : selectedVariant == -1 ? nameField.getText() : visibleVariants.get(selectedVariant).id;
 
@@ -104,22 +99,22 @@ public class GuiEditStringValueFilter extends GuiScreen
 				filter.setValue(text);
 				save.run();
 
-				mc.displayGuiScreen(null);
+				minecraft.displayGuiScreen(null);
 
-				if (mc.currentScreen == null)
+				if (minecraft.currentScreen == null)
 				{
-					mc.setIngameFocus();
+					minecraft.setGameFocused(true);
 				}
 
 				StringValueFilterVariant variant = variants.get(text);
-				mc.getToastGui().add(new SystemToast(SystemToast.Type.TUTORIAL_HINT, new TextComponentString("Value changed!"), text.isEmpty() ? null : new TextComponentString(variant == null ? text : variant.getTitle())));
+				minecraft.getToastGui().add(new SystemToast(SystemToast.Type.TUTORIAL_HINT, new StringTextComponent("Value changed!"), text.isEmpty() ? null : new StringTextComponent(variant == null ? text : variant.getTitle())));
 			}
 			else
 			{
-				mc.getToastGui().add(new SystemToast(SystemToast.Type.TUTORIAL_HINT, new TextComponentString("Invalid string!"), null));
+				minecraft.getToastGui().add(new SystemToast(SystemToast.Type.TUTORIAL_HINT, new StringTextComponent("Invalid string!"), null));
 			}
 		}
-		else if (keyCode == Keyboard.KEY_TAB)
+		else if (keyCode == GLFW.GLFW_KEY_TAB)
 		{
 			selectedVariant++;
 
@@ -128,67 +123,66 @@ public class GuiEditStringValueFilter extends GuiScreen
 				selectedVariant = 0;
 			}
 		}
-		else if (nameField.textboxKeyTyped(typedChar, keyCode))
+		else if (nameField.charTyped(typedChar, keyCode))
 		{
 			updateVariants();
 		}
 		else
 		{
-			super.keyTyped(typedChar, keyCode);
+			return super.charTyped(typedChar, keyCode);
 		}
+		return true;
 	}
 
 	@Override
-	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
+	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton)
 	{
-		super.mouseClicked(mouseX, mouseY, mouseButton);
+		if (super.mouseClicked(mouseX, mouseY, mouseButton))
+		{
+			return true;
+		}
 
 		if (mouseButton == 1)
 		{
 			nameField.setText("");
 			updateVariants();
+			return true;
 		}
 		else
 		{
-			nameField.mouseClicked(mouseX, mouseY, mouseButton);
-		}
-
-		if (!nameField.isFocused())
-		{
-			nameField.setFocused(true);
+			return nameField.mouseClicked(mouseX, mouseY, mouseButton);
 		}
 	}
 
 	@Override
-	public void drawScreen(int mouseX, int mouseY, float partialTicks)
+	public void render(int mouseX, int mouseY, float partialTicks)
 	{
-		drawDefaultBackground();
-		super.drawScreen(mouseX, mouseY, partialTicks);
+		renderBackground();
+		super.render(mouseX, mouseY, partialTicks);
 		GlStateManager.disableLighting();
 		GlStateManager.disableBlend();
 
 		if (!variants.isEmpty())
 		{
-			drawString(fontRenderer, "Variants [" + visibleVariants.size() + "]:", 4, 4, -1);
+			drawString(font, "Variants [" + visibleVariants.size() + "]:", 4, 4, -1);
 
 			for (int i = 0; i < visibleVariants.size(); i++)
 			{
 				StringValueFilterVariant variant = visibleVariants.get(i);
-				drawString(fontRenderer, variant.getTitle(), variant.icon.isEmpty() ? 4 : 14, 14 + i * 10, i == selectedVariant ? 0xFFFFFF00 : -1);
+				drawString(font, variant.getTitle(), variant.icon.isEmpty() ? 4 : 14, 14 + i * 10, i == selectedVariant ? 0xFFFFFF00 : -1);
 
 				if (!variant.icon.isEmpty())
 				{
 					GlStateManager.pushMatrix();
-					GlStateManager.translate(4, 14 + i * 10, 0);
-					GlStateManager.scale(0.5F, 0.5F, 1F);
-					zLevel = 100F;
-					itemRender.zLevel = 100F;
-					GlStateManager.enableDepth();
+					GlStateManager.translated(4, 14 + i * 10, 0);
+					GlStateManager.scaled(0.5F, 0.5F, 1F);
+					//					zLevel = 100F;
+					itemRenderer.zLevel = 100F;
+					GlStateManager.enableDepthTest();
 					RenderHelper.enableGUIStandardItemLighting();
-					itemRender.renderItemAndEffectIntoGUI(mc.player, variant.icon, 0, 0);
-					itemRender.renderItemOverlayIntoGUI(fontRenderer, variant.icon, 0, 0, "");
-					itemRender.zLevel = 0F;
-					zLevel = 0F;
+					itemRenderer.renderItemAndEffectIntoGUI(minecraft.player, variant.icon, 0, 0);
+					itemRenderer.renderItemOverlayIntoGUI(font, variant.icon, 0, 0, "");
+					itemRenderer.zLevel = 0F;
 					GlStateManager.popMatrix();
 				}
 
@@ -199,6 +193,6 @@ public class GuiEditStringValueFilter extends GuiScreen
 			}
 		}
 
-		nameField.drawTextBox();
+		nameField.render(mouseX, mouseY, partialTicks);
 	}
 }

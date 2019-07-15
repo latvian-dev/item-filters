@@ -2,45 +2,36 @@ package com.latmod.mods.itemfilters.filters;
 
 import com.latmod.mods.itemfilters.api.StringValueFilterVariant;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.registries.ForgeRegistries;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author LatvianModder
  */
-public class CreativeTabFilter extends StringValueFilter
+public class ItemGroupFilter extends StringValueFilter
 {
-	private static Field labelField;
+	private ItemGroup tab = null;
 
 	@SuppressWarnings("deprecation")
-	public static String getTabID(CreativeTabs tab)
+	public static String getTabID(ItemGroup tab)
 	{
-		if (labelField == null)
-		{
-			labelField = ReflectionHelper.findField(CreativeTabs.class, "field_78034_o");
-			labelField.setAccessible(true);
-		}
-
 		try
 		{
-			return labelField.get(tab).toString();
+			return tab.getTabLabel().toString();
 		}
 		catch (Exception ex)
 		{
 			return "";
 		}
 	}
-
-	private CreativeTabs tab = null;
 
 	@Override
 	public String getID()
@@ -56,14 +47,14 @@ public class CreativeTabFilter extends StringValueFilter
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public List<StringValueFilterVariant> getValueVariants()
 	{
 		List<StringValueFilterVariant> variants = new ArrayList<>();
 
-		for (CreativeTabs t : CreativeTabs.CREATIVE_TAB_ARRAY)
+		for (ItemGroup t : ItemGroup.GROUPS)
 		{
-			if (t == CreativeTabs.SEARCH || t == CreativeTabs.INVENTORY)
+			if (t == ItemGroup.SEARCH || t == ItemGroup.INVENTORY)
 			{
 				continue;
 			}
@@ -77,11 +68,11 @@ public class CreativeTabFilter extends StringValueFilter
 		return variants;
 	}
 
-	public CreativeTabs getTab()
+	public ItemGroup getTab()
 	{
 		if (tab == null)
 		{
-			for (CreativeTabs t : CreativeTabs.CREATIVE_TAB_ARRAY)
+			for (ItemGroup t : ItemGroup.GROUPS)
 			{
 				if (getValue().equals(getTabID(t)))
 				{
@@ -92,7 +83,7 @@ public class CreativeTabFilter extends StringValueFilter
 
 			if (tab == null)
 			{
-				tab = CreativeTabs.MISC;
+				tab = ItemGroup.MISC;
 			}
 		}
 
@@ -107,7 +98,7 @@ public class CreativeTabFilter extends StringValueFilter
 			return false;
 		}
 
-		for (CreativeTabs t : stack.getItem().getCreativeTabs())
+		for (ItemGroup t : stack.getItem().getCreativeTabs())
 		{
 			if (t == getTab())
 			{
@@ -125,9 +116,9 @@ public class CreativeTabFilter extends StringValueFilter
 		{
 			NonNullList<ItemStack> allItems = NonNullList.create();
 
-			for (Item item : Item.REGISTRY)
+			for (Item item : ForgeRegistries.ITEMS.getValues())
 			{
-				item.getSubItems(getTab(), allItems);
+				item.fillItemGroup(getTab(), allItems);
 			}
 
 			cachedItems = compress(allItems);

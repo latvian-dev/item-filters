@@ -2,84 +2,74 @@ package com.latmod.mods.itemfilters.net;
 
 import com.latmod.mods.itemfilters.api.IItemFilter;
 import com.latmod.mods.itemfilters.api.ItemFiltersAPI;
-import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumHand;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.Hand;
 import net.minecraftforge.common.util.INBTSerializable;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-
-import javax.annotation.Nullable;
+import net.minecraftforge.fml.network.NetworkEvent;
 
 /**
  * @author LatvianModder
  */
-public class MessageUpdateItem implements IMessage
+public class MessageUpdateItem
 {
-	public static class Handler implements IMessageHandler<MessageUpdateItem, IMessage>
-	{
-		@Override
-		@Nullable
-		public IMessage onMessage(MessageUpdateItem message, MessageContext ctx)
-		{
-			if (message.nbt != null)
-			{
-				EntityPlayerMP player = ctx.getServerHandler().player;
-				player.server.addScheduledTask(() -> {
-					ItemStack stack = player.getHeldItem(message.hand);
-					IItemFilter filter = ItemFiltersAPI.getFilter(stack);
-
-					if (filter instanceof INBTSerializable)
-					{
-						((INBTSerializable) filter).deserializeNBT(message.nbt.getTag("x"));
-					}
-				});
-			}
-
-			return null;
-		}
-	}
-
-	private EnumHand hand;
-	private NBTTagCompound nbt;
-
+	private Hand hand;
+	private CompoundNBT nbt;
 	public MessageUpdateItem()
 	{
 	}
 
-	public MessageUpdateItem(EnumHand h, IItemFilter filter)
+	public MessageUpdateItem(Hand h, IItemFilter filter)
 	{
 		hand = h;
 
 		if (filter instanceof INBTSerializable)
 		{
-			NBTBase nbt1 = ((INBTSerializable) filter).serializeNBT();
+			INBT nbt1 = ((INBTSerializable) filter).serializeNBT();
 
 			if (nbt1 != null)
 			{
-				nbt = new NBTTagCompound();
-				nbt.setTag("x", nbt1);
+				nbt = new CompoundNBT();
+				nbt.put("x", nbt1);
 			}
 		}
 	}
 
-	@Override
-	public void fromBytes(ByteBuf buf)
+	public MessageUpdateItem(PacketBuffer buffer)
 	{
-		hand = buf.readBoolean() ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND;
-		nbt = ByteBufUtils.readTag(buf);
+		fromBytes(buffer);
 	}
 
-	@Override
-	public void toBytes(ByteBuf buf)
+	public void onMessage(NetworkEvent.Context ctx)
 	{
-		buf.writeBoolean(hand != EnumHand.MAIN_HAND);
-		ByteBufUtils.writeTag(buf, nbt);
+		if (nbt != null)
+		{
+			ServerPlayerEntity player = ctx.getSender();
+			player.server.execute(() -> {
+				ItemStack stack = player.getHeldItem(hand);
+				IItemFilter filter = ItemFiltersAPI.getFilter(stack);
+
+				if (filter instanceof INBTSerializable)
+				{
+					((INBTSerializable) filter).deserializeNBT(nbt.get("x"));
+				}
+			});
+		}
+	}
+
+	public void fromBytes(PacketBuffer buf)
+	{
+		hand = buf.readBoolean() ? Hand.OFF_HAND : Hand.MAIN_HAND;
+		nbt = buf.readCompoundTag();
+	}
+
+	public void toBytes(PacketBuffer buf)
+	{
+		buf.writeBoolean(hand != Hand.MAIN_HAND);
+		buf.writeCompoundTag(nbt);
 	}
 
 	public void send()

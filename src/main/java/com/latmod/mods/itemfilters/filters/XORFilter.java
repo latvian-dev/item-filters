@@ -4,13 +4,13 @@ import com.latmod.mods.itemfilters.api.IItemFilter;
 import com.latmod.mods.itemfilters.api.ItemFiltersAPI;
 import com.latmod.mods.itemfilters.item.ItemMissing;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.common.util.INBTSerializable;
 
 /**
  * @author LatvianModder
  */
-public class XORFilter extends LogicFilter implements INBTSerializable<NBTTagCompound>
+public class XORFilter extends LogicFilter implements INBTSerializable<CompoundNBT>
 {
 	public ItemStack left = ItemStack.EMPTY;
 	public ItemStack right = ItemStack.EMPTY;
@@ -28,28 +28,28 @@ public class XORFilter extends LogicFilter implements INBTSerializable<NBTTagCom
 	}
 
 	@Override
-	public NBTTagCompound serializeNBT()
+	public CompoundNBT serializeNBT()
 	{
-		NBTTagCompound nbt = new NBTTagCompound();
+		CompoundNBT nbt = new CompoundNBT();
 
 		if (!left.isEmpty())
 		{
-			nbt.setTag("l", ItemMissing.write(left, false));
+			nbt.put("l", ItemMissing.write(left, false));
 		}
 
 		if (!right.isEmpty())
 		{
-			nbt.setTag("r", ItemMissing.write(right, false));
+			nbt.put("r", ItemMissing.write(right, false));
 		}
 
 		return nbt;
 	}
 
 	@Override
-	public void deserializeNBT(NBTTagCompound nbt)
+	public void deserializeNBT(CompoundNBT nbt)
 	{
-		left = ItemMissing.read(nbt.getTag("l"));
-		right = ItemMissing.read(nbt.getTag("r"));
+		left = ItemMissing.read(nbt.get("l"));
+		right = ItemMissing.read(nbt.get("r"));
 	}
 
 	@Override

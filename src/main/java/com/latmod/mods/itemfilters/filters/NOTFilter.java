@@ -4,13 +4,13 @@ import com.latmod.mods.itemfilters.api.IItemFilter;
 import com.latmod.mods.itemfilters.api.ItemFiltersAPI;
 import com.latmod.mods.itemfilters.item.ItemMissing;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.INBT;
 import net.minecraftforge.common.util.INBTSerializable;
 
 /**
  * @author LatvianModder
  */
-public class NOTFilter extends LogicFilter implements INBTSerializable<NBTBase>
+public class NOTFilter extends LogicFilter implements INBTSerializable
 {
 	public ItemStack filter = ItemStack.EMPTY;
 
@@ -27,13 +27,13 @@ public class NOTFilter extends LogicFilter implements INBTSerializable<NBTBase>
 	}
 
 	@Override
-	public NBTBase serializeNBT()
+	public INBT serializeNBT()
 	{
 		return ItemMissing.write(filter, false);
 	}
 
 	@Override
-	public void deserializeNBT(NBTBase nbt)
+	public void deserializeNBT(INBT nbt)
 	{
 		filter = ItemMissing.read(nbt);
 	}

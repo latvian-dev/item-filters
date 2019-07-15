@@ -1,0 +1,28 @@
+{
+	"item.itemfilters.filter": "Item Filter",
+	"item.itemfilters.missing": "Missing Item",
+
+	"filter.itemfilters.always_true": "Always True",
+	"filter.itemfilters.always_true.filter": "Matches all items",
+
+	"filter.itemfilters.or": "OR Filter",
+	"filter.itemfilters.or.filter": "One must match",
+
+	"filter.itemfilters.and": "AND Filter",
+	"filter.itemfilters.and.filter": "All must match",
+
+	"filter.itemfilters.not": "NOT Filter",
+	"filter.itemfilters.not.filter": "Invert filter",
+
+	"filter.itemfilters.xor": "XOR Filter",
+	"filter.itemfilters.xor.filter": "One of two, but not both",
+
+	"filter.itemfilters.ore": "Ore Dictionary Filter",
+	"filter.itemfilters.ore.filter": "Ore Dictionary names, such as 'ingotCopper' or 'cobblestone'",
+
+	"filter.itemfilters.creative_tab": "Creative Tab Filter",
+	"filter.itemfilters.creative_tab.filter": "Use Creative Tab ID",
+
+	"filter.itemfilters.mod": "Mod Filter",
+	"filter.itemfilters.mod.filter": "Use Mod ID"
+}

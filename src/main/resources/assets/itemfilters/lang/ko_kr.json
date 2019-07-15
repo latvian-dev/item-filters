@@ -1,0 +1,28 @@
+{
+	"item.itemfilters.filter": "아이템 필터",
+	"item.itemfilters.missing": "아이템이 없음",
+
+	"filter.itemfilters.always_true": "항상 참",
+	"filter.itemfilters.always_true.filter": "모든 것이 참",
+
+	"filter.itemfilters.or": "OR 필터",
+	"filter.itemfilters.or.filter": "최소 하나가 참이여야 함",
+
+	"filter.itemfilters.and": "AND 필터",
+	"filter.itemfilters.and.filter": "모든 조건이 참이여야 함",
+
+	"filter.itemfilters.not": "NOT 필터",
+	"filter.itemfilters.not.filter": "반대의 결과값",
+
+	"filter.itemfilters.xor": "XOR 필터",
+	"filter.itemfilters.xor.filter": "둘 다 참이 아니며, 둘 중 하나만 참이여야 함",
+
+	"filter.itemfilters.ore": "광물 사전 필터",
+	"filter.itemfilters.ore.filter": "'ingotCopper' 나 'cobblestone'과 같은 광물 사전 사용",
+
+	"filter.itemfilters.creative_tab": "크리에이티브 탭 필터",
+	"filter.itemfilters.creative_tab.filter": "크리에이티브 탭 ID 사용",
+
+	"filter.itemfilters.mod": "모드 필터",
+	"filter.itemfilters.mod.filter": "모드 ID 사용"
+}

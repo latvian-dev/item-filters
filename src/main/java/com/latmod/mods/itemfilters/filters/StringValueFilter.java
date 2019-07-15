@@ -3,23 +3,17 @@ package com.latmod.mods.itemfilters.filters;
 import com.latmod.mods.itemfilters.api.IStringValueFilter;
 import com.latmod.mods.itemfilters.gui.GuiEditStringValueFilter;
 import net.minecraft.client.Minecraft;
-import net.minecraft.nbt.NBTTagString;
+import net.minecraft.nbt.StringNBT;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.INBTSerializable;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author LatvianModder
  */
-public abstract class StringValueFilter extends FilterBase implements IStringValueFilter, INBTSerializable<NBTTagString>
+public abstract class StringValueFilter extends FilterBase implements IStringValueFilter, INBTSerializable<StringNBT>
 {
 	private String value = "";
-
-	@Override
-	public void setValue(String v)
-	{
-		value = v;
-	}
 
 	@Override
 	public String getValue()
@@ -28,22 +22,28 @@ public abstract class StringValueFilter extends FilterBase implements IStringVal
 	}
 
 	@Override
-	public NBTTagString serializeNBT()
+	public void setValue(String v)
 	{
-		return new NBTTagString(getValue());
+		value = v;
 	}
 
 	@Override
-	public void deserializeNBT(NBTTagString nbt)
+	public StringNBT serializeNBT()
+	{
+		return new StringNBT(getValue());
+	}
+
+	@Override
+	public void deserializeNBT(StringNBT nbt)
 	{
 		setValue(nbt.getString());
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void openEditingGUI(Runnable save)
 	{
-		Minecraft.getMinecraft().displayGuiScreen(new GuiEditStringValueFilter(this, save));
+		Minecraft.getInstance().displayGuiScreen(new GuiEditStringValueFilter(this, save));
 	}
 
 	@Override

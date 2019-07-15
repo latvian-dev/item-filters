@@ -1,11 +1,12 @@
 package com.latmod.mods.itemfilters.api;
 
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ public interface IItemFilter
 	/**
 	 * Open GUI on client side
 	 */
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	default void openEditingGUI(Runnable save)
 	{
 	}
@@ -36,9 +37,9 @@ public interface IItemFilter
 	{
 		NonNullList<ItemStack> allItems = NonNullList.create();
 
-		for (Item item : Item.REGISTRY)
+		for (Item item : ForgeRegistries.ITEMS.getValues())
 		{
-			item.getSubItems(CreativeTabs.SEARCH, allItems);
+			item.fillItemGroup(ItemGroup.SEARCH, allItems);
 		}
 
 		for (ItemStack stack : allItems)

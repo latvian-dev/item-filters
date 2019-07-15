@@ -4,7 +4,7 @@ import com.latmod.mods.itemfilters.api.IItemFilter;
 import com.latmod.mods.itemfilters.api.ItemFiltersAPI;
 import com.latmod.mods.itemfilters.item.ItemMissing;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.ListNBT;
 import net.minecraftforge.common.util.INBTSerializable;
 
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * @author LatvianModder
  */
-public class ANDFilter extends LogicFilter implements INBTSerializable<NBTTagList>
+public class ANDFilter extends LogicFilter implements INBTSerializable<ListNBT>
 {
 	public final List<ItemStack> items = new ArrayList<>();
 
@@ -43,15 +43,15 @@ public class ANDFilter extends LogicFilter implements INBTSerializable<NBTTagLis
 	}
 
 	@Override
-	public NBTTagList serializeNBT()
+	public ListNBT serializeNBT()
 	{
-		NBTTagList list = new NBTTagList();
+		ListNBT list = new ListNBT();
 
 		for (ItemStack stack : items)
 		{
 			if (!stack.isEmpty())
 			{
-				list.appendTag(ItemMissing.write(stack, true));
+				list.add(ItemMissing.write(stack, true));
 			}
 		}
 
@@ -59,11 +59,11 @@ public class ANDFilter extends LogicFilter implements INBTSerializable<NBTTagLis
 	}
 
 	@Override
-	public void deserializeNBT(NBTTagList nbt)
+	public void deserializeNBT(ListNBT nbt)
 	{
 		items.clear();
 
-		for (int i = 0; i < nbt.tagCount(); i++)
+		for (int i = 0; i < nbt.size(); i++)
 		{
 			ItemStack stack = ItemMissing.read(nbt.get(i));
 

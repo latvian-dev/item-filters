@@ -6,7 +6,8 @@ import com.latmod.mods.itemfilters.gui.GuiSelectFilter;
 import com.latmod.mods.itemfilters.item.ItemFilter;
 import com.latmod.mods.itemfilters.net.MessageUpdateItem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
+import net.minecraft.util.text.StringTextComponent;
 
 /**
  * @author LatvianModder
@@ -14,13 +15,13 @@ import net.minecraft.util.EnumHand;
 public class ItemFiltersClient extends ItemFiltersCommon
 {
 	@Override
-	public void openSelectionGUI(ItemFilter.ItemFilterData data, EnumHand hand)
+	public void openSelectionGUI(ItemFilter.ItemFilterData data, Hand hand)
 	{
-		Minecraft.getMinecraft().displayGuiScreen(new GuiSelectFilter(data, () -> new MessageUpdateItem(hand, data).send()));
+		Minecraft.getInstance().displayGuiScreen(new GuiSelectFilter(new StringTextComponent("Filter Select"), data, () -> new MessageUpdateItem(hand, data).send()));
 	}
 
 	@Override
-	public void openGUI(IItemFilter filter, EnumHand hand)
+	public void openGUI(IItemFilter filter, Hand hand)
 	{
 		filter.openEditingGUI(() -> new MessageUpdateItem(hand, filter).send());
 	}

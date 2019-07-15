@@ -23,16 +23,16 @@ public enum NBTMatchingMode
 		}
 	}
 
-	public static NBTMatchingMode byName(String n)
-	{
-		NBTMatchingMode m = MAP.get(n);
-		return m == null ? MATCH : m;
-	}
-
 	public final String id;
 
 	NBTMatchingMode(String i)
 	{
 		id = i;
+	}
+
+	public static NBTMatchingMode byName(String n)
+	{
+		NBTMatchingMode m = MAP.get(n);
+		return m == null ? MATCH : m;
 	}
 }

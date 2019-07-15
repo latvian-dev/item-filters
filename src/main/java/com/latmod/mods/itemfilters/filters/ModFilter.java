@@ -3,10 +3,10 @@ package com.latmod.mods.itemfilters.filters;
 import com.latmod.mods.itemfilters.api.StringValueFilterVariant;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.ModContainer;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,12 +24,12 @@ public class ModFilter extends StringValueFilter
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public Collection<StringValueFilterVariant> getValueVariants()
 	{
 		HashSet<String> modIDs = new HashSet<>();
 
-		for (Item item : Item.REGISTRY)
+		for (Item item : ForgeRegistries.ITEMS.getValues())
 		{
 			modIDs.add(item.getRegistryName().getNamespace());
 		}
@@ -38,10 +38,11 @@ public class ModFilter extends StringValueFilter
 
 		for (String id : modIDs)
 		{
-			ModContainer container = Loader.instance().getIndexedModList().get(id);
-			StringValueFilterVariant variant = new StringValueFilterVariant(container.getModId());
-			variant.title = container.getName();
-			variants.add(variant);
+			ModList.get().getModContainerById(id).ifPresent(container -> {
+				StringValueFilterVariant variant = new StringValueFilterVariant(container.getModId());
+				variant.title = container.getNamespace();
+				variants.add(variant);
+			});
 		}
 
 		return variants;

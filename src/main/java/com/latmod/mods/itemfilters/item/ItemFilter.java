@@ -6,28 +6,33 @@ import com.latmod.mods.itemfilters.api.IRegisteredItemFilter;
 import com.latmod.mods.itemfilters.api.ItemFiltersAPI;
 import com.latmod.mods.itemfilters.filters.AlwaysTrueItemFilter;
 import com.latmod.mods.itemfilters.filters.LogicFilter;
-import net.minecraft.client.gui.GuiScreen;
+import com.latmod.mods.itemfilters.util.NBTUtil;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.INBTSerializable;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.common.util.LazyOptional;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Supplier;
@@ -37,40 +42,35 @@ import java.util.function.Supplier;
  */
 public class ItemFilter extends Item
 {
-	public static class ItemFilterData implements IItemFilter, ICapabilitySerializable<NBTTagCompound>
+	public static class ItemFilterData implements IItemFilter, ICapabilitySerializable<CompoundNBT>
 	{
 		public IRegisteredItemFilter filter = AlwaysTrueItemFilter.INSTANCE;
+		public LazyOptional<IItemFilter> filterOpt = LazyOptional.of(() -> this);
 
+		@Nonnull
 		@Override
-		public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing)
+		public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side)
 		{
-			return capability == ItemFiltersAPI.CAPABILITY;
-		}
-
-		@Nullable
-		@Override
-		public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing)
-		{
-			return capability == ItemFiltersAPI.CAPABILITY ? (T) this : null;
+			return cap == ItemFiltersAPI.CAPABILITY ? filterOpt.cast() : LazyOptional.empty();
 		}
 
 		@Override
-		public NBTTagCompound serializeNBT()
+		public CompoundNBT serializeNBT()
 		{
-			NBTTagCompound nbt = new NBTTagCompound();
-			nbt.setString("id", filter.getID());
-			NBTBase nbt1 = filter instanceof INBTSerializable ? ((INBTSerializable) filter).serializeNBT() : null;
+			CompoundNBT nbt = new CompoundNBT();
+			nbt.putString("id", filter.getID());
+			INBT nbt1 = filter instanceof INBTSerializable ? ((INBTSerializable) filter).serializeNBT() : null;
 
-			if (nbt1 != null && !nbt1.isEmpty())
+			if (!NBTUtil.isNullOrEmpty(nbt1))
 			{
-				nbt.setTag("data", nbt1);
+				nbt.put("data", nbt1);
 			}
 
 			return nbt;
 		}
 
 		@Override
-		public void deserializeNBT(NBTTagCompound nbt)
+		public void deserializeNBT(CompoundNBT nbt)
 		{
 			filter = ItemFiltersAPI.createFromID(nbt.getString("id"));
 
@@ -79,9 +79,9 @@ public class ItemFilter extends Item
 				filter = AlwaysTrueItemFilter.INSTANCE;
 			}
 
-			if (filter instanceof INBTSerializable && nbt.hasKey("data"))
+			if (filter instanceof INBTSerializable && nbt.contains("data"))
 			{
-				((INBTSerializable) filter).deserializeNBT(nbt.getTag("data"));
+				((INBTSerializable) filter).deserializeNBT(nbt.get("data"));
 			}
 		}
 
@@ -92,7 +92,7 @@ public class ItemFilter extends Item
 		}
 
 		@Override
-		@SideOnly(Side.CLIENT)
+		@OnlyIn(Dist.CLIENT)
 		public void openEditingGUI(Runnable save)
 		{
 			filter.openEditingGUI(save);
@@ -105,30 +105,35 @@ public class ItemFilter extends Item
 		}
 	}
 
+	public ItemFilter()
+	{
+		super(new Item.Properties().group(ItemGroup.TRANSPORTATION));
+	}
+
 	@Override
-	public ItemFilterData initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt)
+	public ItemFilterData initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt)
 	{
 		return new ItemFilterData();
 	}
 
 	@Override
 	@Nullable
-	public NBTTagCompound getNBTShareTag(ItemStack stack)
+	public CompoundNBT getShareTag(ItemStack stack)
 	{
 		IItemFilter filter = ItemFiltersAPI.getFilter(stack);
 
-		if (filter instanceof INBTSerializable || stack.hasTagCompound())
+		if (filter instanceof INBTSerializable || stack.hasTag())
 		{
-			NBTTagCompound nbt = new NBTTagCompound();
+			CompoundNBT nbt = new CompoundNBT();
 
-			if (stack.getTagCompound() != null)
+			if (stack.getTag() != null)
 			{
-				nbt.setTag("nbt", stack.getTagCompound());
+				nbt.put("nbt", stack.getTag());
 			}
 
 			if (filter instanceof INBTSerializable)
 			{
-				nbt.setTag("filter", ((INBTSerializable) filter).serializeNBT());
+				nbt.put("filter", ((INBTSerializable) filter).serializeNBT());
 			}
 
 			return nbt;
@@ -138,16 +143,16 @@ public class ItemFilter extends Item
 	}
 
 	@Override
-	public void readNBTShareTag(ItemStack stack, @Nullable NBTTagCompound nbt)
+	public void readShareTag(ItemStack stack, @Nullable CompoundNBT nbt)
 	{
-		stack.setTagCompound(nbt == null ? null : (NBTTagCompound) nbt.getTag("nbt"));
+		stack.setTag(nbt == null ? null : (CompoundNBT) nbt.get("nbt"));
 
 		IItemFilter filter = ItemFiltersAPI.getFilter(stack);
 		filter.resetData();
 
 		if (nbt != null && filter instanceof INBTSerializable)
 		{
-			NBTBase nbt1 = nbt.getTag("filter");
+			INBT nbt1 = nbt.get("filter");
 
 			if (nbt1 != null)
 			{
@@ -157,9 +162,9 @@ public class ItemFilter extends Item
 	}
 
 	@Override
-	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items)
+	public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items)
 	{
-		if (isInCreativeTab(tab))
+		if (isInGroup(group))
 		{
 			for (Supplier<IRegisteredItemFilter> supplier : ItemFiltersAPI.REGISTRY.values())
 			{
@@ -176,7 +181,7 @@ public class ItemFilter extends Item
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand)
+	public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand)
 	{
 		ItemStack stack = player.getHeldItem(hand);
 		IItemFilter filter = ItemFiltersAPI.getFilter(stack);
@@ -195,15 +200,15 @@ public class ItemFilter extends Item
 				}
 			}
 
-			return new ActionResult<>(EnumActionResult.SUCCESS, stack);
+			return new ActionResult<>(ActionResultType.SUCCESS, stack);
 		}
 
-		return new ActionResult<>(EnumActionResult.PASS, stack);
+		return new ActionResult<>(ActionResultType.PASS, stack);
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag)
+	@OnlyIn(Dist.CLIENT)
+	public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag)
 	{
 		super.addInformation(stack, world, tooltip, flag);
 
@@ -212,11 +217,11 @@ public class ItemFilter extends Item
 		if (filter instanceof ItemFilterData)
 		{
 			IRegisteredItemFilter f = ((ItemFilterData) filter).filter;
-			tooltip.add(TextFormatting.ITALIC + I18n.format("filter.itemfilters." + f.getID() + ".name"));
+			tooltip.add(new TranslationTextComponent("filter.itemfilters." + f.getID() + ".name").setStyle(new Style().setItalic(true)));
 
-			if (GuiScreen.isShiftKeyDown())
+			//			if (Screen.isShiftKeyDown()) TODO: Figure out how to get this
 			{
-				tooltip.add(TextFormatting.DARK_GRAY + "" + TextFormatting.ITALIC + I18n.format("filter.itemfilters." + f.getID() + ".filter"));
+				tooltip.add(new TranslationTextComponent(I18n.format("filter.itemfilters." + f.getID() + ".filter")).setStyle(new Style().setItalic(true).setColor(TextFormatting.DARK_GRAY)));
 			}
 		}
 	}

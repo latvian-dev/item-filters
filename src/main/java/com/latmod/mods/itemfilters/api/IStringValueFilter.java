@@ -1,7 +1,7 @@
 package com.latmod.mods.itemfilters.api;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -11,11 +11,11 @@ import java.util.Collections;
  */
 public interface IStringValueFilter extends IItemFilter
 {
-	void setValue(String v);
-
 	String getValue();
 
-	@SideOnly(Side.CLIENT)
+	void setValue(String v);
+
+	@OnlyIn(Dist.CLIENT)
 	default Collection<StringValueFilterVariant> getValueVariants()
 	{
 		return Collections.emptyList();

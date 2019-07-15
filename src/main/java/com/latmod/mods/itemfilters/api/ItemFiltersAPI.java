@@ -1,6 +1,6 @@
 package com.latmod.mods.itemfilters.api;
 
-import net.minecraft.init.Blocks;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
@@ -19,22 +19,20 @@ import java.util.function.Supplier;
 public class ItemFiltersAPI
 {
 	/**
-	 * IItemFilter Capability. It's recommended to use getFilter() and isFilter() methods.
+	 * This item can be used as 'filter' to disable pipe face or something similar, since it's not possible to obtain it in survival.
 	 */
-	@CapabilityInject(IItemFilter.class)
-	public static Capability<IItemFilter> CAPABILITY;
-
+	public static final Item NULL_ITEM = Blocks.BARRIER.asItem();
 	private static final Map<String, Supplier<IRegisteredItemFilter>> REGISTRY0 = new LinkedHashMap<>();
 
 	/**
 	 * Immutable map of registered filters.
 	 */
 	public static final Map<String, Supplier<IRegisteredItemFilter>> REGISTRY = Collections.unmodifiableMap(REGISTRY0);
-
 	/**
-	 * This item can be used as 'filter' to disable pipe face or something similar, since it's not possible to obtain it in survival.
+	 * IItemFilter Capability. It's recommended to use getFilter() and isFilter() methods.
 	 */
-	public static final Item NULL_ITEM = Item.getItemFromBlock(Blocks.BARRIER);
+	@CapabilityInject(IItemFilter.class)
+	public static Capability<IItemFilter> CAPABILITY;
 
 	/**
 	 * @return IItemFilter if stack is a filter, null otherwise.
@@ -42,7 +40,7 @@ public class ItemFiltersAPI
 	@Nullable
 	public static IItemFilter getFilter(ItemStack stack)
 	{
-		return stack.getCapability(CAPABILITY, null);
+		return stack.getCapability(CAPABILITY).orElse(null);
 	}
 
 	/**
@@ -50,7 +48,7 @@ public class ItemFiltersAPI
 	 */
 	public static boolean isFilter(ItemStack stack)
 	{
-		return stack.hasCapability(CAPABILITY, null);
+		return stack.getCapability(CAPABILITY).isPresent();
 	}
 
 	/**
@@ -68,19 +66,12 @@ public class ItemFiltersAPI
 			return false;
 		}
 
-		if (stackA.getHasSubtypes())
-		{
-			if (stackA.getMetadata() != stackB.getMetadata())
-			{
-				return false;
-			}
-		}
-		else if (stackA.getItemDamage() != stackB.getItemDamage())
+		if (stackA.getDamage() != stackB.getDamage())
 		{
 			return false;
 		}
 
-		return ItemStack.areItemStackShareTagsEqual(stackA, stackB);
+		return ItemStack.areItemStackTagsEqual(stackA, stackB);
 	}
 
 	/**

@@ -1,23 +1,26 @@
 package com.latmod.mods.itemfilters.item;
 
+import com.latmod.mods.itemfilters.util.NBTUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumRarity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagString;
+import net.minecraft.item.Rarity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.StringNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -29,17 +32,17 @@ public class ItemMissing extends Item
 {
 	public ItemMissing()
 	{
-		setMaxStackSize(1);
+		super(new Item.Properties().maxStackSize(1));
 	}
 
 	private static ItemStack getContainedStack(ItemStack stack)
 	{
-		return stack.hasTagCompound() ? ItemStackSerializer.read(stack.getTagCompound().getTag("item")) : ItemStack.EMPTY;
+		return stack.hasTag() ? ItemStackSerializer.read(stack.getChildTag("item")) : ItemStack.EMPTY;
 	}
 
-	public static ItemStack read(@Nullable NBTBase nbt)
+	public static ItemStack read(@Nullable INBT nbt)
 	{
-		if (nbt == null || nbt.isEmpty())
+		if (NBTUtil.isNullOrEmpty(nbt))
 		{
 			return ItemStack.EMPTY;
 		}
@@ -65,34 +68,35 @@ public class ItemMissing extends Item
 		return stack;
 	}
 
-	public static NBTBase write(ItemStack stack, boolean forceCompound)
+	public static INBT write(ItemStack stack, boolean forceCompound)
 	{
 		if (stack.getItem() == ItemFiltersItems.MISSING)
 		{
-			NBTBase base = stack.hasTagCompound() ? stack.getTagCompound().getTag("item") : null;
+			INBT base = stack.hasTag() ? stack.getChildTag("item") : null;
 
 			if (forceCompound)
 			{
-				NBTTagCompound nbt = new NBTTagCompound();
+				CompoundNBT nbt = new CompoundNBT();
 
-				if (base != null && !base.isEmpty())
+				if (!NBTUtil.isNullOrEmpty(base))
 				{
-					nbt.setTag("item", base);
+					nbt.put("item", base);
 				}
 
 				return nbt;
 			}
 
-			return base == null || base.isEmpty() ? new NBTTagString("") : base;
+			return NBTUtil.isNullOrEmpty(base) ? new StringNBT("") : base;
 		}
 
 		return ItemStackSerializer.write(stack, forceCompound);
 	}
 
+
 	@Override
-	public void onUpdate(ItemStack stack, World world, Entity entity, int slot, boolean isSelected)
+	public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean isSelected)
 	{
-		if (!(entity instanceof EntityPlayer) || world.getTotalWorldTime() % 100L != 65L)
+		if (!(entity instanceof PlayerEntity) || world.getWorldInfo().getGameTime() % 100L != 65L)
 		{
 			return;
 		}
@@ -103,7 +107,7 @@ public class ItemMissing extends Item
 		{
 			if (!world.isRemote)
 			{
-				ItemHandlerHelper.giveItemToPlayer((EntityPlayer) entity, stack1, slot);
+				ItemHandlerHelper.giveItemToPlayer((PlayerEntity) entity, stack1, slot);
 			}
 
 			stack.shrink(1);
@@ -117,51 +121,50 @@ public class ItemMissing extends Item
 	}
 
 	@Override
-	public EnumRarity getRarity(ItemStack stack)
+	public Rarity getRarity(ItemStack stack)
 	{
-		return EnumRarity.EPIC;
+		return Rarity.EPIC;
 	}
 
 	@Override
-	public String getItemStackDisplayName(ItemStack stack)
+	public ITextComponent getDisplayName(ItemStack stack)
 	{
-		if (!stack.hasTagCompound())
+		if (!stack.hasTag())
 		{
-			return super.getItemStackDisplayName(stack);
+			return super.getDisplayName(stack);
 		}
 
-		NBTBase nbt = stack.getTagCompound().getTag("item");
+		INBT nbt = stack.getChildTag("item");
 
-		if (nbt == null || nbt.isEmpty())
+		if (NBTUtil.isNullOrEmpty(nbt))
 		{
-			return super.getItemStackDisplayName(stack);
+			return super.getDisplayName(stack);
 		}
 
 		ItemStack stack1 = ItemStackSerializer.read(nbt);
 		ResourceLocation name;
-		int meta = 0, count = 1;
+		int count = 1;
 
 		if (!stack1.isEmpty())
 		{
 			name = stack1.getItem().getRegistryName();
 			count = stack1.getCount();
-			meta = stack1.getMetadata();
 		}
 		else
 		{
-			NBTTagCompound nbt1;
+			CompoundNBT nbt1;
 
-			if (nbt instanceof NBTTagString)
+			if (nbt instanceof StringNBT)
 			{
-				nbt1 = new NBTTagCompound();
-				nbt1.setTag("item", nbt);
+				nbt1 = new CompoundNBT();
+				nbt1.put("item", nbt);
 			}
 			else
 			{
-				nbt1 = (NBTTagCompound) nbt;
+				nbt1 = (CompoundNBT) nbt;
 			}
 
-			if (nbt1.hasKey("item", Constants.NBT.TAG_STRING))
+			if (nbt1.contains("item", Constants.NBT.TAG_STRING))
 			{
 				String[] sa = nbt1.getString("item").split(" ", 4);
 				name = new ResourceLocation(sa[0]);
@@ -170,17 +173,11 @@ public class ItemMissing extends Item
 				{
 					count = MathHelper.getInt(sa[1], 1);
 				}
-
-				if (sa.length >= 3)
-				{
-					meta = (sa[2].charAt(0) == '*') ? OreDictionary.WILDCARD_VALUE : MathHelper.getInt(sa[2], 0);
-				}
 			}
 			else
 			{
 				name = new ResourceLocation(nbt1.getString("id"));
 				count = nbt1.getByte("Count");
-				meta = nbt1.getShort("Damage");
 			}
 		}
 
@@ -201,24 +198,17 @@ public class ItemMissing extends Item
 		out.append(TextFormatting.GOLD);
 		out.append(name.getPath());
 
-		if (meta > 0)
-		{
-			out.append(TextFormatting.DARK_GRAY);
-			out.append('@');
-			out.append(TextFormatting.GRAY);
-			out.append(meta);
-		}
-
-		return out.toString();
+		return new StringTextComponent(out.toString());
 	}
 
+
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag)
+	@OnlyIn(Dist.CLIENT)
+	public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag)
 	{
-		if (stack.hasTagCompound() && stack.getTagCompound().getTag("item") != null)
+		if (stack.hasTag() && stack.getChildTag("item") != null)
 		{
-			tooltip.add(TextFormatting.LIGHT_PURPLE + super.getItemStackDisplayName(stack));
+			tooltip.add(super.getDisplayName(stack).setStyle(new Style().setColor(TextFormatting.LIGHT_PURPLE)));
 		}
 	}
 }

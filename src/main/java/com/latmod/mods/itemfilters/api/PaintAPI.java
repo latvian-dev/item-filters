@@ -20,6 +20,6 @@ public class PaintAPI
 	@Nullable
 	public static IPaintable get(@Nullable ICapabilityProvider provider)
 	{
-		return provider == null ? null : provider.getCapability(CAPABILITY, null);
+		return provider == null ? null : provider.getCapability(CAPABILITY).orElse(null);
 	}
 }
