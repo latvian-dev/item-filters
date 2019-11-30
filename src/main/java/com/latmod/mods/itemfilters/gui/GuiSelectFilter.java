@@ -60,7 +60,7 @@ public class GuiSelectFilter extends Screen
 		{
 			if (!(entry.getValue().get() instanceof LogicFilter))
 			{
-				String n = I18n.format("filter.itemfilters." + entry.getKey() + ".name");
+				String n = I18n.format("filter.itemfilters." + entry.getKey());
 				int w = font.getStringWidth(n) + 12;
 				addButton(new ButtonFilter((width - w) / 2, offY + i * 24 - 2, w, 20, n, p_onPress_1_ -> {
 					minecraft.player.closeScreen();

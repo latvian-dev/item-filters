@@ -13,13 +13,11 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 /**
  * @author LatvianModder
  */
-//TODO: Replace with a Tag filter
 public class TagFilter extends StringValueFilter
 {
 	@Override
@@ -38,7 +36,21 @@ public class TagFilter extends StringValueFilter
 	@OnlyIn(Dist.CLIENT)
 	public Collection<StringValueFilterVariant> getValueVariants()
 	{
-		return Collections.emptyList();
+		List<StringValueFilterVariant> list = new ArrayList<>();
+
+		for (ResourceLocation id : ItemTags.getCollection().getRegisteredTags())
+		{
+			Tag<Item> tag = ItemTags.getCollection().get(id);
+
+			if (tag != null && !tag.getAllElements().isEmpty())
+			{
+				StringValueFilterVariant variant = new StringValueFilterVariant(id.toString());
+				variant.icon = new ItemStack(tag.getAllElements().iterator().next());
+				list.add(variant);
+			}
+		}
+
+		return list;
 	}
 
 	@Override

@@ -10,15 +10,9 @@ import net.minecraftforge.event.RegistryEvent;
  */
 public class ItemFiltersEventHandler
 {
-	private static Item withName(Item item, String name)
-	{
-		item.setRegistryName(name);
-		return item;
-	}
-
 	public static void registerItems(RegistryEvent.Register<Item> event)
 	{
-		event.getRegistry().register(withName(new ItemFilter(), "filter"));
-		event.getRegistry().register(withName(new ItemMissing(), "missing"));
+		event.getRegistry().register(new ItemFilter().setRegistryName("filter"));
+		event.getRegistry().register(new ItemMissing().setRegistryName("missing"));
 	}
 }

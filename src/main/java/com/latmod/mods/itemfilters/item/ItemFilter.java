@@ -22,7 +22,6 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -218,11 +217,11 @@ public class ItemFilter extends Item
 		if (filter instanceof ItemFilterData)
 		{
 			IRegisteredItemFilter f = ((ItemFilterData) filter).filter;
-			tooltip.add(new TranslationTextComponent("filter.itemfilters." + f.getID() + ".name").setStyle(new Style().setItalic(true)));
+			tooltip.add(new TranslationTextComponent("filter.itemfilters." + f.getID()).applyTextStyle(TextFormatting.ITALIC).applyTextStyle(TextFormatting.GRAY));
 
 			if (Screen.hasShiftDown())
 			{
-				tooltip.add(new TranslationTextComponent(I18n.format("filter.itemfilters." + f.getID() + ".filter")).setStyle(new Style().setItalic(true).setColor(TextFormatting.DARK_GRAY)));
+				tooltip.add(new TranslationTextComponent(I18n.format("filter.itemfilters." + f.getID() + ".filter")).applyTextStyle(TextFormatting.ITALIC).applyTextStyle(TextFormatting.DARK_GRAY));
 			}
 		}
 	}

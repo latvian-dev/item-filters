@@ -14,7 +14,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -201,14 +200,13 @@ public class ItemMissing extends Item
 		return new StringTextComponent(out.toString());
 	}
 
-
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag)
 	{
 		if (stack.hasTag() && stack.getChildTag("item") != null)
 		{
-			tooltip.add(super.getDisplayName(stack).setStyle(new Style().setColor(TextFormatting.LIGHT_PURPLE)));
+			tooltip.add(stack.getDisplayName().applyTextStyle(TextFormatting.LIGHT_PURPLE));
 		}
 	}
 }

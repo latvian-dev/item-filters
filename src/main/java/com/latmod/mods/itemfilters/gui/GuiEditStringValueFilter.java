@@ -46,26 +46,32 @@ public class GuiEditStringValueFilter extends Screen
 	public void init()
 	{
 		super.init();
-		//		Keyboard.enableRepeatEvents(true);
+		minecraft.keyboardListener.enableRepeatEvents(true);
 		int i = width / 2;
 		int j = height / 2;
 		nameField = new TextFieldWidget(font, i - 52, j - 6, 104, 12, "");
 		nameField.setTextColor(-1);
 		nameField.setDisabledTextColour(-1);
 		nameField.setEnableBackgroundDrawing(false);
+		nameField.setResponder(this::updateVariants);
 		nameField.setText(filter.getValue());
 		nameField.setFocused2(true);
-		updateVariants();
 	}
 
+	@Override
+	public void removed()
+	{
+		super.removed();
+		minecraft.keyboardListener.enableRepeatEvents(true);
+	}
 
-	private void updateVariants()
+	private void updateVariants(String txt)
 	{
 		if (!variants.isEmpty())
 		{
 			visibleVariants.clear();
 
-			String txt = nameField.getText().toLowerCase();
+			txt = nameField.getText().toLowerCase();
 
 			if (txt.isEmpty())
 			{
@@ -88,7 +94,7 @@ public class GuiEditStringValueFilter extends Screen
 	}
 
 	@Override
-	public boolean charTyped(char typedChar, int keyCode)
+	public boolean keyPressed(int keyCode, int scanCode, int modifiers)
 	{
 		if (keyCode == GLFW.GLFW_KEY_ENTER)
 		{
@@ -113,6 +119,8 @@ public class GuiEditStringValueFilter extends Screen
 			{
 				minecraft.getToastGui().add(new SystemToast(SystemToast.Type.TUTORIAL_HINT, new StringTextComponent("Invalid string!"), null));
 			}
+
+			return true;
 		}
 		else if (keyCode == GLFW.GLFW_KEY_TAB)
 		{
@@ -122,16 +130,26 @@ public class GuiEditStringValueFilter extends Screen
 			{
 				selectedVariant = 0;
 			}
+
+			return true;
 		}
-		else if (nameField.charTyped(typedChar, keyCode))
+		else if (nameField.keyPressed(keyCode, scanCode, modifiers))
 		{
-			updateVariants();
+			return true;
 		}
-		else
+
+		return super.keyPressed(keyCode, scanCode, modifiers);
+	}
+
+	@Override
+	public boolean charTyped(char typedChar, int keyCode)
+	{
+		if (nameField.charTyped(typedChar, keyCode))
 		{
-			return super.charTyped(typedChar, keyCode);
+			return true;
 		}
-		return true;
+
+		return super.charTyped(typedChar, keyCode);
 	}
 
 	@Override
@@ -145,12 +163,13 @@ public class GuiEditStringValueFilter extends Screen
 		if (mouseButton == 1)
 		{
 			nameField.setText("");
-			updateVariants();
 			return true;
 		}
 		else
 		{
-			return nameField.mouseClicked(mouseX, mouseY, mouseButton);
+			nameField.mouseClicked(mouseX, mouseY, mouseButton);
+			nameField.setFocused2(true);
+			return true;
 		}
 	}
 
@@ -164,7 +183,7 @@ public class GuiEditStringValueFilter extends Screen
 
 		if (!variants.isEmpty())
 		{
-			drawString(font, "Variants [" + visibleVariants.size() + "]:", 4, 4, -1);
+			drawString(font, "Variants [" + visibleVariants.size() + "] [Press Tab]", 4, 4, -1);
 
 			for (int i = 0; i < visibleVariants.size(); i++)
 			{
@@ -176,7 +195,6 @@ public class GuiEditStringValueFilter extends Screen
 					GlStateManager.pushMatrix();
 					GlStateManager.translated(4, 14 + i * 10, 0);
 					GlStateManager.scaled(0.5F, 0.5F, 1F);
-					//					zLevel = 100F;
 					itemRenderer.zLevel = 100F;
 					GlStateManager.enableDepthTest();
 					RenderHelper.enableGUIStandardItemLighting();
