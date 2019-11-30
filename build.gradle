@@ -99,7 +99,7 @@ jar {
 	}
 }
 
-task sourcesJar(type: Jar, dependsOn: classes) {
+task sourceJar(type: Jar, dependsOn: classes) {
 	classifier = 'sources'
 	from sourceSets.main.allSource
 }
@@ -109,15 +109,15 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 	from javadoc.destinationDir
 }
 
-task deobfJar(type:Jar) {
+task deobfJar(type: Jar) {
 	from sourceSets.main.output
 	classifier 'deobf'
 }
 
-build.dependsOn deobfJar, sourcesJar, javadocJar
+build.dependsOn deobfJar, sourceJar, javadocJar
 
 artifacts {
-	archives sourcesJar
+	archives sourceJar
 	archives javadocJar
 	archives deobfJar
 }
