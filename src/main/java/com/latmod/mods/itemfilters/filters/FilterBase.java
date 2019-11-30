@@ -35,7 +35,7 @@ public abstract class FilterBase implements IRegisteredItemFilter
 		ItemFiltersAPI.register("and", ANDFilter::new);
 		ItemFiltersAPI.register("not", NOTFilter::new);
 		ItemFiltersAPI.register("xor", XORFilter::new);
-//		ItemFiltersAPI.register("ore", OreDictionaryFilter::new);
+		ItemFiltersAPI.register("tag", TagFilter::new);
 		ItemFiltersAPI.register("mod", ModFilter::new);
 		ItemFiltersAPI.register("creative_tab", ItemGroupFilter::new);
 

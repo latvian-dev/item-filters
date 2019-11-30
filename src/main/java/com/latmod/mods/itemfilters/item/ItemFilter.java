@@ -7,6 +7,7 @@ import com.latmod.mods.itemfilters.api.ItemFiltersAPI;
 import com.latmod.mods.itemfilters.filters.AlwaysTrueItemFilter;
 import com.latmod.mods.itemfilters.filters.LogicFilter;
 import com.latmod.mods.itemfilters.util.NBTUtil;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
@@ -219,7 +220,7 @@ public class ItemFilter extends Item
 			IRegisteredItemFilter f = ((ItemFilterData) filter).filter;
 			tooltip.add(new TranslationTextComponent("filter.itemfilters." + f.getID() + ".name").setStyle(new Style().setItalic(true)));
 
-			//			if (Screen.isShiftKeyDown()) TODO: Figure out how to get this
+			if (Screen.hasShiftDown())
 			{
 				tooltip.add(new TranslationTextComponent(I18n.format("filter.itemfilters." + f.getID() + ".filter")).setStyle(new Style().setItalic(true).setColor(TextFormatting.DARK_GRAY)));
 			}

@@ -1,73 +1,101 @@
 buildscript {
 	repositories {
-		maven { url = 'https://files.minecraftforge.net/maven' }
 		jcenter()
-		mavenCentral()
+		maven { url = 'https://files.minecraftforge.net/maven' }
 		maven { url "https://plugins.gradle.org/m2/" }
+		mavenCentral()
 	}
 	dependencies {
 		classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
 		classpath 'gradle.plugin.com.matthewprenger:CurseGradle:1.1.0'
+		classpath 'com.wynprice.cursemaven:CurseMaven:1.2.+'
 	}
 }
-
 apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'eclipse'
 apply plugin: 'com.matthewprenger.cursegradle'
 apply plugin: 'maven'
+apply plugin: 'com.wynprice.cursemaven'
 
 apply from: 'https://raw.githubusercontent.com/MinecraftModDevelopment/Gradle-Collection/master/generic/markdown-git-changelog.gradle'
 
 def ENV = System.getenv()
 version = ENV.BUILD_NUMBER ? "${mod_version}.${ENV.BUILD_NUMBER}" : "${mod_version}.custom"
-group = package_group
-archivesBaseName = mod_name
+group = project.mod_package
+archivesBaseName = project.mod_name
 
-sourceCompatibility = targetCompatibility = "1.8"
-compileJava {
-	sourceCompatibility = targetCompatibility = "1.8"
-}
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 minecraft {
-    mappings channel: 'snapshot', version: "${mappings_version}-${mc_version}"
-    runs {
-        client = {
-			properties 'forge.logging.markers': 'SCAN,REGISTRIES,REGISTRYDUMP'
-            properties 'forge.logging.console.level': 'debug'
-            workingDirectory project.file('run').canonicalPath
-            source sourceSets.main
-        }
-        server = {
-			properties 'forge.logging.markers': 'SCAN,REGISTRIES,REGISTRYDUMP'
-            properties 'forge.logging.console.level': 'debug'
-            workingDirectory project.file('run').canonicalPath
-            source sourceSets.main
-        }
-    }
+	mappings channel: 'snapshot', version: project.mapping_version
+	// accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+	runs {
+		client {
+			workingDirectory project.file('run')
+			property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+			property 'forge.logging.console.level', 'debug'
+
+			mods {
+				itemfilters {
+					source sourceSets.main
+				}
+			}
+		}
+
+		server {
+			workingDirectory project.file('run')
+			property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+			property 'forge.logging.console.level', 'debug'
+
+			mods {
+				itemfilters {
+					source sourceSets.main
+				}
+			}
+		}
+
+		data {
+			workingDirectory project.file('run')
+			property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+			property 'forge.logging.console.level', 'debug'
+
+			args '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/')
+
+			mods {
+				itemfilters {
+					source sourceSets.main
+				}
+			}
+		}
+	}
 }
+
+/*
+configurations.all {
+	transitive = false
+}
+*/
 
 repositories {
 	mavenLocal()
-	maven { url "https://dvs1.progwml6.com/files/maven" } //JEI
-	maven { url "https://minecraft.curseforge.com/api/maven/" } //Forestry
 }
 
 dependencies {
-	minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
-  	compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
-  	runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
+	minecraft "net.minecraftforge:forge:${forge_version}"
+	compile fg.deobf(curse.resolve('jei', project.jei_file))
 }
 
-processResources {
-	inputs.property "version", project.version
-	inputs.property "mcversion", mc_version
-
-	from(sourceSets.main.resources.srcDirs) {
-		include 'mcmod.info'
-		expand 'version': project.version, 'mcversion': mc_version
-	}
-
-	from(sourceSets.main.resources.srcDirs) {
-		exclude 'mcmod.info'
+jar {
+	manifest {
+		attributes([
+				"Specification-Title"     : project.mod_id,
+				"Specification-Vendor"    : project.mod_author,
+				"Specification-Version"   : "1",
+				"Implementation-Title"    : project.name,
+				"Implementation-Version"  : version,
+				"Implementation-Vendor"   : project.mod_author,
+				"Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+		])
 	}
 }
 
@@ -85,6 +113,8 @@ task deobfJar(type:Jar) {
 	from sourceSets.main.output
 	classifier 'deobf'
 }
+
+build.dependsOn deobfJar, sourcesJar, javadocJar
 
 artifacts {
 	archives sourcesJar
@@ -108,11 +138,15 @@ if (ENV.CURSEFORGE_KEY) {
 		project {
 			id = "${curseforge_id}"
 			releaseType = "release"
-			addGameVersion "${mc_version}"
+			addGameVersion "1.14.4"
+			relations {
+				optionalDependency 'jei'
+			}
 			changelog = getGitChangelog
 			changelogType = 'markdown'
 			addArtifact(sourceJar)
 			addArtifact(javadocJar)
+			addArtifact(deobfJar)
 		}
 	}
 }
