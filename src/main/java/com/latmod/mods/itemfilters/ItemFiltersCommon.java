@@ -1,7 +1,7 @@
 package com.latmod.mods.itemfilters;
 
-import com.latmod.mods.itemfilters.api.IItemFilter;
-import com.latmod.mods.itemfilters.item.ItemFilter;
+import com.latmod.mods.itemfilters.api.IStringValueFilter;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 
 /**
@@ -9,11 +9,7 @@ import net.minecraft.util.Hand;
  */
 public class ItemFiltersCommon
 {
-	public void openSelectionGUI(ItemFilter.ItemFilterData data, Hand hand)
-	{
-	}
-
-	public void openGUI(IItemFilter filter, Hand hand)
+	public void openStringValueGUI(IStringValueFilter filter, ItemStack stack, Hand hand)
 	{
 	}
 }

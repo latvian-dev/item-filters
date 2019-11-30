@@ -1,5 +1,6 @@
 package com.latmod.mods.itemfilters.api;
 
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -11,12 +12,12 @@ import java.util.Collections;
  */
 public interface IStringValueFilter extends IItemFilter
 {
-	String getValue();
+	String getValue(ItemStack stack);
 
-	void setValue(String v);
+	void setValue(ItemStack stack, String v);
 
 	@OnlyIn(Dist.CLIENT)
-	default Collection<StringValueFilterVariant> getValueVariants()
+	default Collection<StringValueFilterVariant> getValueVariants(ItemStack stack)
 	{
 		return Collections.emptyList();
 	}

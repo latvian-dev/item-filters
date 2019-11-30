@@ -4,8 +4,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
@@ -18,22 +16,14 @@ public interface IItemFilter
 	/**
 	 * @param stack ItemStack
 	 */
-	boolean filter(ItemStack stack);
-
-	/**
-	 * Open GUI on client side
-	 */
-	@OnlyIn(Dist.CLIENT)
-	default void openEditingGUI(Runnable save)
-	{
-	}
+	boolean filter(ItemStack filter, ItemStack stack);
 
 	/**
 	 * You should only override this if there is a faster way to check valid items
 	 *
 	 * @param list The list to add items to
 	 */
-	default void getValidItems(List<ItemStack> list)
+	default void getValidFilterItems(ItemStack filter, List<ItemStack> list)
 	{
 		NonNullList<ItemStack> allItems = NonNullList.create();
 
@@ -42,20 +32,20 @@ public interface IItemFilter
 			item.fillItemGroup(ItemGroup.SEARCH, allItems);
 		}
 
-		for (ItemStack stack : allItems)
+		for (ItemStack is : allItems)
 		{
-			if (filter(stack))
+			if (filter(filter, is))
 			{
-				list.add(stack);
+				list.add(is);
 			}
 		}
 	}
 
-	default void clearCache()
+	default void clearFilterCache(ItemStack filter)
 	{
 	}
 
-	default void resetData()
+	default void resetFilterData(ItemStack filter)
 	{
 	}
 }

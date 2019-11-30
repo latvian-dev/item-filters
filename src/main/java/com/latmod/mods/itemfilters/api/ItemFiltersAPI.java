@@ -1,38 +1,24 @@
 package com.latmod.mods.itemfilters.api;
 
-import net.minecraft.block.Blocks;
+import com.latmod.mods.itemfilters.ItemFilters;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
+import net.minecraft.item.Items;
+import net.minecraftforge.registries.ObjectHolder;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Supplier;
 
 /**
  * @author LatvianModder
  */
 public class ItemFiltersAPI
 {
-	/**
-	 * This item can be used as 'filter' to disable pipe face or something similar, since it's not possible to obtain it in survival.
-	 */
-	public static final Item NULL_ITEM = Blocks.BARRIER.asItem();
-	private static final Map<String, Supplier<IRegisteredItemFilter>> REGISTRY0 = new LinkedHashMap<>();
+	@ObjectHolder(ItemFilters.MOD_ID + ":always_true")
+	public static final Item ALWAYS_TRUE = Items.AIR;
 
-	/**
-	 * Immutable map of registered filters.
-	 */
-	public static final Map<String, Supplier<IRegisteredItemFilter>> REGISTRY = Collections.unmodifiableMap(REGISTRY0);
-	/**
-	 * IItemFilter Capability. It's recommended to use getFilter() and isFilter() methods.
-	 */
-	@CapabilityInject(IItemFilter.class)
-	public static Capability<IItemFilter> CAPABILITY;
+	@ObjectHolder(ItemFilters.MOD_ID + ":always_false")
+	public static final Item ALWAYS_FALSE = Items.AIR;
 
 	/**
 	 * @return IItemFilter if stack is a filter, null otherwise.
@@ -40,7 +26,12 @@ public class ItemFiltersAPI
 	@Nullable
 	public static IItemFilter getFilter(ItemStack stack)
 	{
-		return stack.getCapability(CAPABILITY).orElse(null);
+		if (stack.getItem() instanceof IItemFilter)
+		{
+			return (IItemFilter) stack.getItem();
+		}
+
+		return null;
 	}
 
 	/**
@@ -48,7 +39,7 @@ public class ItemFiltersAPI
 	 */
 	public static boolean isFilter(ItemStack stack)
 	{
-		return stack.getCapability(CAPABILITY).isPresent();
+		return stack.getItem() instanceof IItemFilter;
 	}
 
 	/**
@@ -62,11 +53,6 @@ public class ItemFiltersAPI
 		}
 
 		if (stackA.getItem() != stackB.getItem())
-		{
-			return false;
-		}
-
-		if (stackA.getDamage() != stackB.getDamage())
 		{
 			return false;
 		}
@@ -86,7 +72,7 @@ public class ItemFiltersAPI
 		}
 
 		IItemFilter f = getFilter(filter);
-		return f == null ? areItemStacksEqual(filter, stack) : f.filter(stack);
+		return f == null ? areItemStacksEqual(filter, stack) : f.filter(filter, stack);
 	}
 
 	public static void getValidItems(ItemStack filter, List<ItemStack> list)
@@ -104,26 +90,7 @@ public class ItemFiltersAPI
 		}
 		else
 		{
-			f.getValidItems(list);
+			f.getValidFilterItems(filter, list);
 		}
-	}
-
-	/**
-	 * If you don't want to create your own IItemFilter item, you can register it here and Item Filters mod will make an item.
-	 * Registered filter must return the same id.
-	 */
-	public static void register(String id, Supplier<IRegisteredItemFilter> supplier)
-	{
-		REGISTRY0.put(id, supplier);
-	}
-
-	/**
-	 * @return New instance of registered filter from id or null if it's not registered.
-	 */
-	@Nullable
-	public static IRegisteredItemFilter createFromID(String id)
-	{
-		Supplier<IRegisteredItemFilter> supplier = REGISTRY0.get(id);
-		return supplier == null ? null : supplier.get();
 	}
 }

@@ -7,12 +7,14 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.toasts.SystemToast;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.StringTextComponent;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * @author LatvianModder
@@ -20,20 +22,22 @@ import java.util.Map;
 public class GuiEditStringValueFilter extends Screen
 {
 	public final IStringValueFilter filter;
-	public final Runnable save;
+	public final ItemStack stack;
+	public final Consumer<ItemStack> save;
 	private final Map<String, StringValueFilterVariant> variants;
 	private final ArrayList<StringValueFilterVariant> visibleVariants;
 	private TextFieldWidget nameField;
 	private int selectedVariant = -1;
 
-	public GuiEditStringValueFilter(IStringValueFilter f, Runnable s)
+	public GuiEditStringValueFilter(IStringValueFilter f, ItemStack is, Consumer<ItemStack> s)
 	{
 		super(new StringTextComponent(""));
 		filter = f;
+		stack = is;
 		save = s;
 		variants = new HashMap<>();
 
-		for (StringValueFilterVariant variant : filter.getValueVariants())
+		for (StringValueFilterVariant variant : filter.getValueVariants(stack))
 		{
 			variants.put(variant.id, variant);
 		}
@@ -54,7 +58,7 @@ public class GuiEditStringValueFilter extends Screen
 		nameField.setDisabledTextColour(-1);
 		nameField.setEnableBackgroundDrawing(false);
 		nameField.setResponder(this::updateVariants);
-		nameField.setText(filter.getValue());
+		nameField.setText(filter.getValue(stack));
 		nameField.setFocused2(true);
 	}
 
@@ -81,7 +85,7 @@ public class GuiEditStringValueFilter extends Screen
 			{
 				for (StringValueFilterVariant variant : variants.values())
 				{
-					if (variant.id.toLowerCase().contains(txt) || variant.title.toLowerCase().contains(txt))
+					if (variant.id.toLowerCase().contains(txt) || variant.title.getString().toLowerCase().contains(txt))
 					{
 						visibleVariants.add(variant);
 					}
@@ -102,8 +106,8 @@ public class GuiEditStringValueFilter extends Screen
 
 			if (variants.isEmpty() || text.isEmpty() || variants.containsKey(text))
 			{
-				filter.setValue(text);
-				save.run();
+				filter.setValue(stack, text);
+				save.accept(stack);
 
 				minecraft.displayGuiScreen(null);
 
@@ -113,7 +117,7 @@ public class GuiEditStringValueFilter extends Screen
 				}
 
 				StringValueFilterVariant variant = variants.get(text);
-				minecraft.getToastGui().add(new SystemToast(SystemToast.Type.TUTORIAL_HINT, new StringTextComponent("Value changed!"), text.isEmpty() ? null : new StringTextComponent(variant == null ? text : variant.getTitle())));
+				minecraft.getToastGui().add(new SystemToast(SystemToast.Type.TUTORIAL_HINT, new StringTextComponent("Value changed!"), text.isEmpty() ? null : variant == null ? new StringTextComponent(text) : variant.title.deepCopy()));
 			}
 			else
 			{
@@ -188,7 +192,7 @@ public class GuiEditStringValueFilter extends Screen
 			for (int i = 0; i < visibleVariants.size(); i++)
 			{
 				StringValueFilterVariant variant = visibleVariants.get(i);
-				drawString(font, variant.getTitle(), variant.icon.isEmpty() ? 4 : 14, 14 + i * 10, i == selectedVariant ? 0xFFFFFF00 : -1);
+				drawString(font, variant.title.getFormattedText(), variant.icon.isEmpty() ? 4 : 14, 14 + i * 10, i == selectedVariant ? 0xFFFFFF00 : -1);
 
 				if (!variant.icon.isEmpty())
 				{

@@ -1,6 +1,8 @@
 package com.latmod.mods.itemfilters.api;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 
 /**
  * @author LatvianModder
@@ -8,12 +10,14 @@ import net.minecraft.item.ItemStack;
 public class StringValueFilterVariant implements Comparable<StringValueFilterVariant>
 {
 	public final String id;
-	public String title = "";
-	public ItemStack icon = ItemStack.EMPTY;
+	public ITextComponent title;
+	public ItemStack icon;
 
 	public StringValueFilterVariant(String s)
 	{
 		id = s;
+		title = new StringTextComponent(id);
+		icon = ItemStack.EMPTY;
 	}
 
 	public boolean equals(Object o)
@@ -31,14 +35,9 @@ public class StringValueFilterVariant implements Comparable<StringValueFilterVar
 		return id.hashCode();
 	}
 
-	public String getTitle()
-	{
-		return title.isEmpty() ? id : title;
-	}
-
 	@Override
 	public int compareTo(StringValueFilterVariant o)
 	{
-		return getTitle().compareToIgnoreCase(o.getTitle());
+		return title.getString().compareToIgnoreCase(o.title.getString());
 	}
 }

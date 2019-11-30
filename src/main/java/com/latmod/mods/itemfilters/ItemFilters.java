@@ -2,15 +2,17 @@ package com.latmod.mods.itemfilters;
 
 import com.latmod.mods.itemfilters.api.IItemFilter;
 import com.latmod.mods.itemfilters.api.IPaintable;
+import com.latmod.mods.itemfilters.api.ItemFiltersAPI;
 import com.latmod.mods.itemfilters.client.ItemFiltersClient;
-import com.latmod.mods.itemfilters.filters.AlwaysTrueItemFilter;
-import com.latmod.mods.itemfilters.filters.FilterBase;
+import com.latmod.mods.itemfilters.item.ItemFiltersItems;
 import com.latmod.mods.itemfilters.net.ItemFiltersNetHandler;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -26,14 +28,27 @@ public class ItemFilters
 {
 	public static final String MOD_ID = "itemfilters";
 
-	public static ItemFiltersCommon PROXY;
+	public static ItemFilters instance;
+	public ItemFiltersCommon proxy;
+	public ItemGroup group;
 
 	public ItemFilters()
 	{
-		PROXY = DistExecutor.runForDist(() -> ItemFiltersClient::new, () -> ItemFiltersCommon::new);
+		instance = this;
+		//noinspection Convert2MethodRef
+		proxy = DistExecutor.runForDist(() -> () -> new ItemFiltersClient(), () -> () -> new ItemFiltersCommon());
+		group = new ItemGroup(MOD_ID)
+		{
+			@Override
+			@OnlyIn(Dist.CLIENT)
+			public ItemStack createIcon()
+			{
+				return new ItemStack(ItemFiltersAPI.ALWAYS_TRUE);
+			}
+		};
 
 		ItemFiltersNetHandler.init();
-		FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Item.class, ItemFiltersEventHandler::registerItems);
+		FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Item.class, ItemFiltersItems::register);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 	}
 
@@ -56,7 +71,7 @@ public class ItemFilters
 					((INBTSerializable) instance).deserializeNBT(nbt);
 				}
 			}
-		}, () -> AlwaysTrueItemFilter.INSTANCE);
+		}, () -> null);
 
 		CapabilityManager.INSTANCE.register(IPaintable.class, new Capability.IStorage<IPaintable>()
 		{
@@ -75,19 +90,6 @@ public class ItemFilters
 					((INBTSerializable) instance).deserializeNBT(nbt);
 				}
 			}
-		}, () -> new IPaintable()
-		{
-			@Override
-			public void paint(BlockState paint, Direction facing, boolean all)
-			{
-			}
-
-			@Override
-			public BlockState getPaint()
-			{
-				return Blocks.AIR.getDefaultState();
-			}
-		});
-		FilterBase.register();
+		}, () -> null);
 	}
 }

@@ -1,0 +1,13 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"group": "itemfilters:filter",
+	"result": {"item": "itemfilters:always_false", "count": 4},
+	"pattern": [
+		"F F",
+		"   ",
+		"F F"
+	],
+	"key": {
+		"F": {"tag": "itemfilters:filters"}
+	}
+}

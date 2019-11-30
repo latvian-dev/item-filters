@@ -1,0 +1,8 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"group": "itemfilters:filter",
+	"result": {"item": "itemfilters:always_true"},
+	"ingredients": [
+		{"tag": "itemfilters:filters"}
+	]
+}

@@ -1,0 +1,7 @@
+{
+	"parent": "item/generated",
+	"textures": {
+		"layer0": "itemfilters:item/filter",
+		"layer1": "itemfilters:item/item_group"
+	}
+}

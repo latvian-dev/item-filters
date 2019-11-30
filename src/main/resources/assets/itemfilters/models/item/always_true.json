@@ -1,6 +1,6 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "itemfilters:item/missing"
+		"layer0": "itemfilters:item/filter"
 	}
 }

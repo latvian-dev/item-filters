@@ -1,5 +1,6 @@
 package com.latmod.mods.itemfilters.item;
 
+import com.latmod.mods.itemfilters.ItemFilters;
 import com.latmod.mods.itemfilters.util.NBTUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -31,7 +32,7 @@ public class ItemMissing extends Item
 {
 	public ItemMissing()
 	{
-		super(new Item.Properties().maxStackSize(1));
+		super(new Item.Properties().group(ItemFilters.instance.group).maxStackSize(1));
 	}
 
 	private static ItemStack getContainedStack(ItemStack stack)

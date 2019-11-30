@@ -20,6 +20,7 @@ public class ItemFiltersNetHandler
 				s -> s.startsWith("1"),
 				s -> s.startsWith("1")
 		);
-		NET.registerMessage(0, MessageUpdateItem.class, MessageUpdateItem::toBytes, MessageUpdateItem::new, (m, ctxS) -> m.onMessage(ctxS.get()));
+
+		NET.registerMessage(1, MessageUpdateFilterItem.class, MessageUpdateFilterItem::write, MessageUpdateFilterItem::new, MessageUpdateFilterItem::handle);
 	}
 }
