@@ -16,7 +16,7 @@ public class ItemFiltersNetHandler
 	{
 		NET = NetworkRegistry.newSimpleChannel(
 				new ResourceLocation(ItemFilters.MOD_ID, "channel"),
-				() -> "1.0.0",
+				() -> "1.0.1",
 				s -> s.startsWith("1"),
 				s -> s.startsWith("1")
 		);

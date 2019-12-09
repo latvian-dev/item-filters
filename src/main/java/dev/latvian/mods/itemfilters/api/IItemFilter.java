@@ -4,6 +4,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
@@ -46,6 +48,11 @@ public interface IItemFilter
 	}
 
 	default void resetFilterData(ItemStack filter)
+	{
+	}
+
+	@OnlyIn(Dist.CLIENT)
+	default void addInfo(ItemStack filter, FilterInfo info, boolean expanded)
 	{
 	}
 }

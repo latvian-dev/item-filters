@@ -25,10 +25,3 @@ credits="TheCodedOne for porting to 1.14.3"
     versionRange="[1.14.4]"
     ordering="NONE"
     side="BOTH"
-
-[[dependencies.itemfilters]]
-    modId="jei"
-    mandatory=false
-    versionRange="[1.0.0,)"
-    ordering="AFTER"
-    side="BOTH"

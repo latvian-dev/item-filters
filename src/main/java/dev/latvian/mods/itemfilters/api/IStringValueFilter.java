@@ -12,9 +12,9 @@ import java.util.Collections;
  */
 public interface IStringValueFilter extends IItemFilter
 {
-	String getValue(ItemStack stack);
+	String getValue(ItemStack filter);
 
-	void setValue(ItemStack stack, String v);
+	void setValue(ItemStack filter, String v);
 
 	@OnlyIn(Dist.CLIENT)
 	default Collection<StringValueFilterVariant> getValueVariants(ItemStack stack)

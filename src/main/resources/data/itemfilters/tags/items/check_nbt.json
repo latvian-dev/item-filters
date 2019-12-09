@@ -1,0 +1,10 @@
+{
+	"replace": false,
+	"values": [
+		"minecraft:potion",
+		"minecraft:splash_potion",
+		"minecraft:lingering_potion",
+		"minecraft:enchanted_book",
+		"minecraft:tipped_arrow"
+	]
+}

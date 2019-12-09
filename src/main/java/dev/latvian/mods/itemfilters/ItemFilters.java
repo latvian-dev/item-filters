@@ -1,27 +1,38 @@
 package dev.latvian.mods.itemfilters;
 
-import dev.latvian.mods.itemfilters.api.IItemFilter;
-import dev.latvian.mods.itemfilters.api.IPaintable;
-import dev.latvian.mods.itemfilters.api.ItemFiltersAPI;
+import dev.latvian.mods.itemfilters.api.ItemFiltersItems;
 import dev.latvian.mods.itemfilters.client.ItemFiltersClient;
-import dev.latvian.mods.itemfilters.item.ItemFiltersItems;
+import dev.latvian.mods.itemfilters.gui.InventoryFilterContainer;
+import dev.latvian.mods.itemfilters.item.ANDFilterItem;
+import dev.latvian.mods.itemfilters.item.AlwaysFalseFilterItem;
+import dev.latvian.mods.itemfilters.item.AlwaysTrueFilterItem;
+import dev.latvian.mods.itemfilters.item.BlockFilterItem;
+import dev.latvian.mods.itemfilters.item.DamageFilterItem;
+import dev.latvian.mods.itemfilters.item.ItemGroupFilterItem;
+import dev.latvian.mods.itemfilters.item.ItemInventory;
+import dev.latvian.mods.itemfilters.item.MaxCountFilterItem;
+import dev.latvian.mods.itemfilters.item.ModFilterItem;
+import dev.latvian.mods.itemfilters.item.NOTFilterItem;
+import dev.latvian.mods.itemfilters.item.ORFilterItem;
+import dev.latvian.mods.itemfilters.item.RegExFilterItem;
+import dev.latvian.mods.itemfilters.item.StringValueData;
+import dev.latvian.mods.itemfilters.item.TagFilterItem;
+import dev.latvian.mods.itemfilters.item.XORFilterItem;
 import dev.latvian.mods.itemfilters.net.ItemFiltersNetHandler;
+import dev.latvian.mods.itemfilters.util.EmptyStorage;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.INBT;
-import net.minecraft.util.Direction;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.util.INBTSerializable;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-
-import javax.annotation.Nullable;
+import net.minecraftforge.fml.network.IContainerFactory;
 
 @Mod(ItemFilters.MOD_ID)
 public class ItemFilters
@@ -43,53 +54,44 @@ public class ItemFilters
 			@OnlyIn(Dist.CLIENT)
 			public ItemStack createIcon()
 			{
-				return new ItemStack(ItemFiltersAPI.ALWAYS_TRUE);
+				return new ItemStack(ItemFiltersItems.ALWAYS_TRUE);
 			}
 		};
 
 		ItemFiltersNetHandler.init();
-		FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Item.class, ItemFiltersItems::register);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(proxy::setup);
+		FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Item.class, this::registerItems);
+		FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(ContainerType.class, this::registerContainers);
 	}
 
 	private void setup(FMLCommonSetupEvent event)
 	{
-		CapabilityManager.INSTANCE.register(IItemFilter.class, new Capability.IStorage<IItemFilter>()
-		{
-			@Nullable
-			@Override
-			public INBT writeNBT(Capability<IItemFilter> capability, IItemFilter instance, Direction side)
-			{
-				return instance instanceof INBTSerializable ? ((INBTSerializable) instance).serializeNBT() : null;
-			}
+		CapabilityManager.INSTANCE.register(ItemInventory.class, new EmptyStorage<>(), () -> null);
+		CapabilityManager.INSTANCE.register(StringValueData.class, new EmptyStorage<>(), () -> null);
+	}
 
-			@Override
-			public void readNBT(Capability<IItemFilter> capability, IItemFilter instance, Direction side, INBT nbt)
-			{
-				if (nbt != null && instance instanceof INBTSerializable)
-				{
-					((INBTSerializable) instance).deserializeNBT(nbt);
-				}
-			}
-		}, () -> null);
+	private void registerItems(RegistryEvent.Register<Item> event)
+	{
+		event.getRegistry().registerAll(
+				new AlwaysTrueFilterItem().setRegistryName("always_true"),
+				new AlwaysFalseFilterItem().setRegistryName("always_false"),
+				new ORFilterItem().setRegistryName("or"),
+				new ANDFilterItem().setRegistryName("and"),
+				new NOTFilterItem().setRegistryName("not"),
+				new XORFilterItem().setRegistryName("xor"),
+				new TagFilterItem().setRegistryName("tag"),
+				new ModFilterItem().setRegistryName("mod"),
+				new ItemGroupFilterItem().setRegistryName("item_group"),
+				new RegExFilterItem().setRegistryName("id_regex"),
+				new DamageFilterItem().setRegistryName("damage"),
+				new BlockFilterItem().setRegistryName("block"),
+				new MaxCountFilterItem().setRegistryName("max_count")
+		);
+	}
 
-		CapabilityManager.INSTANCE.register(IPaintable.class, new Capability.IStorage<IPaintable>()
-		{
-			@Nullable
-			@Override
-			public INBT writeNBT(Capability<IPaintable> capability, IPaintable instance, Direction side)
-			{
-				return instance instanceof INBTSerializable ? ((INBTSerializable) instance).serializeNBT() : null;
-			}
-
-			@Override
-			public void readNBT(Capability<IPaintable> capability, IPaintable instance, Direction side, INBT nbt)
-			{
-				if (nbt != null && instance instanceof INBTSerializable)
-				{
-					((INBTSerializable) instance).deserializeNBT(nbt);
-				}
-			}
-		}, () -> null);
+	private void registerContainers(RegistryEvent.Register<ContainerType<?>> event)
+	{
+		event.getRegistry().register(new ContainerType<>((IContainerFactory<InventoryFilterContainer>) InventoryFilterContainer::new).setRegistryName("inventory_filter"));
 	}
 }

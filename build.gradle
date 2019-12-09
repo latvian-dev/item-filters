@@ -139,9 +139,6 @@ if (ENV.CURSEFORGE_KEY) {
 			id = "${curseforge_id}"
 			releaseType = "release"
 			addGameVersion "1.14.4"
-			relations {
-				optionalDependency 'jei'
-			}
 			changelog = getGitChangelog
 			changelogType = 'markdown'
 			addArtifact(sourceJar)

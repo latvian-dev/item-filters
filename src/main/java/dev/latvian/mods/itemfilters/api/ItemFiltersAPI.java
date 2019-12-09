@@ -1,10 +1,8 @@
 package dev.latvian.mods.itemfilters.api;
 
 import dev.latvian.mods.itemfilters.ItemFilters;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraftforge.registries.ObjectHolder;
+import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -12,13 +10,11 @@ import java.util.List;
 /**
  * @author LatvianModder
  */
+@SuppressWarnings("ALL")
 public class ItemFiltersAPI
 {
-	@ObjectHolder(ItemFilters.MOD_ID + ":always_true")
-	public static final Item ALWAYS_TRUE = Items.AIR;
-
-	@ObjectHolder(ItemFilters.MOD_ID + ":always_false")
-	public static final Item ALWAYS_FALSE = Items.AIR;
+	public static final ResourceLocation FILTERS_ITEM_TAG = new ResourceLocation(ItemFilters.MOD_ID, "filters");
+	public static final ResourceLocation CHECK_NBT_ITEM_TAG = new ResourceLocation(ItemFilters.MOD_ID, "check_nbt");
 
 	/**
 	 * @return IItemFilter if stack is a filter, null otherwise.
@@ -56,8 +52,12 @@ public class ItemFiltersAPI
 		{
 			return false;
 		}
+		else if (!stackA.hasTag() && !stackB.hasTag())
+		{
+			return true;
+		}
 
-		return ItemStack.areItemStackTagsEqual(stackA, stackB);
+		return !stackA.getItem().getTags().contains(CHECK_NBT_ITEM_TAG) || ItemStack.areItemStackTagsEqual(stackA, stackB);
 	}
 
 	/**
