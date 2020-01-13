@@ -1,6 +1,6 @@
 package dev.latvian.mods.itemfilters.gui;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import dev.latvian.mods.itemfilters.ItemFilters;
 import dev.latvian.mods.itemfilters.item.InventoryFilterItem;
 import net.minecraft.client.Minecraft;
@@ -34,7 +34,7 @@ public class InventoryFilterScreen extends ContainerScreen<InventoryFilterContai
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY)
 	{
-		GlStateManager.color4f(1F, 1F, 1F, 1F);
+		RenderSystem.color4f(1F, 1F, 1F, 1F);
 		minecraft.getTextureManager().bindTexture(TEXTURE);
 		blit(guiLeft, guiTop, 0, 0, xSize, ySize);
 
@@ -47,7 +47,7 @@ public class InventoryFilterScreen extends ContainerScreen<InventoryFilterContai
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
 	{
-		GlStateManager.color4f(1F, 1F, 1F, 1F);
+		RenderSystem.color4f(1F, 1F, 1F, 1F);
 		font.drawString(getTitle().getFormattedText(), 8, 6, 4210752);
 		font.drawString(Minecraft.getInstance().player.inventory.getDisplayName().getFormattedText(), 8, 72, 4210752);
 	}

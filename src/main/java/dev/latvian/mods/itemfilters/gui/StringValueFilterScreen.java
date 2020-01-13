@@ -1,6 +1,6 @@
 package dev.latvian.mods.itemfilters.gui;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import dev.latvian.mods.itemfilters.api.IStringValueFilter;
 import dev.latvian.mods.itemfilters.api.StringValueFilterVariant;
 import dev.latvian.mods.itemfilters.net.MessageUpdateFilterItem;
@@ -185,8 +185,8 @@ public class StringValueFilterScreen extends Screen
 	{
 		renderBackground();
 		super.render(mouseX, mouseY, partialTicks);
-		GlStateManager.disableLighting();
-		GlStateManager.disableBlend();
+		RenderSystem.disableLighting();
+		RenderSystem.disableBlend();
 
 		if (!variants.isEmpty())
 		{
@@ -199,16 +199,16 @@ public class StringValueFilterScreen extends Screen
 
 				if (!variant.icon.isEmpty())
 				{
-					GlStateManager.pushMatrix();
-					GlStateManager.translated(4, 14 + i * 10, 0);
-					GlStateManager.scaled(0.5F, 0.5F, 1F);
+					RenderSystem.pushMatrix();
+					RenderSystem.translated(4, 14 + i * 10, 0);
+					RenderSystem.scaled(0.5F, 0.5F, 1F);
 					itemRenderer.zLevel = 100F;
-					GlStateManager.enableDepthTest();
-					RenderHelper.enableGUIStandardItemLighting();
+					RenderSystem.enableDepthTest();
+					RenderHelper.disableGuiDepthLighting();
 					itemRenderer.renderItemAndEffectIntoGUI(minecraft.player, variant.icon, 0, 0);
 					itemRenderer.renderItemOverlayIntoGUI(font, variant.icon, 0, 0, "");
 					itemRenderer.zLevel = 0F;
-					GlStateManager.popMatrix();
+					RenderSystem.popMatrix();
 				}
 
 				if (14 + i * 10 >= height)
