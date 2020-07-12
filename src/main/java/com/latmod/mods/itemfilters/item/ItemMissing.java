@@ -44,6 +44,11 @@ public class ItemMissing extends Item
 			return ItemStack.EMPTY;
 		}
 
+		if (nbt instanceof NBTTagCompound && ((NBTTagCompound) nbt).getSize() == 1 && ((NBTTagCompound) nbt).hasKey("item", Constants.NBT.TAG_COMPOUND))
+		{
+			return read(((NBTTagCompound) nbt).getCompoundTag("item"));
+		}
+
 		ItemStack stack = ItemStackSerializer.read(nbt);
 
 		if (stack.getItem() == ItemFiltersItems.MISSING)
