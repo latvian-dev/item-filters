@@ -73,6 +73,11 @@ public class ItemMissing extends Item
 
 			if (forceCompound)
 			{
+				if (base instanceof NBTTagCompound)
+				{
+					return base;
+				}
+
 				NBTTagCompound nbt = new NBTTagCompound();
 
 				if (base != null && !base.isEmpty())

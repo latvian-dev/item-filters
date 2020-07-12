@@ -127,7 +127,13 @@ public class CreativeTabFilter extends StringValueFilter
 
 			for (Item item : Item.REGISTRY)
 			{
-				item.getSubItems(getTab(), allItems);
+				try
+				{
+					item.getSubItems(getTab(), allItems);
+				}
+				catch (Throwable ex)
+				{
+				}
 			}
 
 			cachedItems = compress(allItems);
