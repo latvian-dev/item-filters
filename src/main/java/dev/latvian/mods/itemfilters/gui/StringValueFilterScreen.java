@@ -204,7 +204,7 @@ public class StringValueFilterScreen extends Screen
 					RenderSystem.scaled(0.5F, 0.5F, 1F);
 					itemRenderer.zLevel = 100F;
 					RenderSystem.enableDepthTest();
-					RenderHelper.disableGuiDepthLighting();
+					RenderHelper.enableStandardItemLighting();
 					itemRenderer.renderItemAndEffectIntoGUI(minecraft.player, variant.icon, 0, 0);
 					itemRenderer.renderItemOverlayIntoGUI(font, variant.icon, 0, 0, "");
 					itemRenderer.zLevel = 0F;

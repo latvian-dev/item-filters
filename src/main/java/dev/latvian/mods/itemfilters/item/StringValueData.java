@@ -76,7 +76,7 @@ public abstract class StringValueData<T> implements ICapabilityProvider
 		}
 		else
 		{
-			filter.setTagInfo("value", StringNBT.of(s));
+			filter.setTagInfo("value", StringNBT.valueOf(s));
 		}
 	}
 
