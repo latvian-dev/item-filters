@@ -4,8 +4,8 @@ import dev.latvian.mods.itemfilters.api.StringValueFilterVariant;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class TagFilterItem extends StringValueFilterItem
 {
-	public static class TagData extends StringValueData<Tag<Item>>
+	public static class TagData extends StringValueData<ResourceLocation>
 	{
 		public TagData(ItemStack is)
 		{
@@ -30,15 +30,21 @@ public class TagFilterItem extends StringValueFilterItem
 
 		@Nullable
 		@Override
-		public Tag<Item> fromString(String s)
+		public ResourceLocation fromString(String s)
 		{
-			return ItemTags.getCollection().get(new ResourceLocation(s));
+			if (s.isEmpty())
+			{
+				return null;
+			}
+
+			ResourceLocation id = new ResourceLocation(s);
+			return ItemTags.getCollection().get(id) == null ? null : id;
 		}
 
 		@Override
-		public String toString(Tag<Item> value)
+		public String toString(ResourceLocation value)
 		{
-			return value.getId().toString();
+			return value.toString();
 		}
 	}
 
@@ -62,7 +68,7 @@ public class TagFilterItem extends StringValueFilterItem
 
 		for (ResourceLocation id : ItemTags.getCollection().getRegisteredTags())
 		{
-			Tag<Item> tag = ItemTags.getCollection().get(id);
+			ITag<Item> tag = ItemTags.getCollection().get(id);
 
 			if (tag != null && !tag.getAllElements().isEmpty())
 			{
@@ -78,7 +84,7 @@ public class TagFilterItem extends StringValueFilterItem
 	@Override
 	public void getValidFilterItems(ItemStack filter, List<ItemStack> list)
 	{
-		Tag<Item> items = ItemTags.getCollection().get(new ResourceLocation(getValue(filter)));
+		ITag<Item> items = ItemTags.getCollection().get(new ResourceLocation(getValue(filter)));
 
 		if (items == null || items.getAllElements().isEmpty())
 		{

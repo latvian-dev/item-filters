@@ -121,7 +121,13 @@ public class ItemGroupFilterItem extends StringValueFilterItem
 
 			for (Item item : ForgeRegistries.ITEMS.getValues())
 			{
-				item.fillItemGroup(data.getValue(), allItems);
+				try
+				{
+					item.fillItemGroup(data.getValue(), allItems);
+				}
+				catch (Throwable ex)
+				{
+				}
 			}
 
 			list.addAll(allItems);

@@ -1,5 +1,6 @@
 package dev.latvian.mods.itemfilters.gui;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import dev.latvian.mods.itemfilters.ItemFilters;
 import dev.latvian.mods.itemfilters.item.InventoryFilterItem;
@@ -24,31 +25,31 @@ public class InventoryFilterScreen extends ContainerScreen<InventoryFilterContai
 	}
 
 	@Override
-	public void render(int mouseX, int mouseY, float partialTicks)
+	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
 	{
-		renderBackground();
-		super.render(mouseX, mouseY, partialTicks);
-		renderHoveredToolTip(mouseX, mouseY);
+		renderBackground(matrixStack);
+		super.render(matrixStack, mouseX, mouseY, partialTicks);
+		func_230459_a_(matrixStack, mouseX, mouseY);
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY)
+	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY)
 	{
 		RenderSystem.color4f(1F, 1F, 1F, 1F);
 		minecraft.getTextureManager().bindTexture(TEXTURE);
-		blit(guiLeft, guiTop, 0, 0, xSize, ySize);
+		blit(matrixStack, guiLeft, guiTop, 0, 0, xSize, ySize);
 
 		for (InventoryFilterItem.FilterSlot slot : container.filterSlots)
 		{
-			blit(guiLeft + slot.x - 1, guiTop + slot.y - 1, 177, 0, 18, 18);
+			blit(matrixStack, guiLeft + slot.x - 1, guiTop + slot.y - 1, 177, 0, 18, 18);
 		}
 	}
 
 	@Override
-	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
+	protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY)
 	{
 		RenderSystem.color4f(1F, 1F, 1F, 1F);
-		font.drawString(getTitle().getFormattedText(), 8, 6, 4210752);
-		font.drawString(Minecraft.getInstance().player.inventory.getDisplayName().getFormattedText(), 8, 72, 4210752);
+		font.drawString(matrixStack, getTitle().getString(), 8, 6, 4210752);
+		font.drawString(matrixStack, Minecraft.getInstance().player.inventory.getDisplayName().getString(), 8, 72, 4210752);
 	}
 }

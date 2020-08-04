@@ -35,7 +35,7 @@ public abstract class BaseFilterItem extends Item implements IItemFilter
 
 		if (Screen.hasShiftDown())
 		{
-			tooltip.add(new TranslationTextComponent(I18n.format(getTranslationKey() + ".description")).applyTextStyle(TextFormatting.ITALIC).applyTextStyle(TextFormatting.DARK_GRAY));
+			tooltip.add(new TranslationTextComponent(I18n.format(getTranslationKey() + ".description")).mergeStyle(TextFormatting.ITALIC, TextFormatting.DARK_GRAY));
 		}
 
 		addInfo(stack, new FilterInfoImpl(tooltip), Screen.hasShiftDown());

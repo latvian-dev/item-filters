@@ -1,5 +1,6 @@
 package dev.latvian.mods.itemfilters.gui;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import dev.latvian.mods.itemfilters.api.IStringValueFilter;
 import dev.latvian.mods.itemfilters.api.StringValueFilterVariant;
@@ -54,7 +55,7 @@ public class StringValueFilterScreen extends Screen
 		minecraft.keyboardListener.enableRepeatEvents(true);
 		int i = width / 2;
 		int j = height / 2;
-		nameField = new TextFieldWidget(font, i - 52, j - 6, 104, 12, "");
+		nameField = new TextFieldWidget(font, i - 52, j - 6, 104, 12, StringTextComponent.EMPTY);
 		nameField.setTextColor(-1);
 		nameField.setDisabledTextColour(-1);
 		nameField.setEnableBackgroundDrawing(false);
@@ -64,9 +65,9 @@ public class StringValueFilterScreen extends Screen
 	}
 
 	@Override
-	public void removed()
+	public void onClose()
 	{
-		super.removed();
+		super.onClose();
 		minecraft.keyboardListener.enableRepeatEvents(true);
 	}
 
@@ -181,21 +182,21 @@ public class StringValueFilterScreen extends Screen
 	}
 
 	@Override
-	public void render(int mouseX, int mouseY, float partialTicks)
+	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
 	{
-		renderBackground();
-		super.render(mouseX, mouseY, partialTicks);
+		renderBackground(matrixStack);
+		super.render(matrixStack, mouseX, mouseY, partialTicks);
 		RenderSystem.disableLighting();
 		RenderSystem.disableBlend();
 
 		if (!variants.isEmpty())
 		{
-			drawString(font, "Variants [" + visibleVariants.size() + "] [Press Tab]", 4, 4, -1);
+			drawString(matrixStack, font, "Variants [" + visibleVariants.size() + "] [Press Tab]", 4, 4, -1);
 
 			for (int i = 0; i < visibleVariants.size(); i++)
 			{
 				StringValueFilterVariant variant = visibleVariants.get(i);
-				drawString(font, variant.title.getFormattedText(), variant.icon.isEmpty() ? 4 : 14, 14 + i * 10, i == selectedVariant ? 0xFFFFFF00 : -1);
+				drawString(matrixStack, font, variant.title.getString(), variant.icon.isEmpty() ? 4 : 14, 14 + i * 10, i == selectedVariant ? 0xFFFFFF00 : -1);
 
 				if (!variant.icon.isEmpty())
 				{
@@ -218,6 +219,6 @@ public class StringValueFilterScreen extends Screen
 			}
 		}
 
-		nameField.render(mouseX, mouseY, partialTicks);
+		nameField.render(matrixStack, mouseX, mouseY, partialTicks);
 	}
 }

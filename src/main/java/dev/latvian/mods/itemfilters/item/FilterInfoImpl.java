@@ -23,7 +23,7 @@ public class FilterInfoImpl implements FilterInfo
 	@Override
 	public void add(ITextComponent component)
 	{
-		list.add(new StringTextComponent(indent + "- ").applyTextStyle(TextFormatting.YELLOW).appendSibling(component.applyTextStyle(TextFormatting.GRAY)));
+		list.add(new StringTextComponent(indent + "- ").mergeStyle(TextFormatting.YELLOW).append((new StringTextComponent("").append(component)).mergeStyle(TextFormatting.GRAY)));
 	}
 
 	@Override
