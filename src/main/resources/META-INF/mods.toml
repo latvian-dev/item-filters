@@ -1,6 +1,7 @@
-modLoader="javafml"
-loaderVersion="[30,)"
-issueTrackerURL="https://github.com/LatvianModder/Item-Filters/issues"
+modLoader = "javafml"
+loaderVersion = "[33,)"
+issueTrackerURL = "https://github.com/LatvianModder/Item-Filters/issues"
+license = "GNU LPGLv3"
 
 [[mods]]
 modId="itemfilters"
@@ -14,14 +15,14 @@ credits="TheCodedOne for porting to 1.14.3"
 
 [[dependencies.itemfilters]]
     modId="forge"
-    mandatory=true
-    versionRange="[30,)"
-    ordering="NONE"
+mandatory = true
+versionRange = "[33,)"
+ordering = "NONE"
     side="BOTH"
 
 [[dependencies.itemfilters]]
     modId="minecraft"
-    mandatory=true
-    versionRange="[1.15,)"
-    ordering="NONE"
+mandatory = true
+versionRange = "[1.16,)"
+ordering = "NONE"
     side="BOTH"

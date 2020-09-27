@@ -6,7 +6,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -81,7 +80,7 @@ public class ItemGroupFilterItem extends StringValueFilterItem
 			}
 
 			StringValueFilterVariant variant = new StringValueFilterVariant(t.getPath());
-			variant.title = new TranslationTextComponent(t.getTranslationKey());
+			variant.title = t.getGroupName();
 			variant.icon = t.getIcon();
 			variants.add(variant);
 		}
@@ -142,7 +141,7 @@ public class ItemGroupFilterItem extends StringValueFilterItem
 
 		if (data.getValue() != null)
 		{
-			info.add(new TranslationTextComponent(data.getValue().getTranslationKey()));
+			info.add(data.getValue().getGroupName());
 		}
 	}
 }

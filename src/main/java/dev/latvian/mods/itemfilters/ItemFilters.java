@@ -46,8 +46,7 @@ public class ItemFilters
 	public ItemFilters()
 	{
 		instance = this;
-		//noinspection Convert2MethodRef
-		proxy = DistExecutor.runForDist(() -> () -> new ItemFiltersClient(), () -> () -> new ItemFiltersCommon());
+		proxy = DistExecutor.safeRunForDist(() -> ItemFiltersClient::new, () -> ItemFiltersCommon::new);
 		group = new ItemGroup(MOD_ID)
 		{
 			@Override
@@ -70,7 +69,7 @@ public class ItemFilters
 		CapabilityManager.INSTANCE.register(ItemInventory.class, new EmptyStorage<>(), () -> null);
 		CapabilityManager.INSTANCE.register(StringValueData.class, new EmptyStorage<>(), () -> null);
 	}
-
+  
 	private void registerItems(RegistryEvent.Register<Item> event)
 	{
 		event.getRegistry().registerAll(
