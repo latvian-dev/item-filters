@@ -1,0 +1,30 @@
+{
+	"schemaVersion": 1,
+	"id": "itemfilters",
+	"version": "${version}",
+	"name": "Item Filters",
+	"description": "Customize your modpack or server with JavaScript!",
+	"authors": [
+		"LatvianModder"
+	],
+	"contact": {
+		"sources": "https://github.com/LatvianModder/Item-Filters",
+		"issues": "https://github.com/LatvianModder/Item-Filters/issues"
+	},
+	"license": "GNU LGPLv3",
+	"entrypoints": {
+		"main": [
+			"dev.latvian.mods.itemfilters.fabric.KubeJSFabric"
+		]
+	},
+	"mixins": [
+		"itemfilters-common.mixins.json",
+		"itemfilters.mixins.json"
+	],
+	"depends": {
+		"fabric": "*",
+		"minecraft": "~1.16.2",
+		"rhino": "*",
+		"architectury": ">=1.1.52"
+	}
+}

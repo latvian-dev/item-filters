@@ -1,0 +1,87 @@
+plugins {
+	id "com.github.johnrengelman.shadow" version "5.0.0"
+	id "com.matthewprenger.cursegradle"
+}
+
+def ENV = System.getenv()
+
+configurations {
+	shadow
+}
+
+architectury {
+	platformSetupLoomIde()
+}
+
+loom {
+	mixinConfigs = ["itemfilters.mixins.json", "itemfilters-common.mixins.json"]
+	useFabricMixin = true
+}
+
+dependencies {
+	minecraft("com.mojang:minecraft:${rootProject.architect.minecraft}")
+	mappings(minecraft.officialMojangMappings())
+	forge("net.minecraftforge:forge:${rootProject.architect.minecraft}-${rootProject.forge_version}")
+	modCompile("curse.maven:jei-238222:${rootProject.forge_jei_file}")
+	modCompile("me.shedaniel:architectury:${rootProject.architectury_version}:forge")
+
+	compileOnly(project(path: ":common")) {
+		transitive = false
+	}
+	runtimeOnly(project(path: ":common", configuration: "transformForgeFakeMod")) {
+		transitive = false
+	}
+	shadow(project(path: ":common", configuration: "transformForge")) {
+		transitive = false
+	}
+}
+
+shadowJar {
+	exclude "fabric.mod.json"
+
+	configurations = [project.configurations.shadow]
+	classifier "shadow"
+}
+
+remapJar {
+	dependsOn(shadowJar)
+	input.set(shadowJar.archivePath)
+	archiveClassifier = "forge"
+}
+
+jar {
+	manifest {
+		attributes([
+				"MixinConfigs"            : "itemfilters.mixins.json",
+				"Specification-Title"     : project.mod_id,
+				"Specification-Vendor"    : project.mod_author,
+				"Specification-Version"   : "1",
+				"Implementation-Title"    : project.name,
+				"Implementation-Version"  : version,
+				"Implementation-Vendor"   : project.mod_author,
+				"Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+		])
+	}
+}
+
+if (ENV.CURSEFORGE_KEY) {
+	curseforge {
+		apiKey = ENV.CURSEFORGE_KEY
+		project {
+			id = project.curseforge_id_forge
+			releaseType = "release"
+			addGameVersion "Forge"
+			addGameVersion "1.16.2"
+			addGameVersion "1.16.3"
+			addGameVersion "1.16.4"
+			addGameVersion "1.16.5"
+			mainArtifact(remapJar.archivePath)
+			relations {
+				requiredDependency 'architectury-forge'
+				optionalDependency 'jei'
+			}
+			changelog = getGitChangelog
+			changelogType = 'markdown'
+		}
+	}
+}

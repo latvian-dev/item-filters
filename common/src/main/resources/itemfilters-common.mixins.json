@@ -1,0 +1,14 @@
+{
+	"required": true,
+	"package": "dev.latvian.mods.itemfilters.core.mixin.common",
+	"compatibilityLevel": "JAVA_8",
+	"mixins": [
+		"ItemStackMixin"
+	],
+	"client": [
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"minVersion": "0.8"
+}

@@ -1,0 +1,42 @@
+modLoader = "javafml"
+loaderVersion = "[33,)"
+issueTrackerURL = "https://github.com/LatvianModder/Item-Filters/issues"
+license = "GNU LGPLv3"
+
+[[mods]]
+modId = "itemfilters"
+version = "${file.jarVersion}"
+displayName = "Item Filters"
+authors = "LatvianModder"
+description = '''
+Adds Item Filters that can be used in other mods to filter multiple items in devices
+'''
+license = "GNU LGPLv3"
+
+[[dependencies.itemfilters]]
+modId = "forge"
+mandatory = true
+versionRange = "[32.0.75,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.itemfilters]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.16,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.itemfilters]]
+modId = "architectury"
+mandatory = true
+versionRange = "[1.1.52,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.itemfilters]]
+modId = "jei"
+mandatory = false
+versionRange = "[1.0.0,)"
+ordering = "AFTER"
+side = "BOTH"
