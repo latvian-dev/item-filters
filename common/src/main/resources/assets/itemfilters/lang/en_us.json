@@ -1,5 +1,5 @@
 {
-	"itemGroup.itemfilters": "Item Filters",
+	"itemGroup.itemfilters.main": "Item Filters",
 	"item.itemfilters.missing": "Missing Item",
 	"item.itemfilters.filter": "Item Filter",
 	"item.itemfilters.always_true": "Always True Filter",

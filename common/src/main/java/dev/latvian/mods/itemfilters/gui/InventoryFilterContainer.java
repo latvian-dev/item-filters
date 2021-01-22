@@ -14,13 +14,14 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * @author LatvianModder
  */
 public class InventoryFilterContainer extends AbstractContainerMenu
 {
-	public static MenuType<InventoryFilterContainer> TYPE;
+	public static Supplier<MenuType<?>> TYPE;
 
 	public final InteractionHand hand;
 	public final ItemInventory inventory;
@@ -28,7 +29,7 @@ public class InventoryFilterContainer extends AbstractContainerMenu
 
 	public InventoryFilterContainer(int id, Inventory playerInventory, InteractionHand h)
 	{
-		super(TYPE, id);
+		super(TYPE.get(), id);
 		hand = h;
 		inventory = InventoryFilterItem.getInventory(playerInventory.player.getItemInHand(hand));
 		filterSlots = new ArrayList<>();

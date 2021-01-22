@@ -109,13 +109,7 @@ public class StringValueFilterScreen extends Screen
 			if (variants.isEmpty() || text.isEmpty() || variants.containsKey(text))
 			{
 				filter.setValue(stack, text);
-
 				minecraft.setScreen(null);
-
-				if (minecraft.screen == null)
-				{
-					minecraft.pauseGame(true);
-				}
 
 				StringValueFilterVariant variant = variants.get(text);
 				minecraft.getToasts().addToast(new SystemToast(SystemToast.SystemToastIds.TUTORIAL_HINT, new TextComponent("Value changed!"), text.isEmpty() ? null : variant == null ? new TextComponent(text) : variant.title.copy()));
@@ -205,7 +199,7 @@ public class StringValueFilterScreen extends Screen
 					RenderSystem.scaled(0.5F, 0.5F, 1F);
 					itemRenderer.blitOffset = 100F;
 					RenderSystem.enableDepthTest();
-					Lighting.setupForFlatItems();
+					Lighting.setupFor3DItems();
 					itemRenderer.renderAndDecorateItem(minecraft.player, variant.icon, 0, 0);
 					itemRenderer.renderGuiItemDecorations(font, variant.icon, 0, 0, "");
 					itemRenderer.blitOffset = 0F;

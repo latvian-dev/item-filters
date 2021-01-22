@@ -5,9 +5,11 @@ import dev.latvian.mods.itemfilters.api.IStringValueFilter;
 import dev.latvian.mods.itemfilters.gui.InventoryFilterContainer;
 import dev.latvian.mods.itemfilters.gui.InventoryFilterScreen;
 import dev.latvian.mods.itemfilters.gui.StringValueFilterScreen;
+import me.shedaniel.architectury.event.events.client.ClientLifecycleEvent;
 import me.shedaniel.architectury.registry.MenuRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 
 /**
@@ -18,7 +20,9 @@ public class ItemFiltersClient extends ItemFiltersCommon
 	@Override
 	public void setup()
 	{
-		MenuRegistry.registerScreenFactory(InventoryFilterContainer.TYPE, InventoryFilterScreen::new);
+		ClientLifecycleEvent.CLIENT_SETUP.register(instance -> {
+			MenuRegistry.registerScreenFactory((MenuType<InventoryFilterContainer>) InventoryFilterContainer.TYPE.get(), InventoryFilterScreen::new);
+		});
 	}
 
 	@Override

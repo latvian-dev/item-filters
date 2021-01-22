@@ -122,9 +122,14 @@ public abstract class InventoryFilterItem extends BaseFilterItem
 	{
 		ItemInventory inventory = getInventory(filter);
 
+		if (inventory == null)
+		{
+			return;
+		}
+
 		for (ItemStack stack1 : inventory.getItems())
 		{
-			info.add(stack1.getDisplayName());
+			info.add(stack1.getHoverName());
 
 			if (expanded)
 			{
@@ -133,7 +138,7 @@ public abstract class InventoryFilterItem extends BaseFilterItem
 				if (filter1 != null)
 				{
 					info.push();
-					filter1.addInfo(stack1, info, expanded);
+					filter1.addInfo(stack1, info, true);
 					info.pop();
 				}
 			}

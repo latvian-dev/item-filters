@@ -21,7 +21,7 @@ public abstract class StringValueFilterItem extends BaseFilterItem implements IS
 {
 	public <T extends StringValueData<?>> T getStringValueData(ItemStack filter)
 	{
-		return (T) ((ItemFiltersStack) (Object) filter).getStringValueData();
+		return (T) ((ItemFiltersStack) (Object) filter).getStringValueFilterData();
 	}
 
 	public abstract StringValueData<?> createData(ItemStack stack);
@@ -33,7 +33,7 @@ public abstract class StringValueFilterItem extends BaseFilterItem implements IS
 
 		if (world.isClientSide())
 		{
-			ItemFilters.instance.proxy.openStringValueFilterScreen(this, stack, hand);
+			ItemFilters.proxy.openStringValueFilterScreen(this, stack, hand);
 		}
 
 		return new InteractionResultHolder<>(InteractionResult.SUCCESS, stack);

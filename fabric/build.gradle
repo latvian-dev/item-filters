@@ -13,12 +13,20 @@ architectury {
 	platformSetupLoomIde()
 }
 
+loom {
+	mixinConfigs = ["itemfilters.mixins.json", "itemfilters-common.mixins.json"]
+	useFabricMixin = true
+	accessWidener "src/main/resources/itemfilters.accesswidener"
+}
+
+
 dependencies {
-	minecraft("com.mojang:minecraft:${rootProject.architect.minecraft}")
-	mappings(minecraft.officialMojangMappings())
-	modCompile("net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}")
-	modCompile("net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}")
-	modCompile("me.shedaniel:architectury:${rootProject.architectury_version}:fabric")
+	minecraft "com.mojang:minecraft:${rootProject.architectury.minecraft}"
+	mappings minecraft.officialMojangMappings()
+	modCompile "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
+	modCompile "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
+	modCompile "me.shedaniel:architectury:${rootProject.architectury_version}:fabric"
+
 	modCompileOnly("me.shedaniel:RoughlyEnoughItems-api:${rootProject.fabric_rei_version}") {
 		exclude group: "net.fabricmc.fabric-api"
 		exclude group: "net.fabricmc"
@@ -31,19 +39,19 @@ dependencies {
 	compileOnly(project(path: ":common")) {
 		transitive = false
 	}
-	runtimeOnly(project(path: ":common", configuration: "transformedRuntime")) {
+	runtimeOnly(project(path: ":common", configuration: "transformDevelopmentFabric")) {
 		transitive = false
 	}
-	shadow(project(path: ":common", configuration: "transformed")) {
+	shadow(project(path: ":common", configuration: "transformProductionFabric")) {
 		transitive = false
 	}
 }
 
 processResources {
-    filesMatching("fabric.mod.json") {
-        expand "version": project.version
-    }
-    inputs.property "version", project.version
+	filesMatching("fabric.mod.json") {
+		expand "version": project.version
+	}
+	inputs.property "version", project.version
 }
 
 shadowJar {
@@ -57,7 +65,6 @@ remapJar {
 	archiveClassifier = "fabric"
 }
 
-/*
 if (ENV.CURSEFORGE_KEY) {
 	curseforge {
 		apiKey = ENV.CURSEFORGE_KEY
@@ -79,4 +86,3 @@ if (ENV.CURSEFORGE_KEY) {
 		}
 	}
 }
- */

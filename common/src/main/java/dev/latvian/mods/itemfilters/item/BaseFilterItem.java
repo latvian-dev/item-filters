@@ -24,7 +24,7 @@ public abstract class BaseFilterItem extends Item implements IItemFilter
 {
 	public BaseFilterItem()
 	{
-		super(new Item.Properties().tab(ItemFilters.instance.group).stacksTo(64));
+		super(new Item.Properties().tab(ItemFilters.creativeTab).stacksTo(64));
 	}
 
 	@Override

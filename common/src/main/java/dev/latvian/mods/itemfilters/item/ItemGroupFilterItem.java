@@ -140,7 +140,7 @@ public class ItemGroupFilterItem extends StringValueFilterItem
 	{
 		ItemGroupData data = getStringValueData(filter);
 
-		if (data.getValue() != null)
+		if (data != null && data.getValue() != null)
 		{
 			info.add(data.getValue().getDisplayName());
 		}

@@ -1,5 +1,5 @@
 {
-	"itemGroup.itemfilters": "Фильтры предметов",
+	"itemGroup.itemfilters.main": "Фильтры предметов",
 	"item.itemfilters.missing": "Отсутствует предмет",
 	"item.itemfilters.filter": "Фильтры предметов",
 	"item.itemfilters.always_true": "Всегда True Фильтр",
