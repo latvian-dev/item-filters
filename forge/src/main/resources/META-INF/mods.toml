@@ -5,7 +5,7 @@ license = "GNU LGPLv3"
 
 [[mods]]
 modId = "itemfilters"
-version = "${file.version}"
+version = "${version}"
 displayName = "Item Filters"
 authors = "LatvianModder"
 description = '''
