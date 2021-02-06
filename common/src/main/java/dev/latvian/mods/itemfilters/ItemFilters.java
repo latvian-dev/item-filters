@@ -2,7 +2,7 @@ package dev.latvian.mods.itemfilters;
 
 import dev.latvian.mods.itemfilters.api.ItemFiltersItems;
 import dev.latvian.mods.itemfilters.client.ItemFiltersClient;
-import dev.latvian.mods.itemfilters.gui.InventoryFilterContainer;
+import dev.latvian.mods.itemfilters.gui.InventoryFilterMenu;
 import dev.latvian.mods.itemfilters.net.ItemFiltersNet;
 import me.shedaniel.architectury.registry.CreativeTabs;
 import me.shedaniel.architectury.registry.MenuRegistry;
@@ -27,7 +27,7 @@ public class ItemFilters
 		creativeTab = CreativeTabs.create(new ResourceLocation(MOD_ID, "main"), () -> new ItemStack(ItemFiltersItems.ALWAYS_TRUE.get()));
 
 		ItemFiltersItems.init();
-		InventoryFilterContainer.TYPE = Registries.get(MOD_ID).get(Registry.MENU_REGISTRY).register(new ResourceLocation(MOD_ID, "inventory_filter"), () -> MenuRegistry.ofExtended(InventoryFilterContainer::new));
+		InventoryFilterMenu.TYPE = Registries.get(MOD_ID).get(Registry.MENU_REGISTRY).register(new ResourceLocation(MOD_ID, "inventory_filter"), () -> MenuRegistry.ofExtended(InventoryFilterMenu::new));
 
 		ItemFiltersNet.init();
 		EnvExecutor.runInEnv(EnvType.CLIENT, () -> proxy::setup);

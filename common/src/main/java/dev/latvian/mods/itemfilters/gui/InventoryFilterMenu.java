@@ -19,7 +19,7 @@ import java.util.function.Supplier;
 /**
  * @author LatvianModder
  */
-public class InventoryFilterContainer extends AbstractContainerMenu
+public class InventoryFilterMenu extends AbstractContainerMenu
 {
 	public static Supplier<MenuType<?>> TYPE;
 
@@ -27,7 +27,7 @@ public class InventoryFilterContainer extends AbstractContainerMenu
 	public final ItemInventory inventory;
 	public final List<InventoryFilterItem.FilterSlot> filterSlots;
 
-	public InventoryFilterContainer(int id, Inventory playerInventory, InteractionHand h)
+	public InventoryFilterMenu(int id, Inventory playerInventory, InteractionHand h)
 	{
 		super(TYPE.get(), id);
 		hand = h;
@@ -51,18 +51,19 @@ public class InventoryFilterContainer extends AbstractContainerMenu
 
 		for (int x = 0; x < 9; x++)
 		{
+			final int i = x;
 			addSlot(new Slot(playerInventory, x, 8 + x * 18, 142)
 			{
 				@Override
 				public boolean mayPickup(Player player)
 				{
-					return index != player.inventory.selected;
+					return i != player.inventory.selected;
 				}
 			});
 		}
 	}
 
-	public InventoryFilterContainer(int id, Inventory playerInventory, FriendlyByteBuf data)
+	public InventoryFilterMenu(int id, Inventory playerInventory, FriendlyByteBuf data)
 	{
 		this(id, playerInventory, data.readBoolean() ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND);
 	}

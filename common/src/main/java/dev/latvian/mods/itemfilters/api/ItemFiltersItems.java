@@ -12,7 +12,9 @@ import dev.latvian.mods.itemfilters.item.ModFilterItem;
 import dev.latvian.mods.itemfilters.item.NOTFilterItem;
 import dev.latvian.mods.itemfilters.item.ORFilterItem;
 import dev.latvian.mods.itemfilters.item.RegExFilterItem;
+import dev.latvian.mods.itemfilters.item.StrongNBTFilterItem;
 import dev.latvian.mods.itemfilters.item.TagFilterItem;
+import dev.latvian.mods.itemfilters.item.WeakNBTFilterItem;
 import dev.latvian.mods.itemfilters.item.XORFilterItem;
 import me.shedaniel.architectury.registry.Registries;
 import me.shedaniel.architectury.registry.Registry;
@@ -41,6 +43,8 @@ public class ItemFiltersItems
 	public static final Supplier<Item> DAMAGE = REGISTRY.register(new ResourceLocation(ItemFilters.MOD_ID, "damage"), DamageFilterItem::new);
 	public static final Supplier<Item> BLOCK = REGISTRY.register(new ResourceLocation(ItemFilters.MOD_ID, "block"), BlockFilterItem::new);
 	public static final Supplier<Item> MAX_COUNT = REGISTRY.register(new ResourceLocation(ItemFilters.MOD_ID, "max_count"), MaxCountFilterItem::new);
+	public static final Supplier<Item> STRONG_NBT = REGISTRY.register(new ResourceLocation(ItemFilters.MOD_ID, "strong_nbt"), StrongNBTFilterItem::new);
+	public static final Supplier<Item> WEAK_NBT = REGISTRY.register(new ResourceLocation(ItemFilters.MOD_ID, "weak_nbt"), WeakNBTFilterItem::new);
 
 	public static void init()
 	{

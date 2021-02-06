@@ -13,11 +13,11 @@ import net.minecraft.world.entity.player.Inventory;
 /**
  * @author LatvianModder
  */
-public class InventoryFilterScreen extends AbstractContainerScreen<InventoryFilterContainer>
+public class InventoryFilterScreen extends AbstractContainerScreen<InventoryFilterMenu>
 {
 	private static final ResourceLocation TEXTURE = new ResourceLocation(ItemFilters.MOD_ID, "textures/gui/filter.png");
 
-	public InventoryFilterScreen(InventoryFilterContainer container, Inventory playerInventory, Component title)
+	public InventoryFilterScreen(InventoryFilterMenu container, Inventory playerInventory, Component title)
 	{
 		super(container, playerInventory, title);
 		imageWidth = 176;

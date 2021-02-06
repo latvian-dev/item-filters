@@ -12,8 +12,8 @@ import javax.annotation.Nullable;
 public abstract class StringValueData<T>
 {
 	public final ItemStack filter;
-	private T value;
-	private boolean load;
+	protected T value;
+	protected boolean load;
 
 	public StringValueData(ItemStack is)
 	{

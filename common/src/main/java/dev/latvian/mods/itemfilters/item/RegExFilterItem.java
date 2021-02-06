@@ -45,7 +45,7 @@ public class RegExFilterItem extends StringValueFilterItem
 
 		if (data.getValue() != null)
 		{
-			return data.getValue().matcher(Registry.ITEM.getKey(item.getItem()).toString()).matches();
+			return data.getValue().matcher(Registry.ITEM.getKey(item.getItem()).toString()).find();
 		}
 
 		return false;

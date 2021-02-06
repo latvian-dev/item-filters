@@ -2,7 +2,7 @@ package dev.latvian.mods.itemfilters.client;
 
 import dev.latvian.mods.itemfilters.ItemFiltersCommon;
 import dev.latvian.mods.itemfilters.api.IStringValueFilter;
-import dev.latvian.mods.itemfilters.gui.InventoryFilterContainer;
+import dev.latvian.mods.itemfilters.gui.InventoryFilterMenu;
 import dev.latvian.mods.itemfilters.gui.InventoryFilterScreen;
 import dev.latvian.mods.itemfilters.gui.StringValueFilterScreen;
 import me.shedaniel.architectury.event.events.client.ClientLifecycleEvent;
@@ -21,7 +21,7 @@ public class ItemFiltersClient extends ItemFiltersCommon
 	public void setup()
 	{
 		ClientLifecycleEvent.CLIENT_SETUP.register(instance -> {
-			MenuRegistry.registerScreenFactory((MenuType<InventoryFilterContainer>) InventoryFilterContainer.TYPE.get(), InventoryFilterScreen::new);
+			MenuRegistry.registerScreenFactory((MenuType<InventoryFilterMenu>) InventoryFilterMenu.TYPE.get(), InventoryFilterScreen::new);
 		});
 	}
 

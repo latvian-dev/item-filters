@@ -4,7 +4,7 @@ import dev.latvian.mods.itemfilters.api.FilterInfo;
 import dev.latvian.mods.itemfilters.api.IItemFilter;
 import dev.latvian.mods.itemfilters.api.ItemFiltersAPI;
 import dev.latvian.mods.itemfilters.core.ItemFiltersStack;
-import dev.latvian.mods.itemfilters.gui.InventoryFilterContainer;
+import dev.latvian.mods.itemfilters.gui.InventoryFilterMenu;
 import me.shedaniel.architectury.registry.MenuRegistry;
 import me.shedaniel.architectury.registry.menu.ExtendedMenuProvider;
 import net.fabricmc.api.EnvType;
@@ -63,6 +63,11 @@ public abstract class InventoryFilterItem extends BaseFilterItem
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand)
 	{
+		if (player.isCrouching() && hand == InteractionHand.MAIN_HAND)
+		{
+			return super.use(world, player, hand);
+		}
+
 		ItemStack stack = player.getItemInHand(hand);
 
 		if (!world.isClientSide())
@@ -84,7 +89,7 @@ public abstract class InventoryFilterItem extends BaseFilterItem
 				@Override
 				public AbstractContainerMenu createMenu(int i, Inventory inventory, Player player)
 				{
-					return new InventoryFilterContainer(i, inventory, hand);
+					return new InventoryFilterMenu(i, inventory, hand);
 				}
 			});
 		}

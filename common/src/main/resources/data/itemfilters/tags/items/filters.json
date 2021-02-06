@@ -10,6 +10,11 @@
 		"itemfilters:tag",
 		"itemfilters:mod",
 		"itemfilters:item_group",
-		"itemfilters:id_regex"
+		"itemfilters:id_regex",
+		"itemfilters:damage",
+		"itemfilters:block",
+		"itemfilters:max_count",
+		"itemfilters:strong_nbt",
+		"itemfilters:weak_nbt"
 	]
 }
