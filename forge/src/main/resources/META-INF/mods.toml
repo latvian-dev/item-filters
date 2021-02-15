@@ -30,7 +30,7 @@ side = "BOTH"
 [[dependencies.itemfilters]]
 modId = "architectury"
 mandatory = true
-versionRange = "[1.1.52,)"
+versionRange = "[1.5.112,)"
 ordering = "AFTER"
 side = "BOTH"
 
