@@ -6,6 +6,7 @@ import dev.latvian.mods.itemfilters.api.IStringValueFilter;
 import dev.latvian.mods.itemfilters.core.ItemFiltersStack;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -29,11 +30,6 @@ public abstract class StringValueFilterItem extends BaseFilterItem implements IS
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand)
 	{
-		if (player.isCrouching() && hand == InteractionHand.MAIN_HAND)
-		{
-			return super.use(world, player, hand);
-		}
-
 		ItemStack stack = player.getItemInHand(hand);
 
 		if (world.isClientSide())
@@ -47,32 +43,30 @@ public abstract class StringValueFilterItem extends BaseFilterItem implements IS
 	@Override
 	public String getValue(ItemStack filter)
 	{
-		return filter.hasTag() ? filter.getTag().getString("value") : "";
+		return getStringValueData(filter).getValueAsString();
 	}
 
 	@Override
 	public void setValue(ItemStack filter, String v)
 	{
-		StringValueData<?> data = getStringValueData(filter);
-		data.setValueFromString(v);
+		getStringValueData(filter).setValueFromString(v);
 	}
 
 	@Override
 	public void resetFilterData(ItemStack filter)
 	{
-		StringValueData<?> data = getStringValueData(filter);
-		data.setValue(null);
+		getStringValueData(filter).setValue(null);
 	}
 
 	@Override
 	@Environment(EnvType.CLIENT)
 	public void addInfo(ItemStack filter, FilterInfo info, boolean expanded)
 	{
-		String s = getValue(filter);
+		Component s = getStringValueData(filter).getValueAsComponent();
 
-		if (!s.isEmpty())
+		if (s != TextComponent.EMPTY)
 		{
-			info.add(new TextComponent(s));
+			info.add(s);
 		}
 	}
 }

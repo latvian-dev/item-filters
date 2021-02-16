@@ -11,10 +11,10 @@ import java.util.List;
 public class NOTFilterItem extends InventoryFilterItem
 {
 	@Override
-	public boolean filter(ItemStack filter, ItemStack item)
+	public boolean filter(ItemStack filter, ItemStack stack)
 	{
 		ItemInventory inventory = getInventory(filter);
-		return !inventory.getItems().isEmpty() && !ItemFiltersAPI.filter(inventory.getItems().get(0), item);
+		return !inventory.getItems().isEmpty() && !ItemFiltersAPI.filter(inventory.getItems().get(0), stack);
 	}
 
 	@Override

@@ -73,7 +73,7 @@ public class ItemFiltersAPI
 	 */
 	public static boolean filter(ItemStack filter, ItemStack stack)
 	{
-		if (filter == stack || filter.isEmpty())
+		if (filter.isEmpty())
 		{
 			return true;
 		}

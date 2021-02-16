@@ -2,6 +2,8 @@ package dev.latvian.mods.itemfilters.item;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -28,6 +30,11 @@ public class StrongNBTFilterItem extends StringValueFilterItem
 		@Override
 		protected CompoundTag fromString(String s)
 		{
+			if (s.isEmpty())
+			{
+				return null;
+			}
+
 			try
 			{
 				return TagParser.parseTag(s);
@@ -41,6 +48,11 @@ public class StrongNBTFilterItem extends StringValueFilterItem
 		@Override
 		protected String toString(CompoundTag value)
 		{
+			if (value == null)
+			{
+				return "";
+			}
+
 			return value.toString();
 		}
 
@@ -77,6 +89,19 @@ public class StrongNBTFilterItem extends StringValueFilterItem
 				filter.addTagElement("value", value);
 			}
 		}
+
+		@Override
+		public Component getValueAsComponent()
+		{
+			CompoundTag v = getValue();
+
+			if (v == null)
+			{
+				return TextComponent.EMPTY;
+			}
+
+			return v.getPrettyDisplay();
+		}
 	}
 
 	@Override
@@ -88,11 +113,6 @@ public class StrongNBTFilterItem extends StringValueFilterItem
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand)
 	{
-		if (player.isCrouching() && hand == InteractionHand.MAIN_HAND)
-		{
-			return super.use(world, player, hand);
-		}
-
 		if (hand == InteractionHand.MAIN_HAND && !player.getOffhandItem().isEmpty() && player.getOffhandItem().hasTag())
 		{
 			NBTData data = getStringValueData(player.getMainHandItem());
@@ -104,11 +124,16 @@ public class StrongNBTFilterItem extends StringValueFilterItem
 	}
 
 	@Override
-	public boolean filter(ItemStack filter, ItemStack item)
+	public boolean filter(ItemStack filter, ItemStack stack)
 	{
+		if (stack.isEmpty())
+		{
+			return false;
+		}
+
 		NBTData data = getStringValueData(filter);
 		CompoundTag tag1 = data.getValue();
-		CompoundTag tag2 = item.getTag();
+		CompoundTag tag2 = stack.getTag();
 		return Objects.equals(tag1, tag2);
 	}
 }

@@ -2,6 +2,8 @@ package dev.latvian.mods.itemfilters.item;
 
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.StringTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
@@ -25,7 +27,7 @@ public abstract class StringValueData<T>
 	@Nullable
 	protected abstract T fromString(String s);
 
-	protected abstract String toString(T value);
+	protected abstract String toString(@Nullable T value);
 
 	public final String toString()
 	{
@@ -68,5 +70,23 @@ public abstract class StringValueData<T>
 	public void setValueFromString(String v)
 	{
 		setValue(fromString(v));
+	}
+
+	public String getValueAsString()
+	{
+		return toString(getValue());
+	}
+
+	public Component getValueAsComponent()
+	{
+		T v = getValue();
+
+		if (v == null)
+		{
+			return TextComponent.EMPTY;
+		}
+
+		String s = toString(v);
+		return s.isEmpty() ? TextComponent.EMPTY : new TextComponent(s);
 	}
 }

@@ -11,11 +11,16 @@ import java.util.Objects;
 public class WeakNBTFilterItem extends StrongNBTFilterItem
 {
 	@Override
-	public boolean filter(ItemStack filter, ItemStack item)
+	public boolean filter(ItemStack filter, ItemStack stack)
 	{
+		if (stack.isEmpty())
+		{
+			return false;
+		}
+
 		NBTData data = getStringValueData(filter);
 		CompoundTag tag1 = data.getValue();
-		CompoundTag tag2 = item.getTag();
+		CompoundTag tag2 = stack.getTag();
 
 		if (tag1 == null || tag1.isEmpty())
 		{

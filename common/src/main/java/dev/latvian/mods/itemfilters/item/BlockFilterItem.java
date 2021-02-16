@@ -19,7 +19,7 @@ public class BlockFilterItem extends BaseFilterItem
 	@Override
 	public boolean filter(ItemStack filter, ItemStack stack)
 	{
-		return stack.getItem() instanceof BlockItem;
+		return !stack.isEmpty() && stack.getItem() instanceof BlockItem;
 	}
 
 	@Override

@@ -11,10 +11,10 @@ import java.util.List;
 public class XORFilterItem extends InventoryFilterItem
 {
 	@Override
-	public boolean filter(ItemStack filter, ItemStack item)
+	public boolean filter(ItemStack filter, ItemStack stack)
 	{
 		ItemInventory inventory = getInventory(filter);
-		return inventory.getItems().size() >= 2 && ItemFiltersAPI.filter(inventory.getItems().get(0), item) != ItemFiltersAPI.filter(inventory.getItems().get(1), item);
+		return inventory.getItems().size() >= 2 && ItemFiltersAPI.filter(inventory.getItems().get(0), stack) != ItemFiltersAPI.filter(inventory.getItems().get(1), stack);
 	}
 
 	@Override

@@ -9,13 +9,13 @@ import net.minecraft.world.item.ItemStack;
 public class ANDFilterItem extends InventoryFilterItem
 {
 	@Override
-	public boolean filter(ItemStack filter, ItemStack item)
+	public boolean filter(ItemStack filter, ItemStack stack)
 	{
 		ItemInventory inventory = getInventory(filter);
 
 		for (ItemStack stack1 : inventory.getItems())
 		{
-			if (!ItemFiltersAPI.filter(stack1, item))
+			if (!ItemFiltersAPI.filter(stack1, stack))
 			{
 				return false;
 			}

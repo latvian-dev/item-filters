@@ -57,7 +57,7 @@ public class ItemGroupFilterItem extends StringValueFilterItem
 		@Override
 		protected String toString(CreativeModeTab value)
 		{
-			return value.getRecipeFolderName();
+			return value == null ? "" : value.getRecipeFolderName();
 		}
 	}
 
@@ -90,8 +90,13 @@ public class ItemGroupFilterItem extends StringValueFilterItem
 	}
 
 	@Override
-	public boolean filter(ItemStack filter, ItemStack item)
+	public boolean filter(ItemStack filter, ItemStack stack)
 	{
+		if (stack.isEmpty())
+		{
+			return false;
+		}
+
 		ItemGroupData data = getStringValueData(filter);
 
 		if (data.getValue() == null)
@@ -99,7 +104,7 @@ public class ItemGroupFilterItem extends StringValueFilterItem
 			return false;
 		}
 
-		for (CreativeModeTab t : Collections.singleton(item.getItem().getItemCategory())) // TODO: Forge impl
+		for (CreativeModeTab t : Collections.singleton(stack.getItem().getItemCategory())) // TODO: Forge impl
 		{
 			if (t == data.getValue())
 			{

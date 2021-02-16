@@ -28,7 +28,7 @@ public class RegExFilterItem extends StringValueFilterItem
 		@Override
 		protected String toString(Pattern value)
 		{
-			return value.toString();
+			return value == null ? "" : value.toString();
 		}
 	}
 
@@ -39,13 +39,18 @@ public class RegExFilterItem extends StringValueFilterItem
 	}
 
 	@Override
-	public boolean filter(ItemStack filter, ItemStack item)
+	public boolean filter(ItemStack filter, ItemStack stack)
 	{
+		if (stack.isEmpty())
+		{
+			return false;
+		}
+
 		RegExData data = getStringValueData(filter);
 
 		if (data.getValue() != null)
 		{
-			return data.getValue().matcher(Registry.ITEM.getKey(item.getItem()).toString()).find();
+			return data.getValue().matcher(Registry.ITEM.getKey(stack.getItem()).toString()).find();
 		}
 
 		return false;

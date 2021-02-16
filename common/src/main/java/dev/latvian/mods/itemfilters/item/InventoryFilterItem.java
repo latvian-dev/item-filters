@@ -63,11 +63,6 @@ public abstract class InventoryFilterItem extends BaseFilterItem
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand)
 	{
-		if (player.isCrouching() && hand == InteractionHand.MAIN_HAND)
-		{
-			return super.use(world, player, hand);
-		}
-
 		ItemStack stack = player.getItemInHand(hand);
 
 		if (!world.isClientSide())

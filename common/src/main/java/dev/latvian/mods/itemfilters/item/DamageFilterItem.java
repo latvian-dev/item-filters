@@ -73,6 +73,11 @@ public class DamageFilterItem extends StringValueFilterItem
 		@Override
 		protected String toString(DamageCheck value)
 		{
+			if (value == null)
+			{
+				return "";
+			}
+
 			StringBuilder builder = new StringBuilder();
 
 			switch (value.mode)
@@ -109,8 +114,13 @@ public class DamageFilterItem extends StringValueFilterItem
 	}
 
 	@Override
-	public boolean filter(ItemStack filter, ItemStack item)
+	public boolean filter(ItemStack filter, ItemStack stack)
 	{
+		if (stack.isEmpty())
+		{
+			return false;
+		}
+
 		DamageData data = getStringValueData(filter);
 
 		if (data.getValue() == null)
@@ -118,8 +128,8 @@ public class DamageFilterItem extends StringValueFilterItem
 			return false;
 		}
 
-		int d1 = item.getDamageValue();
-		int d2 = data.getValue().percent ? (int) (item.getMaxDamage() * data.getValue().damage / 100D) : data.getValue().damage;
+		int d1 = stack.getDamageValue();
+		int d2 = data.getValue().percent ? (int) (stack.getMaxDamage() * data.getValue().damage / 100D) : data.getValue().damage;
 
 		switch (data.getValue().mode)
 		{

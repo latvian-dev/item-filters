@@ -44,7 +44,7 @@ public class TagFilterItem extends StringValueFilterItem
 		@Override
 		public String toString(ResourceLocation value)
 		{
-			return value.toString();
+			return value == null ? "" : value.toString();
 		}
 	}
 
@@ -55,13 +55,18 @@ public class TagFilterItem extends StringValueFilterItem
 	}
 
 	@Override
-	public boolean filter(ItemStack filter, ItemStack item)
+	public boolean filter(ItemStack filter, ItemStack stack)
 	{
+		if (stack.isEmpty())
+		{
+			return false;
+		}
+
 		Tag<Item> tag = ItemTags.getAllTags().getTag(new ResourceLocation(getValue(filter)));
 
 		if (tag != null && !tag.getValues().isEmpty())
 		{
-			return tag.contains(item.getItem());
+			return tag.contains(stack.getItem());
 		}
 
 		return false;

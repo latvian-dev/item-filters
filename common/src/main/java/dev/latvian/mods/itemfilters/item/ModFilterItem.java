@@ -39,7 +39,7 @@ public class ModFilterItem extends StringValueFilterItem
 		@Override
 		public String toString(String value)
 		{
-			return value;
+			return value == null ? "" : value;
 		}
 	}
 
@@ -77,6 +77,6 @@ public class ModFilterItem extends StringValueFilterItem
 	@Override
 	public boolean filter(ItemStack filter, ItemStack stack)
 	{
-		return getValue(filter).equals(Registry.ITEM.getKey(stack.getItem()).getNamespace());
+		return !stack.isEmpty() && getValue(filter).equals(Registry.ITEM.getKey(stack.getItem()).getNamespace());
 	}
 }

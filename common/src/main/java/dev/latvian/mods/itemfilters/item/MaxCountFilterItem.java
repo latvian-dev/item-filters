@@ -64,6 +64,11 @@ public class MaxCountFilterItem extends StringValueFilterItem
 		@Override
 		protected String toString(MaxCountCheck value)
 		{
+			if (value == null)
+			{
+				return "";
+			}
+
 			StringBuilder builder = new StringBuilder();
 
 			switch (value.mode)
@@ -94,7 +99,7 @@ public class MaxCountFilterItem extends StringValueFilterItem
 	}
 
 	@Override
-	public boolean filter(ItemStack filter, ItemStack item)
+	public boolean filter(ItemStack filter, ItemStack stack)
 	{
 		MaxCountData data = getStringValueData(filter);
 
@@ -103,7 +108,7 @@ public class MaxCountFilterItem extends StringValueFilterItem
 			return false;
 		}
 
-		int d1 = item.getMaxStackSize();
+		int d1 = stack.getMaxStackSize();
 		int d2 = data.getValue().maxCount;
 
 		switch (data.getValue().mode)
