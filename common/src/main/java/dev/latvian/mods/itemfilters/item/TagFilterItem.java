@@ -10,11 +10,13 @@ import net.minecraft.tags.Tag;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author LatvianModder
@@ -73,6 +75,24 @@ public class TagFilterItem extends StringValueFilterItem
 	}
 
 	@Override
+	public boolean filterItem(ItemStack filter, Item item)
+	{
+		if (item == Items.AIR)
+		{
+			return false;
+		}
+
+		Tag<Item> tag = ItemTags.getAllTags().getTag(new ResourceLocation(getValue(filter)));
+
+		if (tag != null && !tag.getValues().isEmpty())
+		{
+			return tag.contains(item);
+		}
+
+		return false;
+	}
+
+	@Override
 	@Environment(EnvType.CLIENT)
 	public Collection<StringValueFilterVariant> getValueVariants(ItemStack filter)
 	{
@@ -94,7 +114,7 @@ public class TagFilterItem extends StringValueFilterItem
 	}
 
 	@Override
-	public void getValidFilterItems(ItemStack filter, List<ItemStack> list)
+	public void getDisplayItemStacks(ItemStack filter, List<ItemStack> list)
 	{
 		Tag<Item> items = ItemTags.getAllTags().getTag(new ResourceLocation(getValue(filter)));
 
@@ -111,5 +131,18 @@ public class TagFilterItem extends StringValueFilterItem
 		}
 
 		list.addAll(list1);
+	}
+
+	@Override
+	public void getItems(ItemStack filter, Set<Item> set)
+	{
+		Tag<Item> items = ItemTags.getAllTags().getTag(new ResourceLocation(getValue(filter)));
+
+		if (items == null || items.getValues().isEmpty())
+		{
+			return;
+		}
+
+		set.addAll(items.getValues());
 	}
 }

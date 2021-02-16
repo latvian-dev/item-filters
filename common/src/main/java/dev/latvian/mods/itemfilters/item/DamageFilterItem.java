@@ -147,7 +147,7 @@ public class DamageFilterItem extends StringValueFilterItem
 	}
 
 	@Override
-	public void getValidFilterItems(ItemStack filter, List<ItemStack> list)
+	public void getDisplayItemStacks(ItemStack filter, List<ItemStack> list)
 	{
 	}
 }

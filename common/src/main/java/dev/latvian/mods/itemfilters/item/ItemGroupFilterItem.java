@@ -116,7 +116,7 @@ public class ItemGroupFilterItem extends StringValueFilterItem
 	}
 
 	@Override
-	public void getValidFilterItems(ItemStack filter, List<ItemStack> list)
+	public void getDisplayItemStacks(ItemStack filter, List<ItemStack> list)
 	{
 		ItemGroupData data = getStringValueData(filter);
 

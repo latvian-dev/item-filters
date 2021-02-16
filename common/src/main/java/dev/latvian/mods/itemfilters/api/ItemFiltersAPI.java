@@ -7,7 +7,11 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Predicate;
 
 /**
  * @author LatvianModder
@@ -16,6 +20,7 @@ public class ItemFiltersAPI
 {
 	public static final Tag.Named<Item> FILTERS_ITEM_TAG = getNamedTag(ItemFilters.MOD_ID + ":filters");
 	public static final Tag.Named<Item> CHECK_NBT_ITEM_TAG = getNamedTag(ItemFilters.MOD_ID + ":check_nbt");
+	public static final Map<String, CustomFilter> CUSTOM_FILTERS = new LinkedHashMap<>();
 
 	@ExpectPlatform
 	public static Tag.Named<Item> getNamedTag(String s)
@@ -82,7 +87,7 @@ public class ItemFiltersAPI
 		return f == null ? areItemStacksEqual(filter, stack) : f.filter(filter, stack);
 	}
 
-	public static void getValidItems(ItemStack filter, List<ItemStack> list)
+	public static void getDisplayItemStacks(ItemStack filter, List<ItemStack> list)
 	{
 		if (filter.isEmpty())
 		{
@@ -97,7 +102,33 @@ public class ItemFiltersAPI
 		}
 		else
 		{
-			f.getValidFilterItems(filter, list);
+			f.getDisplayItemStacks(filter, list);
 		}
+	}
+
+	public static void getItems(ItemStack filter, Set<Item> list)
+	{
+		if (filter.isEmpty())
+		{
+			return;
+		}
+
+		IItemFilter f = getFilter(filter);
+
+		if (f == null)
+		{
+			list.add(filter.getItem());
+		}
+		else
+		{
+			f.getItems(filter, list);
+		}
+	}
+
+	public static CustomFilter registerCustomFilter(String id, Predicate<ItemStack> predicate)
+	{
+		CustomFilter filter = new CustomFilter(id, predicate);
+		CUSTOM_FILTERS.put(id, filter);
+		return filter;
 	}
 }

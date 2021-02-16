@@ -5,6 +5,7 @@ import dev.latvian.mods.itemfilters.item.ANDFilterItem;
 import dev.latvian.mods.itemfilters.item.AlwaysFalseFilterItem;
 import dev.latvian.mods.itemfilters.item.AlwaysTrueFilterItem;
 import dev.latvian.mods.itemfilters.item.BlockFilterItem;
+import dev.latvian.mods.itemfilters.item.CustomFilterItem;
 import dev.latvian.mods.itemfilters.item.DamageFilterItem;
 import dev.latvian.mods.itemfilters.item.ItemGroupFilterItem;
 import dev.latvian.mods.itemfilters.item.MaxCountFilterItem;
@@ -45,6 +46,7 @@ public class ItemFiltersItems
 	public static final Supplier<Item> MAX_COUNT = REGISTRY.register(new ResourceLocation(ItemFilters.MOD_ID, "max_count"), MaxCountFilterItem::new);
 	public static final Supplier<Item> STRONG_NBT = REGISTRY.register(new ResourceLocation(ItemFilters.MOD_ID, "strong_nbt"), StrongNBTFilterItem::new);
 	public static final Supplier<Item> WEAK_NBT = REGISTRY.register(new ResourceLocation(ItemFilters.MOD_ID, "weak_nbt"), WeakNBTFilterItem::new);
+	public static final Supplier<Item> CUSTOM = REGISTRY.register(new ResourceLocation(ItemFilters.MOD_ID, "custom"), CustomFilterItem::new);
 
 	public static void init()
 	{

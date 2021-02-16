@@ -23,30 +23,10 @@ import java.util.Map;
  */
 public class ModFilterItem extends StringValueFilterItem
 {
-	private static class ModData extends StringValueData<String>
-	{
-		public ModData(ItemStack is)
-		{
-			super(is);
-		}
-
-		@Override
-		public String fromString(String s)
-		{
-			return s;
-		}
-
-		@Override
-		public String toString(String value)
-		{
-			return value == null ? "" : value;
-		}
-	}
-
 	@Override
 	public StringValueData createData(ItemStack stack)
 	{
-		return new ModData(stack);
+		return new SimpleStringData(stack);
 	}
 
 	@Override

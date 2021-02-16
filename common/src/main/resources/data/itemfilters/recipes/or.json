@@ -1,13 +1,18 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"group": "itemfilters:filter",
-	"result": {"item": "itemfilters:or", "count": 6},
+	"result": {
+		"item": "itemfilters:or",
+		"count": 6
+	},
 	"pattern": [
 		"F F",
 		"F F",
 		"F F"
 	],
 	"key": {
-		"F": {"tag": "itemfilters:filters"}
+		"F": {
+			"tag": "itemfilters:filters"
+		}
 	}
 }

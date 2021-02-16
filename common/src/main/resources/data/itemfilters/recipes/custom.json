@@ -2,13 +2,13 @@
 	"type": "minecraft:crafting_shaped",
 	"group": "itemfilters:filter",
 	"result": {
-		"item": "itemfilters:max_count",
-		"count": 5
+		"item": "itemfilters:custom",
+		"count": 6
 	},
 	"pattern": [
+		"FF ",
 		"F F",
-		"  F",
-		"FFF"
+		" FF"
 	],
 	"key": {
 		"F": {

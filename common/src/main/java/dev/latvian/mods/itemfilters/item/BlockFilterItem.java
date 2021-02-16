@@ -10,6 +10,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author LatvianModder
@@ -23,7 +24,13 @@ public class BlockFilterItem extends BaseFilterItem
 	}
 
 	@Override
-	public void getValidFilterItems(ItemStack filter, List<ItemStack> list)
+	public boolean filterItem(ItemStack filter, Item item)
+	{
+		return item != Items.AIR && item instanceof BlockItem;
+	}
+
+	@Override
+	public void getDisplayItemStacks(ItemStack filter, List<ItemStack> list)
 	{
 		NonNullList<ItemStack> allItems = NonNullList.create();
 
@@ -38,5 +45,19 @@ public class BlockFilterItem extends BaseFilterItem
 		}
 
 		list.addAll(allItems);
+	}
+
+	@Override
+	public void getItems(ItemStack filter, Set<Item> set)
+	{
+		for (Block block : Registry.BLOCK)
+		{
+			Item item = block.asItem();
+
+			if (item != Items.AIR && item instanceof BlockItem)
+			{
+				set.add(item);
+			}
+		}
 	}
 }

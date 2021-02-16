@@ -27,7 +27,7 @@ public class ORFilterItem extends InventoryFilterItem
 	}
 
 	@Override
-	public void getValidFilterItems(ItemStack filter, List<ItemStack> list)
+	public void getDisplayItemStacks(ItemStack filter, List<ItemStack> list)
 	{
 		ItemInventory inventory = getInventory(filter);
 
@@ -35,7 +35,7 @@ public class ORFilterItem extends InventoryFilterItem
 		{
 			if (ItemFiltersAPI.isFilter(item))
 			{
-				super.getValidFilterItems(filter, list);
+				super.getDisplayItemStacks(filter, list);
 				return;
 			}
 		}

@@ -15,6 +15,7 @@
 		"itemfilters:block",
 		"itemfilters:max_count",
 		"itemfilters:strong_nbt",
-		"itemfilters:weak_nbt"
+		"itemfilters:weak_nbt",
+		"itemfilters:custom"
 	]
 }
