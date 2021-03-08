@@ -17,39 +17,29 @@ import java.util.Objects;
 /**
  * @author LatvianModder
  */
-public class StrongNBTFilterItem extends StringValueFilterItem
-{
-	public static class NBTData extends StringValueData<CompoundTag>
-	{
-		public NBTData(ItemStack is)
-		{
+public class StrongNBTFilterItem extends StringValueFilterItem {
+	public static class NBTData extends StringValueData<CompoundTag> {
+		public NBTData(ItemStack is) {
 			super(is);
 		}
 
 		@Nullable
 		@Override
-		protected CompoundTag fromString(String s)
-		{
-			if (s.isEmpty())
-			{
+		protected CompoundTag fromString(String s) {
+			if (s.isEmpty()) {
 				return null;
 			}
 
-			try
-			{
+			try {
 				return TagParser.parseTag(s);
-			}
-			catch (Exception ex)
-			{
+			} catch (Exception ex) {
 				return null;
 			}
 		}
 
 		@Override
-		protected String toString(CompoundTag value)
-		{
-			if (value == null)
-			{
+		protected String toString(CompoundTag value) {
+			if (value == null) {
 				return "";
 			}
 
@@ -58,15 +48,12 @@ public class StrongNBTFilterItem extends StringValueFilterItem
 
 		@Override
 		@Nullable
-		public CompoundTag getValue()
-		{
-			if (load)
-			{
+		public CompoundTag getValue() {
+			if (load) {
 				load = false;
 				value = null;
 
-				if (filter.hasTag() && filter.getTag().contains("value"))
-				{
+				if (filter.hasTag() && filter.getTag().contains("value")) {
 					value = filter.getTag().getCompound("value");
 				}
 			}
@@ -75,28 +62,22 @@ public class StrongNBTFilterItem extends StringValueFilterItem
 		}
 
 		@Override
-		public void setValue(@Nullable CompoundTag v)
-		{
+		public void setValue(@Nullable CompoundTag v) {
 			value = v;
 			load = false;
 
-			if (value == null)
-			{
+			if (value == null) {
 				filter.removeTagKey("value");
-			}
-			else
-			{
+			} else {
 				filter.addTagElement("value", value);
 			}
 		}
 
 		@Override
-		public Component getValueAsComponent()
-		{
+		public Component getValueAsComponent() {
 			CompoundTag v = getValue();
 
-			if (v == null)
-			{
+			if (v == null) {
 				return TextComponent.EMPTY;
 			}
 
@@ -105,16 +86,13 @@ public class StrongNBTFilterItem extends StringValueFilterItem
 	}
 
 	@Override
-	public StringValueData createData(ItemStack stack)
-	{
+	public StringValueData createData(ItemStack stack) {
 		return new NBTData(stack);
 	}
 
 	@Override
-	public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand)
-	{
-		if (hand == InteractionHand.MAIN_HAND && !player.getOffhandItem().isEmpty() && player.getOffhandItem().hasTag())
-		{
+	public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
+		if (hand == InteractionHand.MAIN_HAND && !player.getOffhandItem().isEmpty() && player.getOffhandItem().hasTag()) {
 			NBTData data = getStringValueData(player.getMainHandItem());
 			data.setValue(player.getOffhandItem().getTag().copy());
 			return new InteractionResultHolder<>(InteractionResult.SUCCESS, player.getMainHandItem());
@@ -124,10 +102,8 @@ public class StrongNBTFilterItem extends StringValueFilterItem
 	}
 
 	@Override
-	public boolean filter(ItemStack filter, ItemStack stack)
-	{
-		if (stack.isEmpty())
-		{
+	public boolean filter(ItemStack filter, ItemStack stack) {
+		if (stack.isEmpty()) {
 			return false;
 		}
 

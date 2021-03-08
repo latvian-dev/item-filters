@@ -12,35 +12,26 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author LatvianModder
  */
-public class ModFilterItem extends StringValueFilterItem
-{
+public class ModFilterItem extends StringValueFilterItem {
 	@Override
-	public StringValueData createData(ItemStack stack)
-	{
+	public StringValueData createData(ItemStack stack) {
 		return new SimpleStringData(stack);
 	}
 
 	@Override
 	@Environment(EnvType.CLIENT)
-	public Collection<StringValueFilterVariant> getValueVariants(ItemStack stack)
-	{
+	public Collection<StringValueFilterVariant> getValueVariants(ItemStack stack) {
 		List<StringValueFilterVariant> variants = new ArrayList<>();
 
 		LinkedHashSet<String> mods = new LinkedHashSet<>();
 
-		for (Map.Entry<ResourceKey<Item>, Item> entry : Registry.ITEM.entrySet())
-		{
-			if (mods.add(entry.getKey().location().getNamespace()))
-			{
+		for (Map.Entry<ResourceKey<Item>, Item> entry : Registry.ITEM.entrySet()) {
+			if (mods.add(entry.getKey().location().getNamespace())) {
 				Mod info = Platform.getMod(entry.getKey().location().getNamespace());
 				StringValueFilterVariant variant = new StringValueFilterVariant(info.getModId());
 				variant.title = new TextComponent(info.getName());
@@ -55,8 +46,7 @@ public class ModFilterItem extends StringValueFilterItem
 	}
 
 	@Override
-	public boolean filter(ItemStack filter, ItemStack stack)
-	{
+	public boolean filter(ItemStack filter, ItemStack stack) {
 		return !stack.isEmpty() && getValue(filter).equals(Registry.ITEM.getKey(stack.getItem()).getNamespace());
 	}
 }

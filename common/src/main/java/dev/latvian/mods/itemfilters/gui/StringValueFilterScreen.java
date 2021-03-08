@@ -21,8 +21,7 @@ import java.util.Map;
 /**
  * @author LatvianModder
  */
-public class StringValueFilterScreen extends Screen
-{
+public class StringValueFilterScreen extends Screen {
 	public final IStringValueFilter filter;
 	public final ItemStack stack;
 	public final InteractionHand hand;
@@ -31,16 +30,14 @@ public class StringValueFilterScreen extends Screen
 	private EditBox nameField;
 	private int selectedVariant = -1;
 
-	public StringValueFilterScreen(IStringValueFilter f, ItemStack is, InteractionHand h)
-	{
+	public StringValueFilterScreen(IStringValueFilter f, ItemStack is, InteractionHand h) {
 		super(is.getDisplayName());
 		filter = f;
 		stack = is;
 		hand = h;
 		variants = new HashMap<>();
 
-		for (StringValueFilterVariant variant : filter.getValueVariants(stack))
-		{
+		for (StringValueFilterVariant variant : filter.getValueVariants(stack)) {
 			variants.put(variant.id, variant);
 		}
 
@@ -49,8 +46,7 @@ public class StringValueFilterScreen extends Screen
 	}
 
 	@Override
-	public void init()
-	{
+	public void init() {
 		super.init();
 		minecraft.keyboardHandler.setSendRepeatsToGui(true);
 		int i = width / 2;
@@ -65,30 +61,22 @@ public class StringValueFilterScreen extends Screen
 	}
 
 	@Override
-	public void onClose()
-	{
+	public void onClose() {
 		super.onClose();
 		minecraft.keyboardHandler.setSendRepeatsToGui(true);
 	}
 
-	private void updateVariants(String txt)
-	{
-		if (!variants.isEmpty())
-		{
+	private void updateVariants(String txt) {
+		if (!variants.isEmpty()) {
 			visibleVariants.clear();
 
 			txt = nameField.getValue().toLowerCase();
 
-			if (txt.isEmpty())
-			{
+			if (txt.isEmpty()) {
 				visibleVariants.addAll(variants.values());
-			}
-			else
-			{
-				for (StringValueFilterVariant variant : variants.values())
-				{
-					if (variant.id.toLowerCase().contains(txt) || variant.title.getString().toLowerCase().contains(txt))
-					{
+			} else {
+				for (StringValueFilterVariant variant : variants.values()) {
+					if (variant.id.toLowerCase().contains(txt) || variant.title.getString().toLowerCase().contains(txt)) {
 						visibleVariants.add(variant);
 					}
 				}
@@ -100,14 +88,11 @@ public class StringValueFilterScreen extends Screen
 	}
 
 	@Override
-	public boolean keyPressed(int keyCode, int scanCode, int modifiers)
-	{
-		if (keyCode == GLFW.GLFW_KEY_ENTER)
-		{
+	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+		if (keyCode == GLFW.GLFW_KEY_ENTER) {
 			String text = visibleVariants.size() == 1 ? visibleVariants.get(0).id : selectedVariant == -1 ? nameField.getValue() : visibleVariants.get(selectedVariant).id;
 
-			if (variants.isEmpty() || text.isEmpty() || variants.containsKey(text))
-			{
+			if (variants.isEmpty() || text.isEmpty() || variants.containsKey(text)) {
 				filter.setValue(stack, text);
 				minecraft.setScreen(null);
 
@@ -116,27 +101,20 @@ public class StringValueFilterScreen extends Screen
 
 				minecraft.player.setItemInHand(hand, stack);
 				new MessageUpdateFilterItem(hand, stack).send();
-			}
-			else
-			{
+			} else {
 				minecraft.getToasts().addToast(new SystemToast(SystemToast.SystemToastIds.TUTORIAL_HINT, new TextComponent("Invalid string!"), null));
 			}
 
 			return true;
-		}
-		else if (keyCode == GLFW.GLFW_KEY_TAB)
-		{
+		} else if (keyCode == GLFW.GLFW_KEY_TAB) {
 			selectedVariant++;
 
-			if (selectedVariant == visibleVariants.size() || 14 + selectedVariant * 10 >= height)
-			{
+			if (selectedVariant == visibleVariants.size() || 14 + selectedVariant * 10 >= height) {
 				selectedVariant = 0;
 			}
 
 			return true;
-		}
-		else if (nameField.keyPressed(keyCode, scanCode, modifiers))
-		{
+		} else if (nameField.keyPressed(keyCode, scanCode, modifiers)) {
 			return true;
 		}
 
@@ -144,10 +122,8 @@ public class StringValueFilterScreen extends Screen
 	}
 
 	@Override
-	public boolean charTyped(char typedChar, int keyCode)
-	{
-		if (nameField.charTyped(typedChar, keyCode))
-		{
+	public boolean charTyped(char typedChar, int keyCode) {
+		if (nameField.charTyped(typedChar, keyCode)) {
 			return true;
 		}
 
@@ -155,20 +131,15 @@ public class StringValueFilterScreen extends Screen
 	}
 
 	@Override
-	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton)
-	{
-		if (super.mouseClicked(mouseX, mouseY, mouseButton))
-		{
+	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+		if (super.mouseClicked(mouseX, mouseY, mouseButton)) {
 			return true;
 		}
 
-		if (mouseButton == 1)
-		{
+		if (mouseButton == 1) {
 			nameField.setValue("");
 			return true;
-		}
-		else
-		{
+		} else {
 			nameField.mouseClicked(mouseX, mouseY, mouseButton);
 			nameField.setFocus(true);
 			return true;
@@ -176,24 +147,20 @@ public class StringValueFilterScreen extends Screen
 	}
 
 	@Override
-	public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks)
-	{
+	public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		renderBackground(matrixStack);
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
 		RenderSystem.disableLighting();
 		RenderSystem.disableBlend();
 
-		if (!variants.isEmpty())
-		{
+		if (!variants.isEmpty()) {
 			drawString(matrixStack, font, "Variants [" + visibleVariants.size() + "] [Press Tab]", 4, 4, -1);
 
-			for (int i = 0; i < visibleVariants.size(); i++)
-			{
+			for (int i = 0; i < visibleVariants.size(); i++) {
 				StringValueFilterVariant variant = visibleVariants.get(i);
 				drawString(matrixStack, font, variant.title.getString(), variant.icon.isEmpty() ? 4 : 14, 14 + i * 10, i == selectedVariant ? 0xFFFFFF00 : -1);
 
-				if (!variant.icon.isEmpty())
-				{
+				if (!variant.icon.isEmpty()) {
 					RenderSystem.pushMatrix();
 					RenderSystem.translated(4, 14 + i * 10, 0);
 					RenderSystem.scaled(0.5F, 0.5F, 1F);
@@ -206,8 +173,7 @@ public class StringValueFilterScreen extends Screen
 					RenderSystem.popMatrix();
 				}
 
-				if (14 + i * 10 >= height)
-				{
+				if (14 + i * 10 >= height) {
 					break;
 				}
 			}

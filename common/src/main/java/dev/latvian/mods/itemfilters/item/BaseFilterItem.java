@@ -26,21 +26,17 @@ import java.util.List;
 /**
  * @author LatvianModder
  */
-public abstract class BaseFilterItem extends Item implements IItemFilter
-{
-	public BaseFilterItem()
-	{
+public abstract class BaseFilterItem extends Item implements IItemFilter {
+	public BaseFilterItem() {
 		super(new Item.Properties().tab(ItemFilters.creativeTab).stacksTo(64));
 	}
 
 	@Override
 	@Environment(EnvType.CLIENT)
-	public final void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipFlag flag)
-	{
+	public final void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipFlag flag) {
 		super.appendHoverText(stack, world, tooltip, flag);
 
-		if (Screen.hasShiftDown())
-		{
+		if (Screen.hasShiftDown()) {
 			tooltip.add(new TranslatableComponent(I18n.get(getDescriptionId() + ".description")).withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GRAY));
 		}
 
@@ -48,10 +44,8 @@ public abstract class BaseFilterItem extends Item implements IItemFilter
 	}
 
 	@Override
-	public void inventoryTick(ItemStack stack, Level level, Entity entity, int i, boolean bl)
-	{
-		if (entity instanceof ServerPlayer && ((ServerPlayer) entity).getOffhandItem() == stack)
-		{
+	public void inventoryTick(ItemStack stack, Level level, Entity entity, int i, boolean bl) {
+		if (entity instanceof ServerPlayer && ((ServerPlayer) entity).getOffhandItem() == stack) {
 			boolean m = ItemFiltersAPI.filter(stack, ((ServerPlayer) entity).getMainHandItem());
 			((ServerPlayer) entity).sendMessage(new TextComponent("Filter matches: ").append(new TextComponent(m ? "Yes" : "No").withStyle(m ? ChatFormatting.GREEN : ChatFormatting.RED)), ChatType.GAME_INFO, Util.NIL_UUID);
 		}

@@ -7,13 +7,10 @@ import net.minecraft.world.item.ItemStack;
 /**
  * @author LatvianModder
  */
-public class ItemFiltersCommon
-{
-	public void setup()
-	{
+public class ItemFiltersCommon {
+	public void setup() {
 	}
 
-	public void openStringValueFilterScreen(IStringValueFilter filter, ItemStack stack, InteractionHand hand)
-	{
+	public void openStringValueFilterScreen(IStringValueFilter filter, ItemStack stack, InteractionHand hand) {
 	}
 }

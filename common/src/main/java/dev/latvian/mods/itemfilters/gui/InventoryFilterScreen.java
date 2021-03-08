@@ -13,41 +13,35 @@ import net.minecraft.world.entity.player.Inventory;
 /**
  * @author LatvianModder
  */
-public class InventoryFilterScreen extends AbstractContainerScreen<InventoryFilterMenu>
-{
+public class InventoryFilterScreen extends AbstractContainerScreen<InventoryFilterMenu> {
 	private static final ResourceLocation TEXTURE = new ResourceLocation(ItemFilters.MOD_ID, "textures/gui/filter.png");
 
-	public InventoryFilterScreen(InventoryFilterMenu container, Inventory playerInventory, Component title)
-	{
+	public InventoryFilterScreen(InventoryFilterMenu container, Inventory playerInventory, Component title) {
 		super(container, playerInventory, title);
 		imageWidth = 176;
 		imageHeight = 166;
 	}
 
 	@Override
-	public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks)
-	{
+	public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		renderBackground(matrixStack);
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
 		renderTooltip(matrixStack, mouseX, mouseY);
 	}
 
 	@Override
-	protected void renderBg(PoseStack matrixStack, float partialTicks, int mouseX, int mouseY)
-	{
+	protected void renderBg(PoseStack matrixStack, float partialTicks, int mouseX, int mouseY) {
 		RenderSystem.color4f(1F, 1F, 1F, 1F);
 		minecraft.getTextureManager().bind(TEXTURE);
 		blit(matrixStack, leftPos, topPos, 0, 0, imageWidth, imageHeight);
 
-		for (InventoryFilterItem.FilterSlot slot : menu.filterSlots)
-		{
+		for (InventoryFilterItem.FilterSlot slot : menu.filterSlots) {
 			blit(matrixStack, leftPos + slot.x - 1, topPos + slot.y - 1, 177, 0, 18, 18);
 		}
 	}
 
 	@Override
-	protected void renderLabels(PoseStack matrixStack, int mouseX, int mouseY)
-	{
+	protected void renderLabels(PoseStack matrixStack, int mouseX, int mouseY) {
 		RenderSystem.color4f(1F, 1F, 1F, 1F);
 		font.draw(matrixStack, getTitle().getString(), 8, 6, 4210752);
 		font.draw(matrixStack, Minecraft.getInstance().player.inventory.getDisplayName().getString(), 8, 72, 4210752);

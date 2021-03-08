@@ -14,15 +14,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 
-public class ItemFilters
-{
+public class ItemFilters {
 	public static final String MOD_ID = "itemfilters";
 
 	public static ItemFiltersCommon proxy;
 	public static CreativeModeTab creativeTab;
 
-	public void setup()
-	{
+	public void setup() {
 		proxy = EnvExecutor.getEnvSpecific(() -> ItemFiltersClient::new, () -> ItemFiltersCommon::new);
 		creativeTab = CreativeTabs.create(new ResourceLocation(MOD_ID, "main"), () -> new ItemStack(ItemFiltersItems.ALWAYS_TRUE.get()));
 

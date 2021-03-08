@@ -2,6 +2,8 @@ package dev.latvian.mods.itemfilters.api;
 
 import dev.latvian.mods.itemfilters.ItemFilters;
 import me.shedaniel.architectury.annotations.ExpectPlatform;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.SerializationTags;
 import net.minecraft.tags.Tag;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -16,15 +18,14 @@ import java.util.function.Predicate;
 /**
  * @author LatvianModder
  */
-public class ItemFiltersAPI
-{
+public class ItemFiltersAPI {
 	public static final Tag.Named<Item> FILTERS_ITEM_TAG = getNamedTag(ItemFilters.MOD_ID + ":filters");
 	public static final Tag.Named<Item> CHECK_NBT_ITEM_TAG = getNamedTag(ItemFilters.MOD_ID + ":check_nbt");
+	public static final ResourceLocation CHECK_NBT_ITEM_TAG_ID = new ResourceLocation(ItemFilters.MOD_ID, "check_nbt");
 	public static final Map<String, CustomFilter> CUSTOM_FILTERS = new LinkedHashMap<>();
 
 	@ExpectPlatform
-	public static Tag.Named<Item> getNamedTag(String s)
-	{
+	public static Tag.Named<Item> getNamedTag(String s) {
 		throw new AssertionError();
 	}
 
@@ -32,10 +33,8 @@ public class ItemFiltersAPI
 	 * @return IItemFilter if stack is a filter, null otherwise.
 	 */
 	@Nullable
-	public static IItemFilter getFilter(ItemStack stack)
-	{
-		if (stack.getItem() instanceof IItemFilter)
-		{
+	public static IItemFilter getFilter(ItemStack stack) {
+		if (stack.getItem() instanceof IItemFilter) {
 			return (IItemFilter) stack.getItem();
 		}
 
@@ -45,41 +44,39 @@ public class ItemFiltersAPI
 	/**
 	 * @return true if stack is a filter.
 	 */
-	public static boolean isFilter(ItemStack stack)
-	{
+	public static boolean isFilter(ItemStack stack) {
 		return stack.getItem() instanceof IItemFilter;
 	}
 
 	/**
 	 * Helper method to check if two items are equal ignoring item count.
 	 */
-	public static boolean areItemStacksEqual(ItemStack stackA, ItemStack stackB)
-	{
-		if (stackA == stackB)
-		{
+	public static boolean areItemStacksEqual(ItemStack stackA, ItemStack stackB) {
+		if (stackA == stackB) {
 			return true;
 		}
 
-		if (stackA.getItem() != stackB.getItem())
-		{
+		if (stackA.getItem() != stackB.getItem()) {
+			return false;
+		} else if (!stackA.hasTag() && !stackB.hasTag()) {
+			return true;
+		}
+
+		Tag<Item> tag = SerializationTags.getInstance().getItems().getTag(CHECK_NBT_ITEM_TAG_ID);
+
+		if (tag == null) {
 			return false;
 		}
-		else if (!stackA.hasTag() && !stackB.hasTag())
-		{
-			return true;
-		}
 
-		return !CHECK_NBT_ITEM_TAG.contains(stackA.getItem()) || ItemStack.tagMatches(stackA, stackB);
+		return !tag.contains(stackA.getItem()) || ItemStack.tagMatches(stackA, stackB);
 	}
 
 	/**
 	 * @param filter filter item. If it's not an IItemFilter, then it will be compared using areItemStacksEqual() method.
 	 * @param stack  item that is being checked.
 	 */
-	public static boolean filter(ItemStack filter, ItemStack stack)
-	{
-		if (filter.isEmpty())
-		{
+	public static boolean filter(ItemStack filter, ItemStack stack) {
+		if (filter.isEmpty()) {
 			return true;
 		}
 
@@ -87,46 +84,35 @@ public class ItemFiltersAPI
 		return f == null ? areItemStacksEqual(filter, stack) : f.filter(filter, stack);
 	}
 
-	public static void getDisplayItemStacks(ItemStack filter, List<ItemStack> list)
-	{
-		if (filter.isEmpty())
-		{
+	public static void getDisplayItemStacks(ItemStack filter, List<ItemStack> list) {
+		if (filter.isEmpty()) {
 			return;
 		}
 
 		IItemFilter f = getFilter(filter);
 
-		if (f == null)
-		{
+		if (f == null) {
 			list.add(filter);
-		}
-		else
-		{
+		} else {
 			f.getDisplayItemStacks(filter, list);
 		}
 	}
 
-	public static void getItems(ItemStack filter, Set<Item> list)
-	{
-		if (filter.isEmpty())
-		{
+	public static void getItems(ItemStack filter, Set<Item> list) {
+		if (filter.isEmpty()) {
 			return;
 		}
 
 		IItemFilter f = getFilter(filter);
 
-		if (f == null)
-		{
+		if (f == null) {
 			list.add(filter.getItem());
-		}
-		else
-		{
+		} else {
 			f.getItems(filter, list);
 		}
 	}
 
-	public static CustomFilter registerCustomFilter(String id, Predicate<ItemStack> predicate)
-	{
+	public static CustomFilter registerCustomFilter(String id, Predicate<ItemStack> predicate) {
 		CustomFilter filter = new CustomFilter(id, predicate);
 		CUSTOM_FILTERS.put(id, filter);
 		return filter;

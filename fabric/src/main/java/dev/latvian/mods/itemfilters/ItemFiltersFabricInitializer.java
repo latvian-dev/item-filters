@@ -4,7 +4,6 @@ package dev.latvian.mods.itemfilters;
  * @author LatvianModder
  */
 @FunctionalInterface
-public interface ItemFiltersFabricInitializer
-{
+public interface ItemFiltersFabricInitializer {
 	void init();
 }

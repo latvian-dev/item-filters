@@ -19,78 +19,62 @@ import java.util.function.Supplier;
 /**
  * @author LatvianModder
  */
-public class InventoryFilterMenu extends AbstractContainerMenu
-{
+public class InventoryFilterMenu extends AbstractContainerMenu {
 	public static Supplier<MenuType<?>> TYPE;
 
 	public final InteractionHand hand;
 	public final ItemInventory inventory;
 	public final List<InventoryFilterItem.FilterSlot> filterSlots;
 
-	public InventoryFilterMenu(int id, Inventory playerInventory, InteractionHand h)
-	{
+	public InventoryFilterMenu(int id, Inventory playerInventory, InteractionHand h) {
 		super(TYPE.get(), id);
 		hand = h;
 		inventory = InventoryFilterItem.getInventory(playerInventory.player.getItemInHand(hand));
 		filterSlots = new ArrayList<>();
 		inventory.filterItem.addSlots(inventory.filter, filterSlots);
 
-		for (int i = 0; i < filterSlots.size(); i++)
-		{
+		for (int i = 0; i < filterSlots.size(); i++) {
 			InventoryFilterItem.FilterSlot s = filterSlots.get(i);
 			addSlot(new Slot(inventory, i, s.x, s.y));
 		}
 
-		for (int y = 0; y < 3; y++)
-		{
-			for (int x = 0; x < 9; x++)
-			{
+		for (int y = 0; y < 3; y++) {
+			for (int x = 0; x < 9; x++) {
 				addSlot(new Slot(playerInventory, x + y * 9 + 9, 8 + x * 18, 84 + y * 18));
 			}
 		}
 
-		for (int x = 0; x < 9; x++)
-		{
+		for (int x = 0; x < 9; x++) {
 			final int i = x;
-			addSlot(new Slot(playerInventory, x, 8 + x * 18, 142)
-			{
+			addSlot(new Slot(playerInventory, x, 8 + x * 18, 142) {
 				@Override
-				public boolean mayPickup(Player player)
-				{
+				public boolean mayPickup(Player player) {
 					return i != player.inventory.selected;
 				}
 			});
 		}
 	}
 
-	public InventoryFilterMenu(int id, Inventory playerInventory, FriendlyByteBuf data)
-	{
+	public InventoryFilterMenu(int id, Inventory playerInventory, FriendlyByteBuf data) {
 		this(id, playerInventory, data.readBoolean() ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND);
 	}
 
 	@Override
-	public boolean stillValid(Player player)
-	{
+	public boolean stillValid(Player player) {
 		return true;
 	}
 
 	@Override
-	public ItemStack quickMoveStack(Player player, int index)
-	{
-		if (index >= filterSlots.size() && inventory.getItems().size() < filterSlots.size() && index != player.inventory.selected + filterSlots.size())
-		{
+	public ItemStack quickMoveStack(Player player, int index) {
+		if (index >= filterSlots.size() && inventory.getItems().size() < filterSlots.size() && index != player.inventory.selected + filterSlots.size()) {
 			Slot slot = getSlot(index);
 
-			if (slot != null)
-			{
+			if (slot != null) {
 				ItemStack stack = slot.getItem();
 
-				if (!stack.isEmpty())
-				{
-					for (ItemStack stack1 : inventory.getItems())
-					{
-						if (stack1.getItem() == stack.getItem() && ItemStack.tagMatches(stack1, stack))
-						{
+				if (!stack.isEmpty()) {
+					for (ItemStack stack1 : inventory.getItems()) {
+						if (stack1.getItem() == stack.getItem() && ItemStack.tagMatches(stack1, stack)) {
 							return ItemStack.EMPTY;
 						}
 					}
@@ -108,40 +92,29 @@ public class InventoryFilterMenu extends AbstractContainerMenu
 	}
 
 	@Override
-	public ItemStack clicked(int slotId, int dragType, ClickType clickType, Player player)
-	{
-		if (slotId >= 0 && slotId < filterSlots.size())
-		{
+	public ItemStack clicked(int slotId, int dragType, ClickType clickType, Player player) {
+		if (slotId >= 0 && slotId < filterSlots.size()) {
 			ItemStack stack = player.inventory.getCarried().copy();
 			stack.setCount(1);
 
-			if (stack.isEmpty())
-			{
-				if (slotId < inventory.getItems().size())
-				{
+			if (stack.isEmpty()) {
+				if (slotId < inventory.getItems().size()) {
 					ItemStack stack1 = inventory.getItems().get(slotId);
 					inventory.getItems().remove(slotId);
 					inventory.save();
 					return stack1;
 				}
-			}
-			else
-			{
-				for (ItemStack stack1 : inventory.getItems())
-				{
-					if (stack1.getItem() == stack.getItem() && ItemStack.tagMatches(stack1, stack))
-					{
+			} else {
+				for (ItemStack stack1 : inventory.getItems()) {
+					if (stack1.getItem() == stack.getItem() && ItemStack.tagMatches(stack1, stack)) {
 						return ItemStack.EMPTY;
 					}
 				}
 
-				if (slotId < inventory.getItems().size())
-				{
+				if (slotId < inventory.getItems().size()) {
 					inventory.getItems().set(slotId, stack);
 					inventory.save();
-				}
-				else
-				{
+				} else {
 					inventory.getItems().add(stack);
 					inventory.save();
 				}

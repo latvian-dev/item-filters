@@ -10,31 +10,24 @@ import net.minecraft.world.item.ItemStack;
 /**
  * @author LatvianModder
  */
-public interface ItemFiltersStack
-{
+public interface ItemFiltersStack {
 	Object getItemFiltersData();
 
-	default Object createDataIF(Item item)
-	{
-		if (item instanceof InventoryFilterItem)
-		{
+	default Object createDataIF(Item item) {
+		if (item instanceof InventoryFilterItem) {
 			return new ItemInventory((ItemStack) (Object) this);
-		}
-		else if (item instanceof StringValueFilterItem)
-		{
+		} else if (item instanceof StringValueFilterItem) {
 			return ((StringValueFilterItem) item).createData((ItemStack) (Object) this);
 		}
 
 		return null;
 	}
 
-	default StringValueData<?> getStringValueFilterData()
-	{
+	default StringValueData<?> getStringValueFilterData() {
 		return (StringValueData<?>) getItemFiltersData();
 	}
 
-	default ItemInventory getInventoryFilterData()
-	{
+	default ItemInventory getInventoryFilterData() {
 		return (ItemInventory) getItemFiltersData();
 	}
 }

@@ -7,10 +7,8 @@ import net.minecraft.world.item.Item;
 /**
  * @author LatvianModder
  */
-public class ItemFiltersAPIImpl
-{
-	public static Tag.Named<Item> getNamedTag(String s)
-	{
+public class ItemFiltersAPIImpl {
+	public static Tag.Named<Item> getNamedTag(String s) {
 		return ItemTags.bind(s);
 	}
 }

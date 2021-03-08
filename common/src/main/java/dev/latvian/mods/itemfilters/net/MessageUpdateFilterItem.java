@@ -12,40 +12,33 @@ import java.util.function.Supplier;
 /**
  * @author LatvianModder
  */
-public class MessageUpdateFilterItem
-{
+public class MessageUpdateFilterItem {
 	private final InteractionHand hand;
 	private final ItemStack stack;
 
-	public MessageUpdateFilterItem(InteractionHand h, ItemStack is)
-	{
+	public MessageUpdateFilterItem(InteractionHand h, ItemStack is) {
 		hand = h;
 		stack = is;
 	}
 
-	public MessageUpdateFilterItem(FriendlyByteBuf buffer)
-	{
+	public MessageUpdateFilterItem(FriendlyByteBuf buffer) {
 		hand = buffer.readBoolean() ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
 		stack = buffer.readItem();
 	}
 
-	public void write(FriendlyByteBuf buf)
-	{
+	public void write(FriendlyByteBuf buf) {
 		buf.writeBoolean(hand == InteractionHand.MAIN_HAND);
 		buf.writeItem(stack);
 	}
 
-	public void handle(Supplier<NetworkManager.PacketContext> context)
-	{
+	public void handle(Supplier<NetworkManager.PacketContext> context) {
 		context.get().queue(() -> {
 			Player player = context.get().getPlayer();
 
-			if (player != null)
-			{
+			if (player != null) {
 				ItemStack is = player.getItemInHand(hand);
 
-				if (is.getItem() instanceof IItemFilter && stack.getItem() instanceof IItemFilter)
-				{
+				if (is.getItem() instanceof IItemFilter && stack.getItem() instanceof IItemFilter) {
 					player.setItemInHand(hand, stack);
 					player.inventory.setChanged();
 					player.inventoryMenu.broadcastChanges();
@@ -56,8 +49,7 @@ public class MessageUpdateFilterItem
 		//context.get().setPacketHandled(true);
 	}
 
-	public void send()
-	{
+	public void send() {
 		ItemFiltersNet.MAIN.sendToServer(this);
 	}
 }

@@ -8,17 +8,13 @@ import java.util.List;
 /**
  * @author LatvianModder
  */
-public class ORFilterItem extends InventoryFilterItem
-{
+public class ORFilterItem extends InventoryFilterItem {
 	@Override
-	public boolean filter(ItemStack filter, ItemStack stack)
-	{
+	public boolean filter(ItemStack filter, ItemStack stack) {
 		ItemInventory inventory = getInventory(filter);
 
-		for (ItemStack stack1 : inventory.getItems())
-		{
-			if (ItemFiltersAPI.filter(stack1, stack))
-			{
+		for (ItemStack stack1 : inventory.getItems()) {
+			if (ItemFiltersAPI.filter(stack1, stack)) {
 				return true;
 			}
 		}
@@ -27,14 +23,11 @@ public class ORFilterItem extends InventoryFilterItem
 	}
 
 	@Override
-	public void getDisplayItemStacks(ItemStack filter, List<ItemStack> list)
-	{
+	public void getDisplayItemStacks(ItemStack filter, List<ItemStack> list) {
 		ItemInventory inventory = getInventory(filter);
 
-		for (ItemStack item : inventory.getItems())
-		{
-			if (ItemFiltersAPI.isFilter(item))
-			{
+		for (ItemStack item : inventory.getItems()) {
+			if (ItemFiltersAPI.isFilter(item)) {
 				super.getDisplayItemStacks(filter, list);
 				return;
 			}

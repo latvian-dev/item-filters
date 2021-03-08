@@ -14,18 +14,15 @@ import java.util.Optional;
  * @author LatvianModder
  */
 @Mixin(ItemStack.class)
-public abstract class ItemStackMixin implements ItemFiltersStack
-{
+public abstract class ItemStackMixin implements ItemFiltersStack {
 	@Shadow
 	public abstract Item getItem();
 
 	private Optional<Object> itemFiltersData;
 
 	@Override
-	public Object getItemFiltersData()
-	{
-		if (itemFiltersData == null)
-		{
+	public Object getItemFiltersData() {
+		if (itemFiltersData == null) {
 			itemFiltersData = Optional.ofNullable(createDataIF(getItem()));
 		}
 

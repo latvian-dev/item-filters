@@ -18,22 +18,18 @@ import net.minecraft.world.level.Level;
 /**
  * @author LatvianModder
  */
-public abstract class StringValueFilterItem extends BaseFilterItem implements IStringValueFilter
-{
-	public <T extends StringValueData<?>> T getStringValueData(ItemStack filter)
-	{
+public abstract class StringValueFilterItem extends BaseFilterItem implements IStringValueFilter {
+	public <T extends StringValueData<?>> T getStringValueData(ItemStack filter) {
 		return (T) ((ItemFiltersStack) (Object) filter).getStringValueFilterData();
 	}
 
 	public abstract StringValueData<?> createData(ItemStack stack);
 
 	@Override
-	public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand)
-	{
+	public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
 		ItemStack stack = player.getItemInHand(hand);
 
-		if (world.isClientSide())
-		{
+		if (world.isClientSide()) {
 			ItemFilters.proxy.openStringValueFilterScreen(this, stack, hand);
 		}
 
@@ -41,31 +37,26 @@ public abstract class StringValueFilterItem extends BaseFilterItem implements IS
 	}
 
 	@Override
-	public String getValue(ItemStack filter)
-	{
+	public String getValue(ItemStack filter) {
 		return getStringValueData(filter).getValueAsString();
 	}
 
 	@Override
-	public void setValue(ItemStack filter, String v)
-	{
+	public void setValue(ItemStack filter, String v) {
 		getStringValueData(filter).setValueFromString(v);
 	}
 
 	@Override
-	public void resetFilterData(ItemStack filter)
-	{
+	public void resetFilterData(ItemStack filter) {
 		getStringValueData(filter).setValue(null);
 	}
 
 	@Override
 	@Environment(EnvType.CLIENT)
-	public void addInfo(ItemStack filter, FilterInfo info, boolean expanded)
-	{
+	public void addInfo(ItemStack filter, FilterInfo info, boolean expanded) {
 		Component s = getStringValueData(filter).getValueAsComponent();
 
-		if (s != TextComponent.EMPTY)
-		{
+		if (s != TextComponent.EMPTY) {
 			info.add(s);
 		}
 	}

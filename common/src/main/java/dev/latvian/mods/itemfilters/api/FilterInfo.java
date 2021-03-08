@@ -5,8 +5,7 @@ import net.minecraft.network.chat.Component;
 /**
  * @author LatvianModder
  */
-public interface FilterInfo
-{
+public interface FilterInfo {
 	void add(Component component);
 
 	void push();

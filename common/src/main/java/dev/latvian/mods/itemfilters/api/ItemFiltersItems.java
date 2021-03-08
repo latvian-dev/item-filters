@@ -1,22 +1,7 @@
 package dev.latvian.mods.itemfilters.api;
 
 import dev.latvian.mods.itemfilters.ItemFilters;
-import dev.latvian.mods.itemfilters.item.ANDFilterItem;
-import dev.latvian.mods.itemfilters.item.AlwaysFalseFilterItem;
-import dev.latvian.mods.itemfilters.item.AlwaysTrueFilterItem;
-import dev.latvian.mods.itemfilters.item.BlockFilterItem;
-import dev.latvian.mods.itemfilters.item.CustomFilterItem;
-import dev.latvian.mods.itemfilters.item.DamageFilterItem;
-import dev.latvian.mods.itemfilters.item.ItemGroupFilterItem;
-import dev.latvian.mods.itemfilters.item.MaxCountFilterItem;
-import dev.latvian.mods.itemfilters.item.ModFilterItem;
-import dev.latvian.mods.itemfilters.item.NOTFilterItem;
-import dev.latvian.mods.itemfilters.item.ORFilterItem;
-import dev.latvian.mods.itemfilters.item.RegExFilterItem;
-import dev.latvian.mods.itemfilters.item.StrongNBTFilterItem;
-import dev.latvian.mods.itemfilters.item.TagFilterItem;
-import dev.latvian.mods.itemfilters.item.WeakNBTFilterItem;
-import dev.latvian.mods.itemfilters.item.XORFilterItem;
+import dev.latvian.mods.itemfilters.item.*;
 import me.shedaniel.architectury.registry.Registries;
 import me.shedaniel.architectury.registry.Registry;
 import net.minecraft.resources.ResourceLocation;
@@ -27,8 +12,7 @@ import java.util.function.Supplier;
 /**
  * @author LatvianModder
  */
-public class ItemFiltersItems
-{
+public class ItemFiltersItems {
 	private static final Registry<Item> REGISTRY = Registries.get(ItemFilters.MOD_ID).get(net.minecraft.core.Registry.ITEM_REGISTRY);
 
 	public static final Supplier<Item> ALWAYS_TRUE = REGISTRY.register(new ResourceLocation(ItemFilters.MOD_ID, "always_true"), AlwaysTrueFilterItem::new);
@@ -48,7 +32,6 @@ public class ItemFiltersItems
 	public static final Supplier<Item> WEAK_NBT = REGISTRY.register(new ResourceLocation(ItemFilters.MOD_ID, "weak_nbt"), WeakNBTFilterItem::new);
 	public static final Supplier<Item> CUSTOM = REGISTRY.register(new ResourceLocation(ItemFilters.MOD_ID, "custom"), CustomFilterItem::new);
 
-	public static void init()
-	{
+	public static void init() {
 	}
 }

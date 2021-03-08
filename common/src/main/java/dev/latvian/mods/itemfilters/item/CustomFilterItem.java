@@ -20,50 +20,41 @@ import java.util.Set;
 /**
  * @author LatvianModder
  */
-public class CustomFilterItem extends StringValueFilterItem
-{
-	public static class CustomFilterData extends StringValueData<CustomFilter>
-	{
-		public CustomFilterData(ItemStack is)
-		{
+public class CustomFilterItem extends StringValueFilterItem {
+	public static class CustomFilterData extends StringValueData<CustomFilter> {
+		public CustomFilterData(ItemStack is) {
 			super(is);
 		}
 
 		@Nullable
 		@Override
-		protected CustomFilter fromString(String s)
-		{
+		protected CustomFilter fromString(String s) {
 			return s.isEmpty() ? null : ItemFiltersAPI.CUSTOM_FILTERS.get(s);
 		}
 
 		@Override
-		protected String toString(CustomFilter value)
-		{
+		protected String toString(CustomFilter value) {
 			return value == null ? "" : value.id;
 		}
 
 		@Override
-		public Component getValueAsComponent()
-		{
+		public Component getValueAsComponent() {
 			CustomFilter v = getValue();
 			return v == null ? TextComponent.EMPTY : v.displayName;
 		}
 	}
 
 	@Override
-	public StringValueData createData(ItemStack stack)
-	{
+	public StringValueData createData(ItemStack stack) {
 		return new CustomFilterData(stack);
 	}
 
 	@Override
 	@Environment(EnvType.CLIENT)
-	public Collection<StringValueFilterVariant> getValueVariants(ItemStack stack)
-	{
+	public Collection<StringValueFilterVariant> getValueVariants(ItemStack stack) {
 		List<StringValueFilterVariant> variants = new ArrayList<>();
 
-		for (CustomFilter filter : ItemFiltersAPI.CUSTOM_FILTERS.values())
-		{
+		for (CustomFilter filter : ItemFiltersAPI.CUSTOM_FILTERS.values()) {
 			variants.add(new StringValueFilterVariant(filter.id));
 		}
 
@@ -71,10 +62,8 @@ public class CustomFilterItem extends StringValueFilterItem
 	}
 
 	@Override
-	public boolean filter(ItemStack filter, ItemStack stack)
-	{
-		if (stack.isEmpty())
-		{
+	public boolean filter(ItemStack filter, ItemStack stack) {
+		if (stack.isEmpty()) {
 			return false;
 		}
 
@@ -83,10 +72,8 @@ public class CustomFilterItem extends StringValueFilterItem
 	}
 
 	@Override
-	public boolean filterItem(ItemStack filter, Item item)
-	{
-		if (item == Items.AIR)
-		{
+	public boolean filterItem(ItemStack filter, Item item) {
+		if (item == Items.AIR) {
 			return false;
 		}
 
@@ -95,12 +82,10 @@ public class CustomFilterItem extends StringValueFilterItem
 	}
 
 	@Override
-	public void getItems(ItemStack filter, Set<Item> set)
-	{
+	public void getItems(ItemStack filter, Set<Item> set) {
 		CustomFilterData v = getStringValueData(filter);
 
-		if (v.getValue() != null)
-		{
+		if (v.getValue() != null) {
 			set.addAll(v.getValue().getItems());
 		}
 	}

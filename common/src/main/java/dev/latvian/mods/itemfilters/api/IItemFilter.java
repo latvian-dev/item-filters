@@ -15,15 +15,13 @@ import java.util.Set;
 /**
  * @author LatvianModder
  */
-public interface IItemFilter
-{
+public interface IItemFilter {
 	/**
 	 * @param stack ItemStack
 	 */
 	boolean filter(ItemStack filter, ItemStack stack);
 
-	default boolean filterItem(ItemStack filter, Item item)
-	{
+	default boolean filterItem(ItemStack filter, Item item) {
 		return filter(filter, new ItemStack(item));
 	}
 
@@ -32,53 +30,40 @@ public interface IItemFilter
 	 *
 	 * @param list The list to add items to
 	 */
-	default void getDisplayItemStacks(ItemStack filter, List<ItemStack> list)
-	{
+	default void getDisplayItemStacks(ItemStack filter, List<ItemStack> list) {
 		NonNullList<ItemStack> allItems = NonNullList.create();
 		Set<Item> items = new LinkedHashSet<>();
 		getItems(filter, items);
 
-		for (Item item : items)
-		{
-			try
-			{
+		for (Item item : items) {
+			try {
 				item.fillItemCategory(CreativeModeTab.TAB_SEARCH, allItems);
-			}
-			catch (Throwable ex)
-			{
+			} catch (Throwable ex) {
 			}
 		}
 
-		for (ItemStack is : allItems)
-		{
-			if (filter(filter, is))
-			{
+		for (ItemStack is : allItems) {
+			if (filter(filter, is)) {
 				list.add(is);
 			}
 		}
 	}
 
-	default void getItems(ItemStack filter, Set<Item> set)
-	{
-		for (Item item : Registry.ITEM)
-		{
-			if (filterItem(filter, item))
-			{
+	default void getItems(ItemStack filter, Set<Item> set) {
+		for (Item item : Registry.ITEM) {
+			if (filterItem(filter, item)) {
 				set.add(item);
 			}
 		}
 	}
 
-	default void clearFilterCache(ItemStack filter)
-	{
+	default void clearFilterCache(ItemStack filter) {
 	}
 
-	default void resetFilterData(ItemStack filter)
-	{
+	default void resetFilterData(ItemStack filter) {
 	}
 
 	@Environment(EnvType.CLIENT)
-	default void addInfo(ItemStack filter, FilterInfo info, boolean expanded)
-	{
+	default void addInfo(ItemStack filter, FilterInfo info, boolean expanded) {
 	}
 }

@@ -6,8 +6,7 @@ import java.util.Map;
 /**
  * @author LatvianModder
  */
-public enum NBTMatchingMode
-{
+public enum NBTMatchingMode {
 	MATCH("match"),
 	IGNORE("ignore"),
 	CONTAIN("contain");
@@ -15,23 +14,19 @@ public enum NBTMatchingMode
 	public static final NBTMatchingMode[] VALUES = values();
 	public static final Map<String, NBTMatchingMode> MAP = new HashMap<>();
 
-	static
-	{
-		for (NBTMatchingMode mode : VALUES)
-		{
+	static {
+		for (NBTMatchingMode mode : VALUES) {
 			MAP.put(mode.id, mode);
 		}
 	}
 
 	public final String id;
 
-	NBTMatchingMode(String i)
-	{
+	NBTMatchingMode(String i) {
 		id = i;
 	}
 
-	public static NBTMatchingMode byName(String n)
-	{
+	public static NBTMatchingMode byName(String n) {
 		NBTMatchingMode m = MAP.get(n);
 		return m == null ? MATCH : m;
 	}

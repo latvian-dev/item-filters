@@ -10,15 +10,13 @@ import java.util.Collections;
 /**
  * @author LatvianModder
  */
-public interface IStringValueFilter extends IItemFilter
-{
+public interface IStringValueFilter extends IItemFilter {
 	String getValue(ItemStack filter);
 
 	void setValue(ItemStack filter, String v);
 
 	@Environment(EnvType.CLIENT)
-	default Collection<StringValueFilterVariant> getValueVariants(ItemStack stack)
-	{
+	default Collection<StringValueFilterVariant> getValueVariants(ItemStack stack) {
 		return Collections.emptyList();
 	}
 }

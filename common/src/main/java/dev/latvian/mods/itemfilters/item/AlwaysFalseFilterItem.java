@@ -10,27 +10,22 @@ import java.util.Set;
 /**
  * @author LatvianModder
  */
-public class AlwaysFalseFilterItem extends BaseFilterItem
-{
+public class AlwaysFalseFilterItem extends BaseFilterItem {
 	@Override
-	public boolean filter(ItemStack filter, ItemStack stack)
-	{
+	public boolean filter(ItemStack filter, ItemStack stack) {
 		return false;
 	}
 
 	@Override
-	public boolean filterItem(ItemStack filter, Item item)
-	{
+	public boolean filterItem(ItemStack filter, Item item) {
 		return false;
 	}
 
 	@Override
-	public void getDisplayItemStacks(ItemStack filter, List<ItemStack> list)
-	{
+	public void getDisplayItemStacks(ItemStack filter, List<ItemStack> list) {
 	}
 
 	@Override
-	public void getItems(ItemStack filter, Set<Item> set)
-	{
+	public void getItems(ItemStack filter, Set<Item> set) {
 	}
 }

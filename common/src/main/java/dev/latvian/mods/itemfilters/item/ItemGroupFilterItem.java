@@ -11,28 +11,20 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author LatvianModder
  */
-public class ItemGroupFilterItem extends StringValueFilterItem
-{
+public class ItemGroupFilterItem extends StringValueFilterItem {
 	private static Map<String, CreativeModeTab> groups = null;
 
 	@Nullable
-	private static CreativeModeTab getItemGroup(String v)
-	{
-		if (groups == null)
-		{
+	private static CreativeModeTab getItemGroup(String v) {
+		if (groups == null) {
 			groups = new HashMap<>();
 
-			for (CreativeModeTab group : CreativeModeTab.TABS)
-			{
+			for (CreativeModeTab group : CreativeModeTab.TABS) {
 				groups.put(group.getRecipeFolderName(), group);
 			}
 		}
@@ -40,43 +32,35 @@ public class ItemGroupFilterItem extends StringValueFilterItem
 		return groups.get(v);
 	}
 
-	public static class ItemGroupData extends StringValueData<CreativeModeTab>
-	{
-		public ItemGroupData(ItemStack is)
-		{
+	public static class ItemGroupData extends StringValueData<CreativeModeTab> {
+		public ItemGroupData(ItemStack is) {
 			super(is);
 		}
 
 		@Nullable
 		@Override
-		protected CreativeModeTab fromString(String s)
-		{
+		protected CreativeModeTab fromString(String s) {
 			return getItemGroup(s);
 		}
 
 		@Override
-		protected String toString(CreativeModeTab value)
-		{
+		protected String toString(CreativeModeTab value) {
 			return value == null ? "" : value.getRecipeFolderName();
 		}
 	}
 
 	@Override
-	public StringValueData createData(ItemStack stack)
-	{
+	public StringValueData createData(ItemStack stack) {
 		return new ItemGroupData(stack);
 	}
 
 	@Override
 	@Environment(EnvType.CLIENT)
-	public List<StringValueFilterVariant> getValueVariants(ItemStack filter)
-	{
+	public List<StringValueFilterVariant> getValueVariants(ItemStack filter) {
 		List<StringValueFilterVariant> variants = new ArrayList<>();
 
-		for (CreativeModeTab t : CreativeModeTab.TABS)
-		{
-			if (t == CreativeModeTab.TAB_SEARCH || t == CreativeModeTab.TAB_INVENTORY)
-			{
+		for (CreativeModeTab t : CreativeModeTab.TABS) {
+			if (t == CreativeModeTab.TAB_SEARCH || t == CreativeModeTab.TAB_INVENTORY) {
 				continue;
 			}
 
@@ -90,24 +74,20 @@ public class ItemGroupFilterItem extends StringValueFilterItem
 	}
 
 	@Override
-	public boolean filter(ItemStack filter, ItemStack stack)
-	{
-		if (stack.isEmpty())
-		{
+	public boolean filter(ItemStack filter, ItemStack stack) {
+		if (stack.isEmpty()) {
 			return false;
 		}
 
 		ItemGroupData data = getStringValueData(filter);
 
-		if (data.getValue() == null)
-		{
+		if (data.getValue() == null) {
 			return false;
 		}
 
 		for (CreativeModeTab t : Collections.singleton(stack.getItem().getItemCategory())) // TODO: Forge impl
 		{
-			if (t == data.getValue())
-			{
+			if (t == data.getValue()) {
 				return true;
 			}
 		}
@@ -116,22 +96,16 @@ public class ItemGroupFilterItem extends StringValueFilterItem
 	}
 
 	@Override
-	public void getDisplayItemStacks(ItemStack filter, List<ItemStack> list)
-	{
+	public void getDisplayItemStacks(ItemStack filter, List<ItemStack> list) {
 		ItemGroupData data = getStringValueData(filter);
 
-		if (data.getValue() != null)
-		{
+		if (data.getValue() != null) {
 			NonNullList<ItemStack> allItems = NonNullList.create();
 
-			for (Item item : Registry.ITEM)
-			{
-				try
-				{
+			for (Item item : Registry.ITEM) {
+				try {
 					item.fillItemCategory(data.getValue(), allItems);
-				}
-				catch (Throwable ex)
-				{
+				} catch (Throwable ex) {
 				}
 			}
 
@@ -141,12 +115,10 @@ public class ItemGroupFilterItem extends StringValueFilterItem
 
 	@Override
 	@Environment(EnvType.CLIENT)
-	public void addInfo(ItemStack filter, FilterInfo info, boolean expanded)
-	{
+	public void addInfo(ItemStack filter, FilterInfo info, boolean expanded) {
 		ItemGroupData data = getStringValueData(filter);
 
-		if (data != null && data.getValue() != null)
-		{
+		if (data != null && data.getValue() != null) {
 			info.add(data.getValue().getDisplayName());
 		}
 	}

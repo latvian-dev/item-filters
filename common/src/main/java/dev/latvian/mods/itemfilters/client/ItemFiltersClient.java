@@ -15,19 +15,16 @@ import net.minecraft.world.item.ItemStack;
 /**
  * @author LatvianModder
  */
-public class ItemFiltersClient extends ItemFiltersCommon
-{
+public class ItemFiltersClient extends ItemFiltersCommon {
 	@Override
-	public void setup()
-	{
+	public void setup() {
 		ClientLifecycleEvent.CLIENT_SETUP.register(instance -> {
 			MenuRegistry.registerScreenFactory((MenuType<InventoryFilterMenu>) InventoryFilterMenu.TYPE.get(), InventoryFilterScreen::new);
 		});
 	}
 
 	@Override
-	public void openStringValueFilterScreen(IStringValueFilter filter, ItemStack stack, InteractionHand hand)
-	{
+	public void openStringValueFilterScreen(IStringValueFilter filter, ItemStack stack, InteractionHand hand) {
 		Minecraft.getInstance().setScreen(new StringValueFilterScreen(filter, stack, hand));
 	}
 }

@@ -11,14 +11,12 @@ import javax.annotation.Nullable;
 /**
  * @author LatvianModder
  */
-public abstract class StringValueData<T>
-{
+public abstract class StringValueData<T> {
 	public final ItemStack filter;
 	protected T value;
 	protected boolean load;
 
-	public StringValueData(ItemStack is)
-	{
+	public StringValueData(ItemStack is) {
 		filter = is;
 		value = null;
 		load = true;
@@ -29,21 +27,17 @@ public abstract class StringValueData<T>
 
 	protected abstract String toString(@Nullable T value);
 
-	public final String toString()
-	{
+	public final String toString() {
 		return Registry.ITEM.getKey(filter.getItem()) + ":" + toString(getValue());
 	}
 
 	@Nullable
-	public T getValue()
-	{
-		if (load)
-		{
+	public T getValue() {
+		if (load) {
 			load = false;
 			value = null;
 
-			if (filter.hasTag())
-			{
+			if (filter.hasTag()) {
 				value = fromString(filter.getTag().getString("value"));
 			}
 		}
@@ -51,38 +45,30 @@ public abstract class StringValueData<T>
 		return value;
 	}
 
-	public void setValue(@Nullable T v)
-	{
+	public void setValue(@Nullable T v) {
 		value = v;
 		load = false;
 		String s = value == null ? "" : toString(value);
 
-		if (s.isEmpty())
-		{
+		if (s.isEmpty()) {
 			filter.removeTagKey("value");
-		}
-		else
-		{
+		} else {
 			filter.addTagElement("value", StringTag.valueOf(s));
 		}
 	}
 
-	public void setValueFromString(String v)
-	{
+	public void setValueFromString(String v) {
 		setValue(fromString(v));
 	}
 
-	public String getValueAsString()
-	{
+	public String getValueAsString() {
 		return toString(getValue());
 	}
 
-	public Component getValueAsComponent()
-	{
+	public Component getValueAsComponent() {
 		T v = getValue();
 
-		if (v == null)
-		{
+		if (v == null) {
 			return TextComponent.EMPTY;
 		}
 
