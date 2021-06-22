@@ -1,8 +1,7 @@
 package dev.latvian.mods.itemfilters.item;
 
 import net.minecraft.world.item.ItemStack;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author LatvianModder

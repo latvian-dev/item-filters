@@ -2,8 +2,8 @@ package dev.latvian.mods.itemfilters.item;
 
 import net.minecraft.core.Registry;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.regex.Pattern;
 
 /**

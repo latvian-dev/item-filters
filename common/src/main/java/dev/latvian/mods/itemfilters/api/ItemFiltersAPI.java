@@ -1,14 +1,14 @@
 package dev.latvian.mods.itemfilters.api;
 
 import dev.latvian.mods.itemfilters.ItemFilters;
-import me.shedaniel.architectury.annotations.ExpectPlatform;
+import me.shedaniel.architectury.hooks.TagHooks;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.SerializationTags;
 import net.minecraft.tags.Tag;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,15 +19,13 @@ import java.util.function.Predicate;
  * @author LatvianModder
  */
 public class ItemFiltersAPI {
-	public static final Tag.Named<Item> FILTERS_ITEM_TAG = getNamedTag(ItemFilters.MOD_ID + ":filters");
-	public static final Tag.Named<Item> CHECK_NBT_ITEM_TAG = getNamedTag(ItemFilters.MOD_ID + ":check_nbt");
+	public static final ResourceLocation FILTERS_ITEM_TAG_ID = new ResourceLocation(ItemFilters.MOD_ID, "filters");
 	public static final ResourceLocation CHECK_NBT_ITEM_TAG_ID = new ResourceLocation(ItemFilters.MOD_ID, "check_nbt");
-	public static final Map<String, CustomFilter> CUSTOM_FILTERS = new LinkedHashMap<>();
 
-	@ExpectPlatform
-	public static Tag.Named<Item> getNamedTag(String s) {
-		throw new AssertionError();
-	}
+	public static final Tag.Named<Item> FILTERS_ITEM_TAG = TagHooks.getItemOptional(FILTERS_ITEM_TAG_ID);
+	public static final Tag.Named<Item> CHECK_NBT_ITEM_TAG = TagHooks.getItemOptional(CHECK_NBT_ITEM_TAG_ID);
+
+	public static final Map<String, CustomFilter> CUSTOM_FILTERS = new LinkedHashMap<>();
 
 	/**
 	 * @return IItemFilter if stack is a filter, null otherwise.
