@@ -19,7 +19,6 @@
 	},
 	"mixins": [
 		"itemfilters-common.mixins.json",
-		"itemfilters.mixins.json"
 	],
 	"depends": {
 		"fabric": "*",
