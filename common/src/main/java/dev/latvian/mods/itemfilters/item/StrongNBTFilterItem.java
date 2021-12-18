@@ -1,6 +1,7 @@
 package dev.latvian.mods.itemfilters.item;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
@@ -81,7 +82,7 @@ public class StrongNBTFilterItem extends StringValueFilterItem {
 				return TextComponent.EMPTY;
 			}
 
-			return v.getPrettyDisplay();
+			return NbtUtils.toPrettyComponent(v);
 		}
 	}
 

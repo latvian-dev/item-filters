@@ -8,4 +8,4 @@ pluginManagement {
 
 include "common", "fabric", "forge"
 
-rootProject.name = 'Item-Filters-1.16.5'
+rootProject.name = 'Item-Filters-1.18.1'

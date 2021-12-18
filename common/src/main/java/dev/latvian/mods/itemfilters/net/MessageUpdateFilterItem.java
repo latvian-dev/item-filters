@@ -1,7 +1,7 @@
 package dev.latvian.mods.itemfilters.net;
 
+import dev.architectury.networking.NetworkManager;
 import dev.latvian.mods.itemfilters.api.IItemFilter;
-import me.shedaniel.architectury.networking.NetworkManager;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
@@ -40,7 +40,7 @@ public class MessageUpdateFilterItem {
 
 				if (is.getItem() instanceof IItemFilter && stack.getItem() instanceof IItemFilter) {
 					player.setItemInHand(hand, stack);
-					player.inventory.setChanged();
+					player.getInventory().setChanged();
 					player.inventoryMenu.broadcastChanges();
 				}
 			}

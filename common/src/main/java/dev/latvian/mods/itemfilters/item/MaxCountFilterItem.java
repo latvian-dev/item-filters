@@ -54,18 +54,10 @@ public class MaxCountFilterItem extends StringValueFilterItem {
 			StringBuilder builder = new StringBuilder();
 
 			switch (value.mode) {
-				case 1:
-					builder.append(">=");
-					break;
-				case 2:
-					builder.append("<=");
-					break;
-				case 3:
-					builder.append(">");
-					break;
-				case 4:
-					builder.append("<");
-					break;
+				case 1 -> builder.append(">=");
+				case 2 -> builder.append("<=");
+				case 3 -> builder.append(">");
+				case 4 -> builder.append("<");
 			}
 
 			builder.append(value.maxCount);
@@ -89,17 +81,12 @@ public class MaxCountFilterItem extends StringValueFilterItem {
 		int d1 = stack.getMaxStackSize();
 		int d2 = data.getValue().maxCount;
 
-		switch (data.getValue().mode) {
-			case 1:
-				return d1 >= d2;
-			case 2:
-				return d1 <= d2;
-			case 3:
-				return d1 > d2;
-			case 4:
-				return d1 < d2;
-			default:
-				return d1 == d2;
-		}
+		return switch (data.getValue().mode) {
+			case 1 -> d1 >= d2;
+			case 2 -> d1 <= d2;
+			case 3 -> d1 > d2;
+			case 4 -> d1 < d2;
+			default -> d1 == d2;
+		};
 	}
 }

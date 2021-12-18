@@ -150,7 +150,6 @@ public class StringValueFilterScreen extends Screen {
 	public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		renderBackground(matrixStack);
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
-		RenderSystem.disableLighting();
 		RenderSystem.disableBlend();
 
 		if (!variants.isEmpty()) {
@@ -161,16 +160,19 @@ public class StringValueFilterScreen extends Screen {
 				drawString(matrixStack, font, variant.title.getString(), variant.icon.isEmpty() ? 4 : 14, 14 + i * 10, i == selectedVariant ? 0xFFFFFF00 : -1);
 
 				if (!variant.icon.isEmpty()) {
-					RenderSystem.pushMatrix();
-					RenderSystem.translated(4, 14 + i * 10, 0);
-					RenderSystem.scaled(0.5F, 0.5F, 1F);
+					PoseStack modelViewStack = RenderSystem.getModelViewStack();
+					modelViewStack.pushPose();
+					modelViewStack.translate(4, 14 + i * 10, 0);
+					modelViewStack.scale(0.5F, 0.5F, 1F);
+					RenderSystem.applyModelViewMatrix();
 					itemRenderer.blitOffset = 100F;
 					RenderSystem.enableDepthTest();
 					Lighting.setupFor3DItems();
-					itemRenderer.renderAndDecorateItem(minecraft.player, variant.icon, 0, 0);
+					itemRenderer.renderAndDecorateItem(variant.icon, 0, 0);
 					itemRenderer.renderGuiItemDecorations(font, variant.icon, 0, 0, "");
 					itemRenderer.blitOffset = 0F;
-					RenderSystem.popMatrix();
+					modelViewStack.popPose();
+					RenderSystem.applyModelViewMatrix();
 				}
 
 				if (14 + i * 10 >= height) {

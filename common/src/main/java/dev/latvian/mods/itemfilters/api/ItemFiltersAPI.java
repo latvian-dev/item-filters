@@ -1,9 +1,9 @@
 package dev.latvian.mods.itemfilters.api;
 
+import dev.architectury.hooks.tags.TagHooks;
 import dev.latvian.mods.itemfilters.ItemFilters;
-import me.shedaniel.architectury.hooks.TagHooks;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.SerializationTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -22,8 +22,8 @@ public class ItemFiltersAPI {
 	public static final ResourceLocation FILTERS_ITEM_TAG_ID = new ResourceLocation(ItemFilters.MOD_ID, "filters");
 	public static final ResourceLocation CHECK_NBT_ITEM_TAG_ID = new ResourceLocation(ItemFilters.MOD_ID, "check_nbt");
 
-	public static final Tag.Named<Item> FILTERS_ITEM_TAG = TagHooks.getItemOptional(FILTERS_ITEM_TAG_ID);
-	public static final Tag.Named<Item> CHECK_NBT_ITEM_TAG = TagHooks.getItemOptional(CHECK_NBT_ITEM_TAG_ID);
+	public static final Tag.Named<Item> FILTERS_ITEM_TAG = TagHooks.optionalItem(FILTERS_ITEM_TAG_ID);
+	public static final Tag.Named<Item> CHECK_NBT_ITEM_TAG = TagHooks.optionalItem(CHECK_NBT_ITEM_TAG_ID);
 
 	public static final Map<String, CustomFilter> CUSTOM_FILTERS = new LinkedHashMap<>();
 
@@ -60,7 +60,7 @@ public class ItemFiltersAPI {
 			return true;
 		}
 
-		Tag<Item> tag = SerializationTags.getInstance().getItems().getTag(CHECK_NBT_ITEM_TAG_ID);
+		Tag<Item> tag = ItemTags.getAllTags().getTag(CHECK_NBT_ITEM_TAG_ID);
 
 		if (tag == null) {
 			return false;

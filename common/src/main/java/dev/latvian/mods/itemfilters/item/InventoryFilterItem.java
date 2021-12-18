@@ -1,12 +1,12 @@
 package dev.latvian.mods.itemfilters.item;
 
+import dev.architectury.registry.menu.ExtendedMenuProvider;
+import dev.architectury.registry.menu.MenuRegistry;
 import dev.latvian.mods.itemfilters.api.FilterInfo;
 import dev.latvian.mods.itemfilters.api.IItemFilter;
 import dev.latvian.mods.itemfilters.api.ItemFiltersAPI;
 import dev.latvian.mods.itemfilters.core.ItemFiltersStack;
 import dev.latvian.mods.itemfilters.gui.InventoryFilterMenu;
-import me.shedaniel.architectury.registry.MenuRegistry;
-import me.shedaniel.architectury.registry.menu.ExtendedMenuProvider;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.network.FriendlyByteBuf;

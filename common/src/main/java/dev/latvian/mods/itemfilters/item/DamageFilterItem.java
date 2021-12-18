@@ -63,18 +63,10 @@ public class DamageFilterItem extends StringValueFilterItem {
 			StringBuilder builder = new StringBuilder();
 
 			switch (value.mode) {
-				case 1:
-					builder.append(">=");
-					break;
-				case 2:
-					builder.append("<=");
-					break;
-				case 3:
-					builder.append(">");
-					break;
-				case 4:
-					builder.append("<");
-					break;
+				case 1 -> builder.append(">=");
+				case 2 -> builder.append("<=");
+				case 3 -> builder.append(">");
+				case 4 -> builder.append("<");
 			}
 
 			builder.append(value.damage);
@@ -107,18 +99,13 @@ public class DamageFilterItem extends StringValueFilterItem {
 		int d1 = stack.getDamageValue();
 		int d2 = data.getValue().percent ? (int) (stack.getMaxDamage() * data.getValue().damage / 100D) : data.getValue().damage;
 
-		switch (data.getValue().mode) {
-			case 1:
-				return d1 >= d2;
-			case 2:
-				return d1 <= d2;
-			case 3:
-				return d1 > d2;
-			case 4:
-				return d1 < d2;
-			default:
-				return d1 == d2;
-		}
+		return switch (data.getValue().mode) {
+			case 1 -> d1 >= d2;
+			case 2 -> d1 <= d2;
+			case 3 -> d1 > d2;
+			case 4 -> d1 < d2;
+			default -> d1 == d2;
+		};
 	}
 
 	@Override

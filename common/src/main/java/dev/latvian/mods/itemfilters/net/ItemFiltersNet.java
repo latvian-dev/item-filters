@@ -1,7 +1,7 @@
 package dev.latvian.mods.itemfilters.net;
 
+import dev.architectury.networking.NetworkChannel;
 import dev.latvian.mods.itemfilters.ItemFilters;
-import me.shedaniel.architectury.networking.NetworkChannel;
 import net.minecraft.resources.ResourceLocation;
 
 /**

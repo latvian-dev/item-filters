@@ -1,8 +1,8 @@
 package dev.latvian.mods.itemfilters.item;
 
+import dev.architectury.platform.Mod;
+import dev.architectury.platform.Platform;
 import dev.latvian.mods.itemfilters.api.StringValueFilterVariant;
-import me.shedaniel.architectury.platform.Mod;
-import me.shedaniel.architectury.platform.Platform;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.core.Registry;
@@ -12,7 +12,11 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author LatvianModder

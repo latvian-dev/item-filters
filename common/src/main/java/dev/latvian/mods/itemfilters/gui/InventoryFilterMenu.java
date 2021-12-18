@@ -49,7 +49,7 @@ public class InventoryFilterMenu extends AbstractContainerMenu {
 			addSlot(new Slot(playerInventory, x, 8 + x * 18, 142) {
 				@Override
 				public boolean mayPickup(Player player) {
-					return i != player.inventory.selected;
+					return i != player.getInventory().selected;
 				}
 			});
 		}
@@ -66,7 +66,7 @@ public class InventoryFilterMenu extends AbstractContainerMenu {
 
 	@Override
 	public ItemStack quickMoveStack(Player player, int index) {
-		if (index >= filterSlots.size() && inventory.getItems().size() < filterSlots.size() && index != player.inventory.selected + filterSlots.size()) {
+		if (index >= filterSlots.size() && inventory.getItems().size() < filterSlots.size() && index != player.getInventory().selected + filterSlots.size()) {
 			Slot slot = getSlot(index);
 
 			if (slot != null) {
@@ -92,9 +92,9 @@ public class InventoryFilterMenu extends AbstractContainerMenu {
 	}
 
 	@Override
-	public ItemStack clicked(int slotId, int dragType, ClickType clickType, Player player) {
+	public void clicked(int slotId, int dragType, ClickType clickType, Player player) {
 		if (slotId >= 0 && slotId < filterSlots.size()) {
-			ItemStack stack = player.inventory.getCarried().copy();
+			ItemStack stack = player.inventoryMenu.getCarried().copy();
 			stack.setCount(1);
 
 			if (stack.isEmpty()) {
@@ -102,12 +102,11 @@ public class InventoryFilterMenu extends AbstractContainerMenu {
 					ItemStack stack1 = inventory.getItems().get(slotId);
 					inventory.getItems().remove(slotId);
 					inventory.save();
-					return stack1;
 				}
 			} else {
 				for (ItemStack stack1 : inventory.getItems()) {
 					if (stack1.getItem() == stack.getItem() && ItemStack.tagMatches(stack1, stack)) {
-						return ItemStack.EMPTY;
+						return;
 					}
 				}
 
@@ -118,11 +117,7 @@ public class InventoryFilterMenu extends AbstractContainerMenu {
 					inventory.getItems().add(stack);
 					inventory.save();
 				}
-
-				return ItemStack.EMPTY;
 			}
 		}
-
-		return super.clicked(slotId, dragType, clickType, player);
 	}
 }

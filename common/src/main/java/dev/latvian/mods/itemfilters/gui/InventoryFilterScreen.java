@@ -6,6 +6,7 @@ import dev.latvian.mods.itemfilters.ItemFilters;
 import dev.latvian.mods.itemfilters.item.InventoryFilterItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -31,8 +32,10 @@ public class InventoryFilterScreen extends AbstractContainerScreen<InventoryFilt
 
 	@Override
 	protected void renderBg(PoseStack matrixStack, float partialTicks, int mouseX, int mouseY) {
-		RenderSystem.color4f(1F, 1F, 1F, 1F);
-		minecraft.getTextureManager().bind(TEXTURE);
+		RenderSystem.enableTexture();
+		RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
+		RenderSystem.setShaderTexture(0, TEXTURE);
+		RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
 		blit(matrixStack, leftPos, topPos, 0, 0, imageWidth, imageHeight);
 
 		for (InventoryFilterItem.FilterSlot slot : menu.filterSlots) {
@@ -42,8 +45,8 @@ public class InventoryFilterScreen extends AbstractContainerScreen<InventoryFilt
 
 	@Override
 	protected void renderLabels(PoseStack matrixStack, int mouseX, int mouseY) {
-		RenderSystem.color4f(1F, 1F, 1F, 1F);
+		RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
 		font.draw(matrixStack, getTitle().getString(), 8, 6, 4210752);
-		font.draw(matrixStack, Minecraft.getInstance().player.inventory.getDisplayName().getString(), 8, 72, 4210752);
+		font.draw(matrixStack, Minecraft.getInstance().player.getInventory().getDisplayName().getString(), 8, 72, 4210752);
 	}
 }

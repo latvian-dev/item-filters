@@ -1,12 +1,12 @@
 package dev.latvian.mods.itemfilters.client;
 
+import dev.architectury.event.events.client.ClientLifecycleEvent;
+import dev.architectury.registry.menu.MenuRegistry;
 import dev.latvian.mods.itemfilters.ItemFiltersCommon;
 import dev.latvian.mods.itemfilters.api.IStringValueFilter;
 import dev.latvian.mods.itemfilters.gui.InventoryFilterMenu;
 import dev.latvian.mods.itemfilters.gui.InventoryFilterScreen;
 import dev.latvian.mods.itemfilters.gui.StringValueFilterScreen;
-import me.shedaniel.architectury.event.events.client.ClientLifecycleEvent;
-import me.shedaniel.architectury.registry.MenuRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.inventory.MenuType;
