@@ -1,6 +1,7 @@
-package dev.latvian.mods.itemfilters;
+package dev.latvian.mods.itemfilters.forge;
 
 import dev.architectury.platform.forge.EventBuses;
+import dev.latvian.mods.itemfilters.ItemFilters;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 

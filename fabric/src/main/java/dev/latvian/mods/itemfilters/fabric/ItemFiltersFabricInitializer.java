@@ -1,4 +1,4 @@
-package dev.latvian.mods.itemfilters;
+package dev.latvian.mods.itemfilters.fabric;
 
 /**
  * @author LatvianModder

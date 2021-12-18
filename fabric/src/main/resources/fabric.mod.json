@@ -14,7 +14,7 @@
 	"license": "GNU LGPLv3",
 	"entrypoints": {
 		"main": [
-			"dev.latvian.mods.itemfilters.ItemFiltersFabric"
+			"dev.latvian.mods.itemfilters.fabric.ItemFiltersFabric"
 		]
 	},
 	"mixins": [
