@@ -3,10 +3,13 @@ package dev.latvian.mods.itemfilters.item;
 import dev.latvian.mods.itemfilters.api.StringValueFilterVariant;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.core.Holder;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -17,29 +20,30 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.StreamSupport;
 
 /**
  * @author LatvianModder
  */
 public class TagFilterItem extends StringValueFilterItem {
-	public static class TagData extends StringValueData<ResourceLocation> {
+	public static class TagData extends StringValueData<TagKey<Item>> {
 		public TagData(ItemStack is) {
 			super(is);
 		}
 
 		@Nullable
 		@Override
-		public ResourceLocation fromString(String s) {
+		public TagKey<Item> fromString(String s) {
 			if (s.isEmpty()) {
 				return null;
 			}
 
 			ResourceLocation id = new ResourceLocation(s);
-			return ItemTags.getAllTags().getTag(id) == null ? null : id;
+			return TagKey.create(Registry.ITEM_REGISTRY, id);
 		}
 
 		@Override
-		public String toString(ResourceLocation value) {
+		public String toString(TagKey<Item> value) {
 			return value == null ? "" : value.toString();
 		}
 	}
@@ -55,13 +59,7 @@ public class TagFilterItem extends StringValueFilterItem {
 			return false;
 		}
 
-		Tag<Item> tag = ItemTags.getAllTags().getTag(new ResourceLocation(getValue(filter)));
-
-		if (tag != null && !tag.getValues().isEmpty()) {
-			return tag.contains(stack.getItem());
-		}
-
-		return false;
+		return stack.is(TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(getValue(filter))));
 	}
 
 	@Override
@@ -70,58 +68,32 @@ public class TagFilterItem extends StringValueFilterItem {
 			return false;
 		}
 
-		Tag<Item> tag = ItemTags.getAllTags().getTag(new ResourceLocation(getValue(filter)));
-
-		if (tag != null && !tag.getValues().isEmpty()) {
-			return tag.contains(item);
-		}
-
-		return false;
+		return item.builtInRegistryHolder().is(TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(getValue(filter))));
 	}
 
 	@Override
 	@Environment(EnvType.CLIENT)
 	public Collection<StringValueFilterVariant> getValueVariants(ItemStack filter) {
-		List<StringValueFilterVariant> list = new ArrayList<>();
-
-		for (ResourceLocation id : ItemTags.getAllTags().getAvailableTags()) {
-			Tag<Item> tag = ItemTags.getAllTags().getTag(id);
-
-			if (tag != null && !tag.getValues().isEmpty()) {
-				StringValueFilterVariant variant = new StringValueFilterVariant(id.toString());
-				variant.icon = new ItemStack(tag.getValues().iterator().next());
-				list.add(variant);
-			}
-		}
-
-		return list;
+		return Registry.ITEM.getTags().map(e -> {
+			StringValueFilterVariant variant = new StringValueFilterVariant(e.getFirst().location().toString());
+			variant.icon = e.getSecond().stream().findAny().map(ItemStack::new).orElse(ItemStack.EMPTY);
+			return variant;
+		}).toList();
 	}
 
 	@Override
 	public void getDisplayItemStacks(ItemStack filter, List<ItemStack> list) {
-		Tag<Item> items = ItemTags.getAllTags().getTag(new ResourceLocation(getValue(filter)));
-
-		if (items == null || items.getValues().isEmpty()) {
-			return;
-		}
-
 		NonNullList<ItemStack> list1 = NonNullList.create();
 
-		for (Item item : items.getValues()) {
-			item.fillItemCategory(CreativeModeTab.TAB_SEARCH, list1);
-		}
+		StreamSupport.stream(Registry.ITEM.getTagOrEmpty(TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(getValue(filter)))).spliterator(), false)
+				.forEach(e -> e.value().fillItemCategory(CreativeModeTab.TAB_SEARCH, list1));
 
 		list.addAll(list1);
 	}
 
 	@Override
 	public void getItems(ItemStack filter, Set<Item> set) {
-		Tag<Item> items = ItemTags.getAllTags().getTag(new ResourceLocation(getValue(filter)));
-
-		if (items == null || items.getValues().isEmpty()) {
-			return;
-		}
-
-		set.addAll(items.getValues());
+		List<Item> items = StreamSupport.stream(Registry.ITEM.getTagOrEmpty(TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(getValue(filter)))).spliterator(), false).map(Holder::value).toList();
+		set.addAll(items);
 	}
 }
