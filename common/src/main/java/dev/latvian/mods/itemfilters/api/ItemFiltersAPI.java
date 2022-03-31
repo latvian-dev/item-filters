@@ -1,10 +1,9 @@
 package dev.latvian.mods.itemfilters.api;
 
-import dev.architectury.hooks.tags.TagHooks;
 import dev.latvian.mods.itemfilters.ItemFilters;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
@@ -22,8 +21,8 @@ public class ItemFiltersAPI {
 	public static final ResourceLocation FILTERS_ITEM_TAG_ID = new ResourceLocation(ItemFilters.MOD_ID, "filters");
 	public static final ResourceLocation CHECK_NBT_ITEM_TAG_ID = new ResourceLocation(ItemFilters.MOD_ID, "check_nbt");
 
-	public static final Tag.Named<Item> FILTERS_ITEM_TAG = TagHooks.optionalItem(FILTERS_ITEM_TAG_ID);
-	public static final Tag.Named<Item> CHECK_NBT_ITEM_TAG = TagHooks.optionalItem(CHECK_NBT_ITEM_TAG_ID);
+	public static final TagKey<Item> FILTERS_ITEM_TAG = TagKey.create(Registry.ITEM_REGISTRY, FILTERS_ITEM_TAG_ID);
+	public static final TagKey<Item> CHECK_NBT_ITEM_TAG = TagKey.create(Registry.ITEM_REGISTRY, CHECK_NBT_ITEM_TAG_ID);
 
 	public static final Map<String, CustomFilter> CUSTOM_FILTERS = new LinkedHashMap<>();
 
@@ -60,13 +59,7 @@ public class ItemFiltersAPI {
 			return true;
 		}
 
-		Tag<Item> tag = ItemTags.getAllTags().getTag(CHECK_NBT_ITEM_TAG_ID);
-
-		if (tag == null) {
-			return false;
-		}
-
-		return !tag.contains(stackA.getItem()) || ItemStack.tagMatches(stackA, stackB);
+		return !stackA.getItem().builtInRegistryHolder().is(CHECK_NBT_ITEM_TAG_ID) || ItemStack.tagMatches(stackA, stackB);
 	}
 
 	/**
