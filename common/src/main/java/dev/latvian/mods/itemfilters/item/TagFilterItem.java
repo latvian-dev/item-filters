@@ -44,7 +44,7 @@ public class TagFilterItem extends StringValueFilterItem {
 
 		@Override
 		public String toString(TagKey<Item> value) {
-			return value == null ? "" : value.toString();
+			return value == null ? "" : value.location().toString();
 		}
 	}
 
