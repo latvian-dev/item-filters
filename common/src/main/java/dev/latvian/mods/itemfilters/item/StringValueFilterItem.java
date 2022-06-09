@@ -7,7 +7,7 @@ import dev.latvian.mods.itemfilters.core.ItemFiltersStack;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -56,7 +56,7 @@ public abstract class StringValueFilterItem extends BaseFilterItem implements IS
 	public void addInfo(ItemStack filter, FilterInfo info, boolean expanded) {
 		Component s = getStringValueData(filter).getValueAsComponent();
 
-		if (s != TextComponent.EMPTY) {
+		if (s.getContents() != ComponentContents.EMPTY) {
 			info.add(s);
 		}
 	}

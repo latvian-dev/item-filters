@@ -2,7 +2,6 @@ package dev.latvian.mods.itemfilters.api;
 
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.item.ItemStack;
 
 /**
@@ -15,7 +14,7 @@ public class StringValueFilterVariant implements Comparable<StringValueFilterVar
 
 	public StringValueFilterVariant(String s) {
 		id = s;
-		title = new TextComponent(id);
+		title = Component.literal(id);
 		icon = ItemStack.EMPTY;
 	}
 

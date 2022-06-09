@@ -3,7 +3,6 @@ package dev.latvian.mods.itemfilters.item;
 import dev.latvian.mods.itemfilters.api.FilterInfo;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 
 import java.util.List;
 
@@ -20,7 +19,7 @@ public class FilterInfoImpl implements FilterInfo {
 
 	@Override
 	public void add(Component component) {
-		list.add(new TextComponent(indent + "- ").withStyle(ChatFormatting.YELLOW).append((new TextComponent("").append(component)).withStyle(ChatFormatting.GRAY)));
+		list.add(Component.literal(indent + "- ").withStyle(ChatFormatting.YELLOW).append((Component.literal("").append(component)).withStyle(ChatFormatting.GRAY)));
 	}
 
 	@Override

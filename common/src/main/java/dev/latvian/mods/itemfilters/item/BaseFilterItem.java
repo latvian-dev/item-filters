@@ -6,13 +6,10 @@ import dev.latvian.mods.itemfilters.api.ItemFiltersAPI;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Item;
@@ -37,7 +34,7 @@ public abstract class BaseFilterItem extends Item implements IItemFilter {
 		super.appendHoverText(stack, world, tooltip, flag);
 
 		if (Screen.hasShiftDown()) {
-			tooltip.add(new TranslatableComponent(I18n.get(getDescriptionId() + ".description")).withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GRAY));
+			tooltip.add(Component.translatable(I18n.get(getDescriptionId() + ".description")).withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GRAY));
 		}
 
 		addInfo(stack, new FilterInfoImpl(tooltip), Screen.hasShiftDown());
@@ -47,7 +44,7 @@ public abstract class BaseFilterItem extends Item implements IItemFilter {
 	public void inventoryTick(ItemStack stack, Level level, Entity entity, int i, boolean bl) {
 		if (entity instanceof ServerPlayer && ((ServerPlayer) entity).getOffhandItem() == stack) {
 			boolean m = ItemFiltersAPI.filter(stack, ((ServerPlayer) entity).getMainHandItem());
-			((ServerPlayer) entity).sendMessage(new TextComponent("Filter matches: ").append(new TextComponent(m ? "Yes" : "No").withStyle(m ? ChatFormatting.GREEN : ChatFormatting.RED)), ChatType.GAME_INFO, Util.NIL_UUID);
+			((ServerPlayer) entity).sendSystemMessage(Component.literal("Filter matches: ").append(Component.literal(m ? "Yes" : "No").withStyle(m ? ChatFormatting.GREEN : ChatFormatting.RED)), ChatType.GAME_INFO);
 		}
 
 		super.inventoryTick(stack, level, entity, i, bl);

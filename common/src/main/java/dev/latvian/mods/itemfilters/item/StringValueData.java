@@ -3,7 +3,6 @@ package dev.latvian.mods.itemfilters.item;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -68,10 +67,10 @@ public abstract class StringValueData<T> {
 		T v = getValue();
 
 		if (v == null) {
-			return TextComponent.EMPTY;
+			return Component.empty();
 		}
 
 		String s = toString(v);
-		return s.isEmpty() ? TextComponent.EMPTY : new TextComponent(s);
+		return s.isEmpty() ? Component.empty() : Component.literal(s);
 	}
 }

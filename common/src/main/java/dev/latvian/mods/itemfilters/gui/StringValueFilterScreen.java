@@ -9,7 +9,7 @@ import dev.latvian.mods.itemfilters.net.MessageUpdateFilterItem;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.toasts.SystemToast;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import org.lwjgl.glfw.GLFW;
@@ -51,7 +51,7 @@ public class StringValueFilterScreen extends Screen {
 		minecraft.keyboardHandler.setSendRepeatsToGui(true);
 		int i = width / 2;
 		int j = height / 2;
-		nameField = new EditBox(font, i - 52, j - 6, 104, 12, TextComponent.EMPTY);
+		nameField = new EditBox(font, i - 52, j - 6, 104, 12, Component.empty());
 		nameField.setTextColor(-1);
 		nameField.setTextColorUneditable(-1);
 		nameField.setBordered(false);
@@ -97,12 +97,12 @@ public class StringValueFilterScreen extends Screen {
 				minecraft.setScreen(null);
 
 				StringValueFilterVariant variant = variants.get(text);
-				minecraft.getToasts().addToast(new SystemToast(SystemToast.SystemToastIds.TUTORIAL_HINT, new TextComponent("Value changed!"), text.isEmpty() ? null : variant == null ? new TextComponent(text) : variant.title.copy()));
+				minecraft.getToasts().addToast(new SystemToast(SystemToast.SystemToastIds.TUTORIAL_HINT, Component.literal("Value changed!"), text.isEmpty() ? null : variant == null ? Component.literal(text) : variant.title.copy()));
 
 				minecraft.player.setItemInHand(hand, stack);
 				new MessageUpdateFilterItem(hand, stack).send();
 			} else {
-				minecraft.getToasts().addToast(new SystemToast(SystemToast.SystemToastIds.TUTORIAL_HINT, new TextComponent("Invalid string!"), null));
+				minecraft.getToasts().addToast(new SystemToast(SystemToast.SystemToastIds.TUTORIAL_HINT, Component.literal("Invalid string!"), null));
 			}
 
 			return true;
