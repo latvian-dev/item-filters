@@ -94,7 +94,7 @@ public class InventoryFilterMenu extends AbstractContainerMenu {
 	@Override
 	public void clicked(int slotId, int dragType, ClickType clickType, Player player) {
 		if (slotId >= 0 && slotId < filterSlots.size()) {
-			ItemStack stack = player.inventoryMenu.getCarried().copy();
+			ItemStack stack = this.getCarried().copy();
 			stack.setCount(1);
 
 			if (stack.isEmpty()) {
@@ -118,6 +118,8 @@ public class InventoryFilterMenu extends AbstractContainerMenu {
 					inventory.save();
 				}
 			}
+		} else {
+			super.clicked(slotId, dragType, clickType, player);
 		}
 	}
 }
