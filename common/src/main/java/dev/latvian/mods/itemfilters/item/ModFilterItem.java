@@ -6,17 +6,13 @@ import dev.latvian.mods.itemfilters.api.StringValueFilterVariant;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.core.Registry;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author LatvianModder
@@ -38,7 +34,7 @@ public class ModFilterItem extends StringValueFilterItem {
 			if (mods.add(entry.getKey().location().getNamespace())) {
 				Mod info = Platform.getMod(entry.getKey().location().getNamespace());
 				StringValueFilterVariant variant = new StringValueFilterVariant(info.getModId());
-				variant.title = new TextComponent(info.getName());
+				variant.title = Component.literal(info.getName());
 				variant.icon = new ItemStack(entry.getValue());
 				variants.add(variant);
 			}

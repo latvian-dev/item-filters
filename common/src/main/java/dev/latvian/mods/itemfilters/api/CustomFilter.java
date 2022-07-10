@@ -2,7 +2,6 @@ package dev.latvian.mods.itemfilters.api;
 
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
@@ -22,7 +21,7 @@ public class CustomFilter {
 	public CustomFilter(String i, Predicate<ItemStack> p) {
 		id = i;
 		predicate = p;
-		displayName = new TextComponent(i);
+		displayName = Component.literal(i);
 	}
 
 	public Set<Item> getItems() {

@@ -6,7 +6,6 @@ import dev.latvian.mods.itemfilters.api.StringValueFilterVariant;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -40,7 +39,7 @@ public class CustomFilterItem extends StringValueFilterItem {
 		@Override
 		public Component getValueAsComponent() {
 			CustomFilter v = getValue();
-			return v == null ? TextComponent.EMPTY : v.displayName;
+			return v == null ? Component.empty() : v.displayName;
 		}
 	}
 

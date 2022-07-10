@@ -4,7 +4,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -79,7 +78,7 @@ public class StrongNBTFilterItem extends StringValueFilterItem {
 			CompoundTag v = getValue();
 
 			if (v == null) {
-				return TextComponent.EMPTY;
+				return Component.empty();
 			}
 
 			return NbtUtils.toPrettyComponent(v);
