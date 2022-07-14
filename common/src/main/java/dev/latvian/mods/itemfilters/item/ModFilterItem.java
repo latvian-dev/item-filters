@@ -7,8 +7,6 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
@@ -28,19 +26,20 @@ public class ModFilterItem extends StringValueFilterItem {
 	public Collection<StringValueFilterVariant> getValueVariants(ItemStack stack) {
 		List<StringValueFilterVariant> variants = new ArrayList<>();
 
-		LinkedHashSet<String> mods = new LinkedHashSet<>();
+		var mods = new LinkedHashSet<>();
 
-		for (Map.Entry<ResourceKey<Item>, Item> entry : Registry.ITEM.entrySet()) {
-			if (mods.add(entry.getKey().location().getNamespace())) {
-				Mod info = Platform.getMod(entry.getKey().location().getNamespace());
-				StringValueFilterVariant variant = new StringValueFilterVariant(info.getModId());
-				variant.title = Component.literal(info.getName());
-				variant.icon = new ItemStack(entry.getValue());
+		for (var itemEntry : Registry.ITEM.entrySet()) {
+			var id = itemEntry.getKey().location().getNamespace();
+			if (mods.add(id)) {
+				var variant = new StringValueFilterVariant(id);
+				variant.title = Component.literal(Platform.getOptionalMod(id).map(Mod::getName).orElse(id));
+				variant.icon = new ItemStack(itemEntry.getValue());
+				if(id.equals("minecraft")) {
+					variant.icon = Items.GRASS_BLOCK.getDefaultInstance();
+				}
 				variants.add(variant);
 			}
 		}
-
-		variants.stream().filter(variant -> variant.id.equals("minecraft")).findFirst().ifPresent(variant -> variant.icon = new ItemStack(Items.GRASS_BLOCK));
 
 		return variants;
 	}
