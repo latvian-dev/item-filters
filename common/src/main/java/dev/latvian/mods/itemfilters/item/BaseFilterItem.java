@@ -8,7 +8,6 @@ import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.language.I18n;
-import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -42,9 +41,9 @@ public abstract class BaseFilterItem extends Item implements IItemFilter {
 
 	@Override
 	public void inventoryTick(ItemStack stack, Level level, Entity entity, int i, boolean bl) {
-		if (entity instanceof ServerPlayer && ((ServerPlayer) entity).getOffhandItem() == stack) {
-			boolean m = ItemFiltersAPI.filter(stack, ((ServerPlayer) entity).getMainHandItem());
-			((ServerPlayer) entity).sendSystemMessage(Component.literal("Filter matches: ").append(Component.literal(m ? "Yes" : "No").withStyle(m ? ChatFormatting.GREEN : ChatFormatting.RED)), ChatType.GAME_INFO);
+		if (entity instanceof ServerPlayer player && player.getOffhandItem() == stack) {
+			boolean m = ItemFiltersAPI.filter(stack, player.getMainHandItem());
+			player.sendSystemMessage(Component.literal("Filter matches: ").append(Component.literal(m ? "Yes" : "No").withStyle(m ? ChatFormatting.GREEN : ChatFormatting.RED)), true);
 		}
 
 		super.inventoryTick(stack, level, entity, i, bl);
