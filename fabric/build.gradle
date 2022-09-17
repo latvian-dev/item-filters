@@ -101,5 +101,3 @@ publishing {
 		}
 	}
 }
-
-rootProject.tasks.getByName("curseforgePublish").dependsOn tasks.getByName("curseforge")
