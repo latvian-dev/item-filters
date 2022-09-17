@@ -18,11 +18,8 @@ import java.util.function.Predicate;
  * @author LatvianModder
  */
 public class ItemFiltersAPI {
-	public static final ResourceLocation FILTERS_ITEM_TAG_ID = new ResourceLocation(ItemFilters.MOD_ID, "filters");
-	public static final ResourceLocation CHECK_NBT_ITEM_TAG_ID = new ResourceLocation(ItemFilters.MOD_ID, "check_nbt");
-
-	public static final TagKey<Item> FILTERS_ITEM_TAG = TagKey.create(Registry.ITEM_REGISTRY, FILTERS_ITEM_TAG_ID);
-	public static final TagKey<Item> CHECK_NBT_ITEM_TAG = TagKey.create(Registry.ITEM_REGISTRY, CHECK_NBT_ITEM_TAG_ID);
+	public static final TagKey<Item> FILTERS_ITEM_TAG = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(ItemFilters.MOD_ID, "filters"));
+	public static final TagKey<Item> CHECK_NBT_ITEM_TAG = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(ItemFilters.MOD_ID, "check_nbt"));
 
 	public static final Map<String, CustomFilter> CUSTOM_FILTERS = new LinkedHashMap<>();
 
@@ -59,7 +56,7 @@ public class ItemFiltersAPI {
 			return true;
 		}
 
-		return !stackA.getItem().builtInRegistryHolder().is(CHECK_NBT_ITEM_TAG_ID) || ItemStack.tagMatches(stackA, stackB);
+		return !stackA.is(CHECK_NBT_ITEM_TAG) || ItemStack.tagMatches(stackA, stackB);
 	}
 
 	/**
