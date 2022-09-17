@@ -7,7 +7,7 @@ dependencies {
 def ENV = System.getenv()
 
 architectury {
-	common()
+	common("fabric", "forge")
 }
 
 publishing {
