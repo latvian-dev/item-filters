@@ -59,7 +59,7 @@ public class ItemFiltersAPI {
 			return true;
 		}
 
-		return !stackA.getItem().builtInRegistryHolder().is(CHECK_NBT_ITEM_TAG_ID) || ItemStack.tagMatches(stackA, stackB);
+		return !stackA.is(CHECK_NBT_ITEM_TAG) || ItemStack.tagMatches(stackA, stackB);
 	}
 
 	/**
