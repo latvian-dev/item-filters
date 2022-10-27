@@ -109,7 +109,7 @@ public class StringValueFilterScreen extends Screen {
 			if (variants.isEmpty() || text.isEmpty() || variants.containsKey(text)) {
 				ItemStack newStack = stack.copy();
 				filter.setValue(newStack, text);
-				if (newStack.hasTag()) {
+				if (newStack.hasTag() || text.isEmpty()) {
 					minecraft.setScreen(null);
 
 					StringValueFilterVariant variant = variants.get(text);
