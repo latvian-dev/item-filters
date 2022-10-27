@@ -28,7 +28,7 @@ public class RegExFilterItem extends StringValueFilterItem {
 	}
 
 	@Override
-	public StringValueData createData(ItemStack stack) {
+	public StringValueData<?> createData(ItemStack stack) {
 		return new RegExData(stack);
 	}
 
@@ -45,5 +45,10 @@ public class RegExFilterItem extends StringValueFilterItem {
 		}
 
 		return false;
+	}
+
+	@Override
+	public String getHelpKey() {
+		return "itemfilters.help_text.regex";
 	}
 }

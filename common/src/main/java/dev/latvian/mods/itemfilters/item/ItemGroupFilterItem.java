@@ -54,7 +54,7 @@ public class ItemGroupFilterItem extends StringValueFilterItem {
 	}
 
 	@Override
-	public StringValueData createData(ItemStack stack) {
+	public StringValueData<?> createData(ItemStack stack) {
 		return new ItemGroupData(stack);
 	}
 
@@ -109,7 +109,7 @@ public class ItemGroupFilterItem extends StringValueFilterItem {
 			for (Item item : Registry.ITEM) {
 				try {
 					item.fillItemCategory(data.getValue(), allItems);
-				} catch (Throwable ex) {
+				} catch (Throwable ignored) {
 				}
 			}
 

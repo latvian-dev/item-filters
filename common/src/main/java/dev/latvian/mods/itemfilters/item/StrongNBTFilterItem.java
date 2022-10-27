@@ -1,5 +1,6 @@
 package dev.latvian.mods.itemfilters.item;
 
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.TagParser;
@@ -8,11 +9,13 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * @author LatvianModder
@@ -86,7 +89,7 @@ public class StrongNBTFilterItem extends StringValueFilterItem {
 	}
 
 	@Override
-	public StringValueData createData(ItemStack stack) {
+	public StringValueData<?> createData(ItemStack stack) {
 		return new NBTData(stack);
 	}
 
@@ -111,5 +114,16 @@ public class StrongNBTFilterItem extends StringValueFilterItem {
 		CompoundTag tag1 = data.getValue();
 		CompoundTag tag2 = stack.getTag();
 		return Objects.equals(tag1, tag2);
+	}
+
+	@Override
+	public String getHelpKey() {
+		return "itemfilters.help_text.nbt";
+	}
+
+	@Override
+	public void getItems(ItemStack filter, Set<Item> set) {
+		// any item could potentially have NBT, so we need the lot
+		Registry.ITEM.forEach(set::add);
 	}
 }
