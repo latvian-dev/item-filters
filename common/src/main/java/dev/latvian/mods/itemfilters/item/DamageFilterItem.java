@@ -80,7 +80,7 @@ public class DamageFilterItem extends StringValueFilterItem {
 	}
 
 	@Override
-	public StringValueData createData(ItemStack stack) {
+	public StringValueData<?> createData(ItemStack stack) {
 		return new DamageData(stack);
 	}
 
@@ -110,5 +110,10 @@ public class DamageFilterItem extends StringValueFilterItem {
 
 	@Override
 	public void getDisplayItemStacks(ItemStack filter, List<ItemStack> list) {
+	}
+
+	@Override
+	public String getHelpKey() {
+		return "itemfilters.help_text.damage";
 	}
 }

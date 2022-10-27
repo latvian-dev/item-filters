@@ -33,4 +33,9 @@ public class WeakNBTFilterItem extends StrongNBTFilterItem {
 
 		return true;
 	}
+
+	@Override
+	public String getHelpKey() {
+		return "itemfilters.help_text.weak_nbt";
+	}
 }

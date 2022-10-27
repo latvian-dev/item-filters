@@ -66,7 +66,7 @@ public class MaxCountFilterItem extends StringValueFilterItem {
 	}
 
 	@Override
-	public StringValueData createData(ItemStack stack) {
+	public StringValueData<?> createData(ItemStack stack) {
 		return new MaxCountData(stack);
 	}
 
@@ -88,5 +88,10 @@ public class MaxCountFilterItem extends StringValueFilterItem {
 			case 4 -> d1 < d2;
 			default -> d1 == d2;
 		};
+	}
+
+	@Override
+	public String getHelpKey() {
+		return "itemfilters.help_text.max_count";
 	}
 }
