@@ -45,7 +45,7 @@ public class CustomFilterItem extends StringValueFilterItem {
 	}
 
 	@Override
-	public StringValueData createData(ItemStack stack) {
+	public StringValueData<?> createData(ItemStack stack) {
 		return new CustomFilterData(stack);
 	}
 

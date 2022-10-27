@@ -87,7 +87,7 @@ public class StrongNBTFilterItem extends StringValueFilterItem {
 	}
 
 	@Override
-	public StringValueData createData(ItemStack stack) {
+	public StringValueData<?> createData(ItemStack stack) {
 		return new NBTData(stack);
 	}
 
@@ -112,5 +112,10 @@ public class StrongNBTFilterItem extends StringValueFilterItem {
 		CompoundTag tag1 = data.getValue();
 		CompoundTag tag2 = stack.getTag();
 		return Objects.equals(tag1, tag2);
+	}
+
+	@Override
+	public String getHelpKey() {
+		return "itemfilters.help_text.nbt";
 	}
 }

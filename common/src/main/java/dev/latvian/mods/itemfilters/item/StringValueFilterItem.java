@@ -60,4 +60,8 @@ public abstract class StringValueFilterItem extends BaseFilterItem implements IS
 			info.add(s);
 		}
 	}
+
+	public String getHelpKey() {
+		return "itemfilters.help_text.filter";
+	}
 }

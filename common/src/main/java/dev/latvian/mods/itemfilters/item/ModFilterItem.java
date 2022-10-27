@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class ModFilterItem extends StringValueFilterItem {
 	@Override
-	public StringValueData createData(ItemStack stack) {
+	public StringValueData<?> createData(ItemStack stack) {
 		return new SimpleStringData(stack);
 	}
 
@@ -36,10 +36,9 @@ public class ModFilterItem extends StringValueFilterItem {
 			if (mods.add(id)) {
 				var variant = new StringValueFilterVariant(id);
 				variant.title = new TextComponent(Platform.getOptionalMod(id).map(Mod::getName).orElse(id));
-				variant.icon = new ItemStack(itemEntry.getValue());
-				if(id.equals("minecraft")) {
-					variant.icon = Items.GRASS_BLOCK.getDefaultInstance();;
-				}
+				variant.icon = id.equals("minecraft") ?
+						Items.GRASS_BLOCK.getDefaultInstance() :
+						new ItemStack(itemEntry.getValue());
 				variants.add(variant);
 			}
 		}

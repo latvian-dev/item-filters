@@ -49,7 +49,7 @@ public class TagFilterItem extends StringValueFilterItem {
 	}
 
 	@Override
-	public StringValueData createData(ItemStack stack) {
+	public StringValueData<?> createData(ItemStack stack) {
 		return new TagData(stack);
 	}
 
