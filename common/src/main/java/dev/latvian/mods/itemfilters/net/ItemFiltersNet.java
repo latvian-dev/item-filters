@@ -12,5 +12,6 @@ public class ItemFiltersNet {
 
 	public static void init() {
 		MAIN.register(MessageUpdateFilterItem.class, MessageUpdateFilterItem::write, MessageUpdateFilterItem::new, MessageUpdateFilterItem::handle);
+		MAIN.register(MessageClearDisplayCache.class, MessageClearDisplayCache::write, MessageClearDisplayCache::new, MessageClearDisplayCache::handle);
 	}
 }

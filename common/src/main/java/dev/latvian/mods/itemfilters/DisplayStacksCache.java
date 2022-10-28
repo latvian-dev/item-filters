@@ -51,6 +51,10 @@ public class DisplayStacksCache {
         return allKnownStacks.stream().filter(candidate -> f.filter(filterStack, candidate)).toList();
     }
 
+    public static void clear() {
+        cache.clear();
+    }
+
     private static class CacheKey {
         private final int key;
 
