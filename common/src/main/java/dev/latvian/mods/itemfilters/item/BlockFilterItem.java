@@ -23,21 +23,6 @@ public class BlockFilterItem extends BaseFilterItem {
 	}
 
 	@Override
-	public void getDisplayItemStacks(ItemStack filter, List<ItemStack> list) {
-		NonNullList<ItemStack> allItems = NonNullList.create();
-
-		for (Block block : Registry.BLOCK) {
-			Item item = block.asItem();
-
-			if (item != Items.AIR && item instanceof BlockItem) {
-				item.fillItemCategory(CreativeModeTab.TAB_SEARCH, allItems);
-			}
-		}
-
-		list.addAll(allItems);
-	}
-
-	@Override
 	public void getItems(ItemStack filter, Set<Item> set) {
 		for (Block block : Registry.BLOCK) {
 			Item item = block.asItem();
