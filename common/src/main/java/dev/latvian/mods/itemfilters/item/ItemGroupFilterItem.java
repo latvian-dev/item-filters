@@ -100,24 +100,6 @@ public class ItemGroupFilterItem extends StringValueFilterItem {
 	}
 
 	@Override
-	public void getDisplayItemStacks(ItemStack filter, List<ItemStack> list) {
-		ItemGroupData data = getStringValueData(filter);
-
-		if (data.getValue() != null) {
-			NonNullList<ItemStack> allItems = NonNullList.create();
-
-			for (Item item : Registry.ITEM) {
-				try {
-					item.fillItemCategory(data.getValue(), allItems);
-				} catch (Throwable ignored) {
-				}
-			}
-
-			list.addAll(allItems);
-		}
-	}
-
-	@Override
 	@Environment(EnvType.CLIENT)
 	public void addInfo(ItemStack filter, FilterInfo info, boolean expanded) {
 		ItemGroupData data = getStringValueData(filter);
