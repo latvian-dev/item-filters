@@ -62,6 +62,7 @@ public class ItemFiltersAPI {
 	/**
 	 * @param filter filter item. If it's not an IItemFilter, then it will be compared using areItemStacksEqual() method.
 	 * @param stack  item that is being checked.
+	 * @return true if the item matches the filter
 	 */
 	public static boolean filter(ItemStack filter, ItemStack stack) {
 		if (filter.isEmpty()) {
@@ -72,6 +73,14 @@ public class ItemFiltersAPI {
 		return f == null ? areItemStacksEqual(filter, stack) : f.filter(filter, stack);
 	}
 
+	/**
+	 * Add all the known item stacks that match the given filter to the given list. Do not modify these item stacks
+	 * without first copying them; they come from a shared cached pool.
+	 * @param filter the filter item
+	 * @param list list of item stacks to add to
+	 * @implNote this list is computed from the list of all item stacks known from the creative search tab and is
+	 * cached internally per filter item for performance reasons
+	 */
 	public static void getDisplayItemStacks(ItemStack filter, List<ItemStack> list) {
 		if (filter.isEmpty()) {
 			return;
@@ -86,6 +95,15 @@ public class ItemFiltersAPI {
 		}
 	}
 
+	/**
+	 * Get a list of all items that this filter might apply to
+	 * @param filter the filter item
+	 * @param list set of items to add to
+	 * @deprecated this method was here primarily to support {@link #getDisplayItemStacks(ItemStack, List)}, which
+	 * should always be used in preference. It is no longer used for that purpose either, since it did not reliably
+	 * work for every filter type. tl;dr there's no good reason to use this anymore
+	 */
+	@Deprecated
 	public static void getItems(ItemStack filter, Set<Item> list) {
 		if (filter.isEmpty()) {
 			return;
