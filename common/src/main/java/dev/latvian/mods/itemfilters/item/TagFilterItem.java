@@ -4,19 +4,14 @@ import dev.latvian.mods.itemfilters.api.StringValueFilterVariant;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.core.Holder;
-import net.minecraft.core.NonNullList;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -79,16 +74,6 @@ public class TagFilterItem extends StringValueFilterItem {
 			variant.icon = e.getSecond().stream().findAny().map(ItemStack::new).orElse(ItemStack.EMPTY);
 			return variant;
 		}).toList();
-	}
-
-	@Override
-	public void getDisplayItemStacks(ItemStack filter, List<ItemStack> list) {
-		NonNullList<ItemStack> list1 = NonNullList.create();
-
-		StreamSupport.stream(Registry.ITEM.getTagOrEmpty(TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(getValue(filter)))).spliterator(), false)
-				.forEach(e -> e.value().fillItemCategory(CreativeModeTab.TAB_SEARCH, list1));
-
-		list.addAll(list1);
 	}
 
 	@Override

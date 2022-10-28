@@ -22,17 +22,4 @@ public class ORFilterItem extends InventoryFilterItem {
 		return false;
 	}
 
-	@Override
-	public void getDisplayItemStacks(ItemStack filter, List<ItemStack> list) {
-		ItemInventory inventory = getInventory(filter);
-
-		for (ItemStack item : inventory.getItems()) {
-			if (ItemFiltersAPI.isFilter(item)) {
-				super.getDisplayItemStacks(filter, list);
-				return;
-			}
-		}
-
-		list.addAll(inventory.getItems());
-	}
 }
