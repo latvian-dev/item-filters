@@ -54,7 +54,7 @@ public class ItemGroupFilterItem extends StringValueFilterItem {
 	}
 
 	@Override
-	public StringValueData createData(ItemStack stack) {
+	public StringValueData<?> createData(ItemStack stack) {
 		return new ItemGroupData(stack);
 	}
 
@@ -97,24 +97,6 @@ public class ItemGroupFilterItem extends StringValueFilterItem {
 		}
 
 		return false;
-	}
-
-	@Override
-	public void getDisplayItemStacks(ItemStack filter, List<ItemStack> list) {
-		ItemGroupData data = getStringValueData(filter);
-
-		if (data.getValue() != null) {
-			NonNullList<ItemStack> allItems = NonNullList.create();
-
-			for (Item item : Registry.ITEM) {
-				try {
-					item.fillItemCategory(data.getValue(), allItems);
-				} catch (Throwable ex) {
-				}
-			}
-
-			list.addAll(allItems);
-		}
 	}
 
 	@Override
