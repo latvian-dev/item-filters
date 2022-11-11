@@ -22,4 +22,17 @@ public class ORFilterItem extends InventoryFilterItem {
 		return false;
 	}
 
+	@Override
+	public void getDisplayItemStacks(ItemStack filter, List<ItemStack> list) {
+		ItemInventory inventory = getInventory(filter);
+
+		for (ItemStack stack1 : inventory.getItems()) {
+			if (ItemFiltersAPI.isFilter(stack1)) {
+				super.getDisplayItemStacks(filter, list);
+			} else {
+				// allows for the possibility of custom items in the filter which aren't in the creative search tab
+				list.add(stack1);
+			}
+		}
+	}
 }
