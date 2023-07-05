@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[43,)"
+loaderVersion = "[47,)"
 issueTrackerURL = "https://github.com/LatvianModder/Item-Filters/issues"
 license = "GNU LGPLv3"
 
@@ -16,20 +16,20 @@ license = "GNU LGPLv3"
 [[dependencies.itemfilters]]
 modId = "forge"
 mandatory = true
-versionRange = "[43,)"
+versionRange = "[47,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.itemfilters]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.19.2,)"
+versionRange = "[1.20.1,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.itemfilters]]
 modId = "architectury"
 mandatory = true
-versionRange = "[6.2.43,)"
+versionRange = "[9.0.8,)"
 ordering = "AFTER"
 side = "BOTH"

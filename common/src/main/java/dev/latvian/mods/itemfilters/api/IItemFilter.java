@@ -4,6 +4,7 @@ import dev.latvian.mods.itemfilters.DisplayStacksCache;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
@@ -41,21 +42,6 @@ public interface IItemFilter {
 	 */
 	default void getDisplayItemStacks(ItemStack filter, List<ItemStack> list) {
 		list.addAll(DisplayStacksCache.getCachedDisplayStacks(filter));
-	}
-
-	/**
-	 * Get a list of all items this filter should apply to
-	 * @param filter the filter item
-	 * @param set set of items to add to
-	 * @deprecated see notes in {@link ItemFiltersAPI#getItems(ItemStack, Set)}
-	 */
-	@Deprecated
-	default void getItems(ItemStack filter, Set<Item> set) {
-		for (Item item : Registry.ITEM) {
-			if (filterItem(filter, item)) {
-				set.add(item);
-			}
-		}
 	}
 
 	default void clearFilterCache(ItemStack filter) {

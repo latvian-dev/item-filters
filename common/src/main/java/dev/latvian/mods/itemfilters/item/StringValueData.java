@@ -1,6 +1,6 @@
 package dev.latvian.mods.itemfilters.item;
 
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -26,7 +26,7 @@ public abstract class StringValueData<T> {
 	protected abstract String toString(@Nullable T value);
 
 	public final String toString() {
-		return Registry.ITEM.getKey(filter.getItem()) + ":" + toString(getValue());
+		return BuiltInRegistries.ITEM.getKey(filter.getItem()) + ":" + toString(getValue());
 	}
 
 	@Nullable

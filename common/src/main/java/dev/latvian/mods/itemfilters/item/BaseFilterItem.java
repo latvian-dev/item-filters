@@ -24,7 +24,7 @@ import java.util.List;
  */
 public abstract class BaseFilterItem extends Item implements IItemFilter {
 	public BaseFilterItem() {
-		super(new Item.Properties().tab(ItemFilters.creativeTab).stacksTo(64));
+		super(new Item.Properties().arch$tab(ItemFilters.creativeTab).stacksTo(64));
 	}
 
 	@Override

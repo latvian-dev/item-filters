@@ -3,13 +3,13 @@ package dev.latvian.mods.itemfilters;
 import dev.latvian.mods.itemfilters.api.IItemFilter;
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.Registry;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * LRU cache to improve the performance of {@link dev.latvian.mods.itemfilters.api.IItemFilter#getDisplayItemStacks(ItemStack, List)}
@@ -20,7 +20,7 @@ public class DisplayStacksCache {
     private static final Object2ObjectLinkedOpenHashMap<CacheKey, List<ItemStack>> cache = new Object2ObjectLinkedOpenHashMap<>(MAX_CACHE_SIZE);
     private static final NonNullList<ItemStack> allKnownStacks = NonNullList.create();
 
-    @Nonnull
+    @NotNull
     public static List<ItemStack> getCachedDisplayStacks(ItemStack filterStack) {
         CacheKey key = new CacheKey(filterStack);
 
@@ -38,13 +38,14 @@ public class DisplayStacksCache {
 
     private static List<ItemStack> computeMatchingStacks(ItemStack filterStack) {
         if (allKnownStacks.isEmpty()) {
-            for (Item item : Registry.ITEM) {
-                try {
-                    // all items appear in the creative search tab
-                    item.fillItemCategory(CreativeModeTab.TAB_SEARCH, allKnownStacks);
-                } catch (Throwable ignored) {
-                }
-            }
+            allKnownStacks.addAll(CreativeModeTabs.searchTab().getSearchTabDisplayItems());
+//            for (Item item : BuiltInRegistries.ITEM) {
+//                try {
+//                    // all items appear in the creative search tab
+//                    item.fillItemCategory(CreativeModeTab.TAB_SEARCH, allKnownStacks);
+//                } catch (Throwable ignored) {
+//                }
+//            }
         }
 
         IItemFilter f = (IItemFilter) filterStack.getItem();
@@ -59,7 +60,7 @@ public class DisplayStacksCache {
         private final int key;
 
         private CacheKey(ItemStack filterStack) {
-            key = Objects.hash(Registry.ITEM.getId(filterStack.getItem()), filterStack.hasTag() ? filterStack.getTag().hashCode() : 0);
+            key = Objects.hash(BuiltInRegistries.ITEM.getId(filterStack.getItem()), filterStack.hasTag() ? filterStack.getTag().hashCode() : 0);
         }
 
         @Override

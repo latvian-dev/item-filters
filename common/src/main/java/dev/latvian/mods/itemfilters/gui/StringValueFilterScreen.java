@@ -1,13 +1,12 @@
 package dev.latvian.mods.itemfilters.gui;
 
-import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import dev.latvian.mods.itemfilters.api.IStringValueFilter;
 import dev.latvian.mods.itemfilters.api.StringValueFilterVariant;
 import dev.latvian.mods.itemfilters.item.StringValueFilterItem;
 import dev.latvian.mods.itemfilters.net.MessageUpdateFilterItem;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ComponentRenderUtils;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.toasts.SystemToast;
@@ -53,7 +52,6 @@ public class StringValueFilterScreen extends Screen {
 	@Override
 	public void init() {
 		super.init();
-		minecraft.keyboardHandler.setSendRepeatsToGui(true);
 		int i = width / 2;
 		int j = height / 2;
 		int w = (width * 3) / 4;
@@ -63,15 +61,9 @@ public class StringValueFilterScreen extends Screen {
 		nameField.setResponder(this::updateVariants);
 		nameField.setMaxLength(4096);
 		nameField.setValue(filter.getValue(stack));
-		nameField.setFocus(true);
+		nameField.setFocused(true);
 
 		addRenderableWidget(nameField);
-	}
-
-	@Override
-	public void onClose() {
-		super.onClose();
-		minecraft.keyboardHandler.setSendRepeatsToGui(true);
 	}
 
 	private void updateVariants(String txt) {
@@ -168,7 +160,7 @@ public class StringValueFilterScreen extends Screen {
 			nameField.setValue("");
 		} else {
 			nameField.mouseClicked(mouseX, mouseY, mouseButton);
-			nameField.setFocus(true);
+			nameField.setFocused(true);
 		}
 		return true;
 	}
@@ -180,60 +172,67 @@ public class StringValueFilterScreen extends Screen {
 	}
 
 	@Override
-	public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-		renderBackground(matrixStack);
-		super.render(matrixStack, mouseX, mouseY, partialTicks);
+	public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+		renderBackground(graphics);
+		super.render(graphics, mouseX, mouseY, partialTicks);
 		RenderSystem.disableBlend();
 
 		if (!variants.isEmpty()) {
 			int drawY = 4 + font.lineHeight;
 			int nLines = (height - drawY) / font.lineHeight;
 
-			drawString(matrixStack, font, Component.translatable("itemfilters.variants", visibleVariants.size()).withStyle(ChatFormatting.AQUA), 4, 4, -1);
+			graphics.drawString(font, Component.translatable("itemfilters.variants", visibleVariants.size()).withStyle(ChatFormatting.AQUA), 4, 4, 0xFFFFFF, false);
 
 			List<FormattedCharSequence> lines = ComponentRenderUtils.wrapComponents(Component.translatable("itemfilters.help_text.variants").withStyle(ChatFormatting.DARK_AQUA), width / 2, font);
 			for (int i = 0; i < lines.size(); i++) {
 				FormattedCharSequence line = lines.get(i);
-				drawString(matrixStack, font, line, width - font.width(line) - 4, 4 + i * font.lineHeight, -1);
+				graphics.drawString(font, line, width - font.width(line) - 4, 4 + i * font.lineHeight, -1, false);
 			}
 
 			int first = visibleVariants.size() < nLines ? 0 : Math.max(0, selectedVariant - (nLines / 2));
 			for (int i = first; i < visibleVariants.size() && drawY < (height - font.lineHeight); i++) {
 				StringValueFilterVariant variant = visibleVariants.get(i);
-				drawString(matrixStack, font, variant.title.getString(), variant.icon.isEmpty() ? 4 : 14, drawY, i == selectedVariant ? 0xFFFFFF00 : -1);
+				graphics.drawString(font, variant.title, variant.icon.isEmpty() ? 4 : 14, drawY, i == selectedVariant ? 0xFFFF00 : 0xFFFFFF, false);
 
 				if (!variant.icon.isEmpty()) {
-					PoseStack modelViewStack = RenderSystem.getModelViewStack();
-					modelViewStack.pushPose();
-					modelViewStack.translate(4, drawY, 0);
-					modelViewStack.scale(0.5F, 0.5F, 1F);
-					RenderSystem.applyModelViewMatrix();
-					itemRenderer.blitOffset = 100F;
-					RenderSystem.enableDepthTest();
-					Lighting.setupFor3DItems();
-					itemRenderer.renderAndDecorateItem(variant.icon, 0, 0);
-					itemRenderer.renderGuiItemDecorations(font, variant.icon, 0, 0, "");
-					itemRenderer.blitOffset = 0F;
-					modelViewStack.popPose();
-					RenderSystem.applyModelViewMatrix();
+					graphics.pose().pushPose();
+					graphics.pose().translate(4, drawY, 0);
+					graphics.pose().scale(0.5f, 0.5f, 0f);
+					graphics.renderItem(variant.icon, 0, 0);
+					graphics.renderItemDecorations(font, variant.icon, 0, 0);
+					graphics.pose().popPose();
+
+//					PoseStack modelViewStack = RenderSystem.getModelViewStack();
+//					modelViewStack.pushPose();
+//					modelViewStack.translate(4, drawY, 0);
+//					modelViewStack.scale(0.5F, 0.5F, 1F);
+//					RenderSystem.applyModelViewMatrix();
+//					itemRenderer.blitOffset = 100F;
+//					RenderSystem.enableDepthTest();
+//					Lighting.setupFor3DItems();
+//					itemRenderer.renderAndDecorateItem(variant.icon, 0, 0);
+//					itemRenderer.renderGuiItemDecorations(font, variant.icon, 0, 0, "");
+//					itemRenderer.blitOffset = 0F;
+//					modelViewStack.popPose();
+//					RenderSystem.applyModelViewMatrix();
 				}
 				drawY += font.lineHeight;
 			}
-			nameField.x = width / 2;
+			nameField.setX(width / 2);
 			nameField.setWidth(width / 3);
 
-			drawString(matrixStack, font, Component.translatable("itemfilters.help_text.filter"), nameField.x, nameField.y - font.lineHeight - 2, 0xFFFFFFFF);
+			graphics.drawString(font, Component.translatable("itemfilters.help_text.filter"), nameField.getX(), nameField.getY() - font.lineHeight - 2, 0xFFFFFFFF, false);
 		} else {
 			int w = (width * 3) / 4;
-			nameField.x = (width - w) / 2;
+			nameField.setX((width - w) / 2);
 			nameField.setWidth(w);
 
 			if (stack.getItem() instanceof StringValueFilterItem filterItem) {
 				List<FormattedCharSequence> lines = ComponentRenderUtils.wrapComponents(Component.translatable(filterItem.getHelpKey()), nameField.getWidth(), font);
-				int textY = nameField.y - 3 - font.lineHeight * lines.size();
+				int textY = nameField.getY() - 3 - font.lineHeight * lines.size();
 				int color = 0xFFFFFFFF;
 				for (var line : lines) {
-					drawString(matrixStack, font, line, nameField.x, textY, color);
+					graphics.drawString(font, line, nameField.getX(), textY, color, false);
 					color = 0xFF999999;
 					textY += font.lineHeight;
 				}

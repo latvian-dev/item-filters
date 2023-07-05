@@ -21,15 +21,4 @@ public class BlockFilterItem extends BaseFilterItem {
 	public boolean filterItem(ItemStack filter, Item item) {
 		return item != Items.AIR && item instanceof BlockItem;
 	}
-
-	@Override
-	public void getItems(ItemStack filter, Set<Item> set) {
-		for (Block block : Registry.BLOCK) {
-			Item item = block.asItem();
-
-			if (item != Items.AIR && item instanceof BlockItem) {
-				set.add(item);
-			}
-		}
-	}
 }

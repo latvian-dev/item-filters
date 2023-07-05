@@ -24,8 +24,4 @@ public class AlwaysFalseFilterItem extends BaseFilterItem {
 	@Override
 	public void getDisplayItemStacks(ItemStack filter, List<ItemStack> list) {
 	}
-
-	@Override
-	public void getItems(ItemStack filter, Set<Item> set) {
-	}
 }

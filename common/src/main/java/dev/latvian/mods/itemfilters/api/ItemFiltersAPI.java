@@ -1,7 +1,7 @@
 package dev.latvian.mods.itemfilters.api;
 
 import dev.latvian.mods.itemfilters.ItemFilters;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -11,15 +11,14 @@ import org.jetbrains.annotations.Nullable;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Predicate;
 
 /**
  * @author LatvianModder
  */
 public class ItemFiltersAPI {
-	public static final TagKey<Item> FILTERS_ITEM_TAG = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(ItemFilters.MOD_ID, "filters"));
-	public static final TagKey<Item> CHECK_NBT_ITEM_TAG = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(ItemFilters.MOD_ID, "check_nbt"));
+	public static final TagKey<Item> FILTERS_ITEM_TAG = TagKey.create(Registries.ITEM, new ResourceLocation(ItemFilters.MOD_ID, "filters"));
+	public static final TagKey<Item> CHECK_NBT_ITEM_TAG = TagKey.create(Registries.ITEM, new ResourceLocation(ItemFilters.MOD_ID, "check_nbt"));
 
 	public static final Map<String, CustomFilter> CUSTOM_FILTERS = new LinkedHashMap<>();
 
@@ -56,7 +55,7 @@ public class ItemFiltersAPI {
 			return true;
 		}
 
-		return !stackA.is(CHECK_NBT_ITEM_TAG) || ItemStack.tagMatches(stackA, stackB);
+		return !stackA.is(CHECK_NBT_ITEM_TAG) || stackA.hasTag() && stackA.getTag().equals(stackB.getTag());
 	}
 
 	/**
@@ -92,29 +91,6 @@ public class ItemFiltersAPI {
 			list.add(filter);
 		} else {
 			f.getDisplayItemStacks(filter, list);
-		}
-	}
-
-	/**
-	 * Get a list of all items that this filter might apply to
-	 * @param filter the filter item
-	 * @param list set of items to add to
-	 * @deprecated this method was here primarily to support {@link #getDisplayItemStacks(ItemStack, List)}, which
-	 * should always be used in preference. It is no longer used for that purpose either, since it did not reliably
-	 * work for every filter type. tl;dr there's no good reason to use this anymore
-	 */
-	@Deprecated
-	public static void getItems(ItemStack filter, Set<Item> list) {
-		if (filter.isEmpty()) {
-			return;
-		}
-
-		IItemFilter f = getFilter(filter);
-
-		if (f == null) {
-			list.add(filter.getItem());
-		} else {
-			f.getItems(filter, list);
 		}
 	}
 
