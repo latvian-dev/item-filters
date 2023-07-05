@@ -1,6 +1,5 @@
 package dev.latvian.mods.itemfilters.gui;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import dev.latvian.mods.itemfilters.api.IStringValueFilter;
 import dev.latvian.mods.itemfilters.api.StringValueFilterVariant;
 import dev.latvian.mods.itemfilters.item.StringValueFilterItem;
@@ -175,7 +174,6 @@ public class StringValueFilterScreen extends Screen {
 	public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
 		renderBackground(graphics);
 		super.render(graphics, mouseX, mouseY, partialTicks);
-		RenderSystem.disableBlend();
 
 		if (!variants.isEmpty()) {
 			int drawY = 4 + font.lineHeight;
@@ -201,20 +199,6 @@ public class StringValueFilterScreen extends Screen {
 					graphics.renderItem(variant.icon, 0, 0);
 					graphics.renderItemDecorations(font, variant.icon, 0, 0);
 					graphics.pose().popPose();
-
-//					PoseStack modelViewStack = RenderSystem.getModelViewStack();
-//					modelViewStack.pushPose();
-//					modelViewStack.translate(4, drawY, 0);
-//					modelViewStack.scale(0.5F, 0.5F, 1F);
-//					RenderSystem.applyModelViewMatrix();
-//					itemRenderer.blitOffset = 100F;
-//					RenderSystem.enableDepthTest();
-//					Lighting.setupFor3DItems();
-//					itemRenderer.renderAndDecorateItem(variant.icon, 0, 0);
-//					itemRenderer.renderGuiItemDecorations(font, variant.icon, 0, 0, "");
-//					itemRenderer.blitOffset = 0F;
-//					modelViewStack.popPose();
-//					RenderSystem.applyModelViewMatrix();
 				}
 				drawY += font.lineHeight;
 			}

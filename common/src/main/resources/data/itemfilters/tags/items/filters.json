@@ -9,7 +9,6 @@
 		"itemfilters:xor",
 		"itemfilters:tag",
 		"itemfilters:mod",
-		"itemfilters:item_group",
 		"itemfilters:id_regex",
 		"itemfilters:damage",
 		"itemfilters:block",

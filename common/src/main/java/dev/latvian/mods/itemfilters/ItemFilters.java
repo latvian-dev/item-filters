@@ -4,6 +4,7 @@ import dev.architectury.registry.CreativeTabRegistry;
 import dev.architectury.registry.ReloadListenerRegistry;
 import dev.architectury.registry.menu.MenuRegistry;
 import dev.architectury.registry.registries.RegistrarManager;
+import dev.architectury.registry.registries.RegistrySupplier;
 import dev.architectury.utils.EnvExecutor;
 import dev.architectury.utils.GameInstance;
 import dev.latvian.mods.itemfilters.api.ItemFiltersItems;
@@ -27,16 +28,20 @@ public class ItemFilters {
 	public static final String MOD_ID = "itemfilters";
 
 	public static ItemFiltersCommon proxy;
-	public static CreativeModeTab creativeTab;
 
 	public void setup() {
-		proxy = EnvExecutor.getEnvSpecific(() -> ItemFiltersClient::new, () -> ItemFiltersCommon::new);
-		creativeTab = CreativeTabRegistry.create(Component.translatable("itemGroup.itemfilters.main"), () -> new ItemStack(ItemFiltersItems.ALWAYS_TRUE.get()));
+		RegistrarManager registrar = RegistrarManager.get(MOD_ID);
 
-		ItemFiltersItems.init();
-		InventoryFilterMenu.TYPE = RegistrarManager.get(MOD_ID).get(Registries.MENU)
+		proxy = EnvExecutor.getEnvSpecific(() -> ItemFiltersClient::new, () -> ItemFiltersCommon::new);
+
+		ItemFiltersItems.CREATIVE_TAB = registrar.get(Registries.CREATIVE_MODE_TAB)
+				.register(new ResourceLocation(MOD_ID, "default"),
+						() -> CreativeTabRegistry.create(Component.translatable("itemGroup.itemfilters.main"), () -> new ItemStack(ItemFiltersItems.ALWAYS_TRUE.get())));
+
+		InventoryFilterMenu.TYPE = registrar.get(Registries.MENU)
 				.register(new ResourceLocation(MOD_ID, "inventory_filter"), () -> MenuRegistry.ofExtended(InventoryFilterMenu::new));
 
+		ItemFiltersItems.init();
 		ItemFiltersNet.init();
 		EnvExecutor.runInEnv(EnvType.CLIENT, () -> proxy::setup);
 

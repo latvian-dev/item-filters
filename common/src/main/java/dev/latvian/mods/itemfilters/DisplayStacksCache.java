@@ -18,7 +18,6 @@ import java.util.Objects;
 public class DisplayStacksCache {
     private static final int MAX_CACHE_SIZE = 1024;
     private static final Object2ObjectLinkedOpenHashMap<CacheKey, List<ItemStack>> cache = new Object2ObjectLinkedOpenHashMap<>(MAX_CACHE_SIZE);
-    private static final NonNullList<ItemStack> allKnownStacks = NonNullList.create();
 
     @NotNull
     public static List<ItemStack> getCachedDisplayStacks(ItemStack filterStack) {
@@ -37,19 +36,10 @@ public class DisplayStacksCache {
     }
 
     private static List<ItemStack> computeMatchingStacks(ItemStack filterStack) {
-        if (allKnownStacks.isEmpty()) {
-            allKnownStacks.addAll(CreativeModeTabs.searchTab().getSearchTabDisplayItems());
-//            for (Item item : BuiltInRegistries.ITEM) {
-//                try {
-//                    // all items appear in the creative search tab
-//                    item.fillItemCategory(CreativeModeTab.TAB_SEARCH, allKnownStacks);
-//                } catch (Throwable ignored) {
-//                }
-//            }
-        }
-
         IItemFilter f = (IItemFilter) filterStack.getItem();
-        return allKnownStacks.stream().filter(candidate -> f.filter(filterStack, candidate)).toList();
+        return CreativeModeTabs.searchTab().getSearchTabDisplayItems().stream()
+                .filter(candidate -> f.filter(filterStack, candidate))
+                .toList();
     }
 
     public static void clear() {

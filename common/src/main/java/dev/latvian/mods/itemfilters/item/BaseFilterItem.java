@@ -1,8 +1,8 @@
 package dev.latvian.mods.itemfilters.item;
 
-import dev.latvian.mods.itemfilters.ItemFilters;
 import dev.latvian.mods.itemfilters.api.IItemFilter;
 import dev.latvian.mods.itemfilters.api.ItemFiltersAPI;
+import dev.latvian.mods.itemfilters.api.ItemFiltersItems;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
@@ -24,7 +24,7 @@ import java.util.List;
  */
 public abstract class BaseFilterItem extends Item implements IItemFilter {
 	public BaseFilterItem() {
-		super(new Item.Properties().arch$tab(ItemFilters.creativeTab).stacksTo(64));
+		super(new Item.Properties().arch$tab(ItemFiltersItems.CREATIVE_TAB).stacksTo(64));
 	}
 
 	@Override

@@ -2,10 +2,12 @@ package dev.latvian.mods.itemfilters.api;
 
 import dev.architectury.registry.registries.Registrar;
 import dev.architectury.registry.registries.RegistrarManager;
+import dev.architectury.registry.registries.RegistrySupplier;
 import dev.latvian.mods.itemfilters.ItemFilters;
 import dev.latvian.mods.itemfilters.item.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 
 import java.util.function.Supplier;
@@ -14,6 +16,8 @@ import java.util.function.Supplier;
  * @author LatvianModder
  */
 public class ItemFiltersItems {
+	public static RegistrySupplier<CreativeModeTab> CREATIVE_TAB;
+
 	private static final Registrar<Item> REGISTRY = RegistrarManager.get(ItemFilters.MOD_ID).get(Registries.ITEM);
 
 	public static final Supplier<Item> ALWAYS_TRUE = REGISTRY.register(new ResourceLocation(ItemFilters.MOD_ID, "always_true"), AlwaysTrueFilterItem::new);
