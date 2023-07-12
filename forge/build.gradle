@@ -45,7 +45,7 @@ shadowJar {
 	exclude "fabric.mod.json"
 
 	configurations = [project.configurations.shadowCommon]
-	classifier "dev-shadow"
+	setArchiveClassifier("dev-shadow")
 }
 
 remapJar {
@@ -68,7 +68,7 @@ jar {
 		])
 	}
 
-	classifier "dev"
+	setArchiveClassifier("dev")
 }
 
 components.java {
@@ -84,8 +84,8 @@ if (ENV.CURSEFORGE_KEY) {
 			id = project.curseforge_id
 			releaseType = project.curseforge_type
 			addGameVersion "Forge"
-			addGameVersion "1.19.2"
-			mainArtifact(remapJar.archivePath)
+			addGameVersion "1.20.1"
+			mainArtifact(remapJar.archiveFile)
 			relations {
 				requiredDependency 'architectury-api'
 			}

@@ -79,13 +79,4 @@ public class CustomFilterItem extends StringValueFilterItem {
 		CustomFilterData v = getStringValueData(filter);
 		return v.getValue() != null && v.getValue().getItems().contains(item);
 	}
-
-	@Override
-	public void getItems(ItemStack filter, Set<Item> set) {
-		CustomFilterData v = getStringValueData(filter);
-
-		if (v.getValue() != null) {
-			set.addAll(v.getValue().getItems());
-		}
-	}
 }

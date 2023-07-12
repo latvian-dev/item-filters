@@ -1,11 +1,11 @@
 pluginManagement {
 	repositories {
 		maven { url "https://maven.creeperhost.net/" }
-		maven { url "https://maven.shedaniel.me/" }
+		maven { url "https://maven.architectury.dev/" }
 		gradlePluginPortal()
 	}
 }
 
 include "common", "fabric", "forge"
 
-rootProject.name = 'Item-Filters-1.19.2'
+rootProject.name = 'Item-Filters-1.20.1'

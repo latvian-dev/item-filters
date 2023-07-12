@@ -1,6 +1,7 @@
 package dev.latvian.mods.itemfilters.item;
 
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -41,7 +42,7 @@ public class RegExFilterItem extends StringValueFilterItem {
 		RegExData data = getStringValueData(filter);
 
 		if (data.getValue() != null) {
-			return data.getValue().matcher(Registry.ITEM.getKey(stack.getItem()).toString()).find();
+			return data.getValue().matcher(BuiltInRegistries.ITEM.getKey(stack.getItem()).toString()).find();
 		}
 
 		return false;

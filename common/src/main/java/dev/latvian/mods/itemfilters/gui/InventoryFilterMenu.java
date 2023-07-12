@@ -74,7 +74,7 @@ public class InventoryFilterMenu extends AbstractContainerMenu {
 
 				if (!stack.isEmpty()) {
 					for (ItemStack stack1 : inventory.getItems()) {
-						if (stack1.getItem() == stack.getItem() && ItemStack.tagMatches(stack1, stack)) {
+						if (ItemStack.isSameItemSameTags(stack1, stack)) {
 							return ItemStack.EMPTY;
 						}
 					}
@@ -105,7 +105,7 @@ public class InventoryFilterMenu extends AbstractContainerMenu {
 				}
 			} else {
 				for (ItemStack stack1 : inventory.getItems()) {
-					if (stack1.getItem() == stack.getItem() && ItemStack.tagMatches(stack1, stack)) {
+					if (ItemStack.isSameItemSameTags(stack1, stack)) {
 						return;
 					}
 				}

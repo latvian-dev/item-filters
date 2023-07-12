@@ -1,6 +1,7 @@
 package dev.latvian.mods.itemfilters.item;
 
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.TagParser;
@@ -119,11 +120,5 @@ public class StrongNBTFilterItem extends StringValueFilterItem {
 	@Override
 	public String getHelpKey() {
 		return "itemfilters.help_text.nbt";
-	}
-
-	@Override
-	public void getItems(ItemStack filter, Set<Item> set) {
-		// any item could potentially have NBT, so we need the lot
-		Registry.ITEM.forEach(set::add);
 	}
 }
