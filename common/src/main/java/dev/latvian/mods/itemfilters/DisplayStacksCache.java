@@ -38,9 +38,7 @@ public class DisplayStacksCache {
     private static List<ItemStack> computeMatchingStacks(ItemStack filterStack) {
         IItemFilter f = (IItemFilter) filterStack.getItem();
 
-        if (!CreativeModeTabs.searchTab().hasAnyItems()) {
-            ItemFilters.proxy.registryAccess().ifPresent(ra -> CreativeModeTabs.tryRebuildTabContents(FeatureFlags.DEFAULT_FLAGS, true, ra));
-        }
+        ItemFilters.proxy.registryAccess().ifPresent(ra -> CreativeModeTabs.tryRebuildTabContents(FeatureFlags.DEFAULT_FLAGS, true, ra));
 
         return CreativeModeTabs.searchTab().getSearchTabDisplayItems().stream()
                 .filter(candidate -> f.filter(filterStack, candidate))
