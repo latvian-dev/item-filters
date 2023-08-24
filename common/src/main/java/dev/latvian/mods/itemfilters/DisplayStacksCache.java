@@ -2,8 +2,8 @@ package dev.latvian.mods.itemfilters;
 
 import dev.latvian.mods.itemfilters.api.IItemFilter;
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
-import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -37,6 +37,9 @@ public class DisplayStacksCache {
 
     private static List<ItemStack> computeMatchingStacks(ItemStack filterStack) {
         IItemFilter f = (IItemFilter) filterStack.getItem();
+
+        ItemFilters.proxy.registryAccess().ifPresent(ra -> CreativeModeTabs.tryRebuildTabContents(FeatureFlags.DEFAULT_FLAGS, true, ra));
+
         return CreativeModeTabs.searchTab().getSearchTabDisplayItems().stream()
                 .filter(candidate -> f.filter(filterStack, candidate))
                 .toList();
