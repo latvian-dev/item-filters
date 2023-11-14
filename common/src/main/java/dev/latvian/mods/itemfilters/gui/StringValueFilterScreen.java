@@ -165,14 +165,14 @@ public class StringValueFilterScreen extends Screen {
 	}
 
 	@Override
-	public boolean mouseScrolled(double d, double e, double delta) {
+	public boolean mouseScrolled(double d, double e, double delta, double direction) {
 		adjustSelected(delta < 0);
 		return true;
 	}
 
 	@Override
 	public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-		renderBackground(graphics);
+		renderBackground(graphics, mouseX, mouseY, partialTicks);
 		super.render(graphics, mouseX, mouseY, partialTicks);
 
 		if (!variants.isEmpty()) {
